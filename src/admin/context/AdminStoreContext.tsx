@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type {
   AdminAppointment,
   AdminLead,
@@ -81,15 +81,67 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
   });
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  const refreshPatients = useCallback(() => {
+  const refreshPatients = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/patients', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.patients)) {
+          setPatients(data.patients);
+          return;
+        }
+      }
+    } catch {}
     setPatients(patientStorage.getAll());
   }, []);
 
-  const refreshAppointments = useCallback(() => {
+  const refreshAppointments = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/appointments', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.appointments)) {
+          const normalized = data.appointments.map((a: any) => ({
+            ...a,
+            fullName: a.fullName || a.patientName || 'Patient',
+            patientName: a.patientName || a.fullName || 'Patient',
+            phone: a.phone || a.patientPhone || '',
+            email: a.email || a.patientEmail || '',
+            preferredDate: a.preferredDate || a.date || '',
+            preferredTime: a.preferredTime || a.time || '',
+            date: a.date || a.preferredDate || '',
+            time: a.time || a.preferredTime || '',
+            service: a.service || 'Chiropractic Care',
+            status: a.status ? (a.status.charAt(0).toUpperCase() + a.status.slice(1).toLowerCase()) : 'Confirmed',
+          }));
+          setAppointments(normalized);
+          return;
+        }
+      }
+    } catch {}
     setAppointments(appointmentStorage.getAll());
   }, []);
 
-  const refreshLeads = useCallback(() => {
+  const refreshLeads = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/leads', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.leads)) {
+          setLeads(data.leads);
+          return;
+        }
+      }
+    } catch {}
     setLeads(leadStorage.getAll());
   }, []);
 
@@ -97,11 +149,37 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
     setOffers(offerStorage.getAll());
   }, []);
 
-  const refreshNotifications = useCallback(() => {
+  const refreshNotifications = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/notifications', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.notifications)) {
+          setNotifications(data.notifications);
+          return;
+        }
+      }
+    } catch {}
     setNotifications(notificationStorage.getAll());
   }, []);
 
-  const refreshMetrics = useCallback(() => {
+  const refreshMetrics = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/dashboard', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.metrics) {
+          setMetrics(data.metrics);
+          return;
+        }
+      }
+    } catch {}
     setMetrics(computeDashboardMetrics());
   }, []);
 

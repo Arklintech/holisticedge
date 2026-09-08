@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { appointmentStorage, notificationStorage } from '../../services/adminStorage';
@@ -73,8 +73,40 @@ export function AppointmentForm() {
     e.preventDefault();
     if (!validate()) return;
     setSaving(true);
-    await new Promise(r => setTimeout(r, 400));
+    let createdId = '';
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+        body: JSON.stringify({
+          fullName: form.fullName.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim() || undefined,
+          service: form.service,
+          condition: form.condition,
+          date: form.preferredDate,
+          preferredDate: form.preferredDate,
+          time: form.preferredTime,
+          preferredTime: form.preferredTime,
+          source: form.source,
+          notes: form.notes.trim() || undefined,
+          status: form.status,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.appointment?.id) {
+        createdId = data.appointment.id;
+      }
+    } catch (err) {
+      console.warn('[AppointmentForm] API create fallback:', err);
+    }
+
     const created = appointmentStorage.create({
+      id: createdId || undefined,
       fullName: form.fullName.trim(),
       phone: form.phone.trim(),
       email: form.email.trim() || undefined,
@@ -85,21 +117,25 @@ export function AppointmentForm() {
       source: form.source,
       notes: form.notes.trim() || undefined,
       status: form.status,
-    });
+    } as any);
+
+    const finalId = createdId || created.id;
+
     notificationStorage.create({
       type: 'appointment',
       title: 'New Appointment Created',
       message: `${created.fullName} — ${created.service} on ${created.preferredDate}`,
-      entityId: created.id,
+      entityId: finalId,
       entityType: 'appointment',
-      link: `/admin/appointments/${created.id}`,
+      link: `/admin/appointments/${finalId}`,
     });
-    refreshAppointments();
-    refreshMetrics();
-    logAudit('created', 'appointment', created.id, `Appointment created for ${created.fullName}`);
-    showToast('success', 'Appointment created', `${created.fullName} — ${created.id}`);
+
+    await refreshAppointments();
+    await refreshMetrics();
+    logAudit('created', 'appointment', finalId, `Appointment created for ${created.fullName}`);
+    showToast('success', 'Appointment created', `${created.fullName} — ${finalId}`);
     setSaving(false);
-    navigate(`/admin/appointments/${created.id}`);
+    navigate(`/admin/appointments/${finalId}`);
   };
 
 

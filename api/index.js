@@ -16,6 +16,7 @@ import emailRoutes from '../server/routes/email.js';
 import publicBookingRoutes from '../server/routes/publicBooking.js';
 import mediaRoutes from '../server/routes/media.js';
 import integrationRoutes from '../server/routes/integrations.js';
+import dashboardRoutes from '../server/routes/dashboard.js';
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use('/api/cms', cmsRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // 404 Handler for unknown API routes
 app.use('/api', (req, res) => {

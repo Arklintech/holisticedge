@@ -32,14 +32,52 @@ export function AppointmentDetailPage() {
   const [savingNotes, setSavingNotes] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{ action: AppointmentStatus; label: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [loadingAppt, setLoadingAppt] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-    const data = appointmentStorage.getById(id);
-    setAppt(data);
-    setEditNotes(data?.notes || '');
+    const local = appointmentStorage.getById(id);
+    if (local) {
+      setAppt(local);
+      setEditNotes(local.notes || '');
+      setLoadingAppt(false);
+    }
+
+    const token = localStorage.getItem('admin_token');
+    fetch(`/api/appointments/${id}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.appointment) {
+          const a = data.appointment;
+          const normalized: AdminAppointment = {
+            ...a,
+            fullName: a.fullName || a.patientName || 'Patient',
+            phone: a.phone || a.patientPhone || '',
+            email: a.email || a.patientEmail || undefined,
+            preferredDate: a.preferredDate || a.date || '',
+            preferredTime: a.preferredTime || a.time || '',
+            service: a.service || 'Chiropractic Care',
+            status: a.status ? (a.status.charAt(0).toUpperCase() + a.status.slice(1).toLowerCase()) as AppointmentStatus : 'Confirmed',
+          };
+          setAppt(normalized);
+          setEditNotes(normalized.notes || '');
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingAppt(false));
   }, [id]);
+
+  if (loadingAppt && !appt) {
+    return (
+      <div className="p-12 text-center">
+        <RefreshCw size={24} className="animate-spin text-[#10B981] mx-auto mb-3" />
+        <p className="text-sm text-[#5A544E]">Loading appointment details...</p>
+      </div>
+    );
+  }
 
   if (!appt) {
     return (
@@ -54,25 +92,34 @@ export function AppointmentDetailPage() {
 
   const handleStatusChange = async (newStatus: AppointmentStatus) => {
     setActionLoading(true);
-    await new Promise(r => setTimeout(r, 300));
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/appointments/${appt.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+        body: JSON.stringify({ status: newStatus.toUpperCase() }),
+      });
+    } catch {}
     const updated = appointmentStorage.update(appt.id, { status: newStatus });
-    if (updated) {
-      setAppt(updated);
-      refreshAppointments();
-      refreshMetrics();
-      logAudit(newStatus.toLowerCase(), 'appointment', appt.id, `Appointment ${appt.id} marked as ${newStatus}`);
-      if (newStatus === 'Cancelled') {
-        notificationStorage.create({
-          type: 'appointment',
-          title: 'Appointment Cancelled',
-          message: `${appt.fullName}'s appointment on ${appt.preferredDate} was cancelled.`,
-          entityId: appt.id,
-          entityType: 'appointment',
-          link: `/admin/appointments/${appt.id}`,
-        });
-      }
-      showToast('success', `Status updated to ${newStatus}`);
+    const target = updated || { ...appt, status: newStatus };
+    setAppt(target);
+    refreshAppointments();
+    refreshMetrics();
+    logAudit(newStatus.toLowerCase(), 'appointment', appt.id, `Appointment ${appt.id} marked as ${newStatus}`);
+    if (newStatus === 'Cancelled') {
+      notificationStorage.create({
+        type: 'appointment',
+        title: 'Appointment Cancelled',
+        message: `${appt.fullName}'s appointment on ${appt.preferredDate} was cancelled.`,
+        entityId: appt.id,
+        entityType: 'appointment',
+        link: `/admin/appointments/${appt.id}`,
+      });
     }
+    showToast('success', `Status updated to ${newStatus}`);
     setActionLoading(false);
     setConfirmAction(null);
   };

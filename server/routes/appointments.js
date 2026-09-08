@@ -16,7 +16,45 @@ router.get('/', async (req, res) => {
     } catch (e) {
       appointments = db.get('appointments') || [];
     }
-    res.json({ success: true, count: appointments.length, appointments });
+
+    // Enrich appointments with patient name, phone, email
+    let patients = [];
+    try {
+      patients = (await dataProvider.searchPatients('')) || [];
+    } catch (e) {
+      patients = db.get('patients') || [];
+    }
+    const patientsById = new Map();
+    const patientsByToken = new Map();
+    const localPatients = db.get('patients') || [];
+    [...localPatients, ...patients].forEach(p => {
+      if (p.id) patientsById.set(p.id, p);
+      if (p.registrationTokenNumber) patientsByToken.set(p.registrationTokenNumber.toUpperCase(), p);
+    });
+
+    const enriched = appointments.map(a => {
+      const p = patientsById.get(a.patientId) || (a.registrationTokenNumber ? patientsByToken.get(a.registrationTokenNumber.toUpperCase()) : null);
+      const name = a.fullName || a.patientName || p?.name || 'Walk-in Patient';
+      const phone = a.phone || a.patientPhone || p?.phone || '';
+      const email = a.email || a.patientEmail || p?.email || '';
+      const date = a.date || a.preferredDate || '';
+      const time = a.time || a.preferredTime || '';
+      return {
+        ...a,
+        fullName: name,
+        patientName: name,
+        phone,
+        patientPhone: phone,
+        email,
+        patientEmail: email,
+        preferredDate: date,
+        preferredTime: time,
+        date,
+        time,
+      };
+    });
+
+    res.json({ success: true, count: enriched.length, appointments: enriched });
   } catch (err) {
     const appointments = db.get('appointments') || [];
     res.json({ success: true, count: appointments.length, appointments });
@@ -24,9 +62,43 @@ router.get('/', async (req, res) => {
 });
 
 // GET /api/appointments/:id
-router.get('/:id', (req, res) => {
-  const appt = db.find('appointments', a => a.id === req.params.id);
+router.get('/:id', async (req, res) => {
+  let appt = db.find('appointments', a => a.id === req.params.id);
+  if (!appt) {
+    try {
+      const all = await dataProvider.getAppointments();
+      appt = all.find(a => a.id === req.params.id) || null;
+    } catch (e) {}
+  }
   if (!appt) return res.status(404).json({ error: 'Appointment not found' });
+
+  // Enrich with patient details if missing
+  if (!appt.fullName || !appt.phone) {
+    let patient = null;
+    try {
+      if (appt.patientId) {
+        patient = await dataProvider.getPatientById(appt.patientId);
+      }
+      if (!patient && appt.registrationTokenNumber) {
+        patient = await dataProvider.getPatientByRegistrationToken(appt.registrationTokenNumber);
+      }
+    } catch (e) {}
+
+    appt = {
+      ...appt,
+      fullName: appt.fullName || appt.patientName || patient?.name || 'Walk-in Patient',
+      patientName: appt.patientName || appt.fullName || patient?.name || 'Walk-in Patient',
+      phone: appt.phone || appt.patientPhone || patient?.phone || '',
+      patientPhone: appt.patientPhone || appt.phone || patient?.phone || '',
+      email: appt.email || appt.patientEmail || patient?.email || '',
+      patientEmail: appt.patientEmail || appt.email || patient?.email || '',
+      preferredDate: appt.preferredDate || appt.date || '',
+      preferredTime: appt.preferredTime || appt.time || '',
+      date: appt.date || appt.preferredDate || '',
+      time: appt.time || appt.preferredTime || '',
+    };
+  }
+
   res.json({ success: true, appointment: appt });
 });
 
@@ -170,8 +242,18 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/appointments/:id
-router.put('/:id', authenticate, (req, res) => {
-  const updated = db.update('appointments', req.params.id, req.body);
+router.put('/:id', authenticate, async (req, res) => {
+  let updated = db.update('appointments', req.params.id, req.body);
+  if (!updated) {
+    try {
+      const all = await dataProvider.getAppointments();
+      const existing = all.find(a => a.id === req.params.id);
+      if (existing) {
+        updated = { ...existing, ...req.body, updatedAt: new Date().toISOString() };
+        db.insert('appointments', updated);
+      }
+    } catch (e) {}
+  }
   if (!updated) return res.status(404).json({ error: 'Appointment not found' });
 
   db.insert('auditLogs', {

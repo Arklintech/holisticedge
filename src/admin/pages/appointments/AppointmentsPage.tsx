@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Plus, Search, Filter, Calendar, List, Phone, MessageSquare,
@@ -32,13 +32,17 @@ export function AppointmentsPage() {
   const [confirmAction, setConfirmAction] = useState<{ id: string; action: AppointmentStatus; label: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
+  useEffect(() => {
+    refreshAppointments();
+  }, [refreshAppointments]);
+
   // Filter + search
   const filtered = useMemo(() => {
     let data = [...appointments].sort((a, b) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
     );
     if (statusFilter !== 'All') {
-      data = data.filter(a => a.status === statusFilter);
+      data = data.filter(a => a.status?.toLowerCase() === statusFilter.toLowerCase());
     }
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -58,25 +62,34 @@ export function AppointmentsPage() {
 
   const handleStatusChange = useCallback(async (apptId: string, newStatus: AppointmentStatus) => {
     setActionLoading(true);
-    await new Promise(r => setTimeout(r, 300));
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/appointments/${apptId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+        body: JSON.stringify({ status: newStatus.toUpperCase() }),
+      });
+    } catch {}
     const updated = appointmentStorage.update(apptId, { status: newStatus });
-    if (updated) {
-      refreshAppointments();
-      refreshMetrics();
-      logAudit(newStatus.toLowerCase(), 'appointment', apptId, `Appointment ${apptId} marked as ${newStatus}`);
-      showToast('success', `Appointment ${newStatus}`, `${updated.fullName}'s appointment has been updated.`);
-    }
+    refreshAppointments();
+    refreshMetrics();
+    logAudit(newStatus.toLowerCase(), 'appointment', apptId, `Appointment ${apptId} marked as ${newStatus}`);
+    showToast('success', `Appointment ${newStatus}`, `${updated?.fullName || 'Patient'}'s appointment has been updated.`);
     setActionLoading(false);
     setConfirmAction(null);
   }, [refreshAppointments, refreshMetrics, logAudit, showToast]);
 
   const quickActions = (appt: AdminAppointment) => {
     const actions: { label: string; status: AppointmentStatus; icon: React.ReactNode; color: string }[] = [];
-    if (appt.status === 'Pending') {
+    const s = (appt.status || '').toLowerCase();
+    if (s === 'pending') {
       actions.push({ label: 'Confirm', status: 'Confirmed', icon: <Check size={11} />, color: 'bg-green-50 text-green-700 hover:bg-green-100' });
       actions.push({ label: 'Cancel', status: 'Cancelled', icon: <X size={11} />, color: 'bg-red-50 text-red-700 hover:bg-red-100' });
     }
-    if (appt.status === 'Confirmed') {
+    if (s === 'confirmed') {
       actions.push({ label: 'Complete', status: 'Completed', icon: <Check size={11} />, color: 'bg-[#EFF6FF] text-[#1E40AF] hover:bg-blue-100' });
       actions.push({ label: 'No-show', status: 'No-show', icon: <Clock size={11} />, color: 'bg-gray-100 text-gray-600 hover:bg-gray-200' });
       actions.push({ label: 'Cancel', status: 'Cancelled', icon: <X size={11} />, color: 'bg-red-50 text-red-700 hover:bg-red-100' });

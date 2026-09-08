@@ -16,6 +16,7 @@ import emailRoutes from './routes/email.js';
 import publicBookingRoutes from './routes/publicBooking.js';
 import mediaRoutes from './routes/media.js';
 import integrationRoutes from './routes/integrations.js';
+import dashboardRoutes from './routes/dashboard.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -63,6 +64,7 @@ app.use('/api/cms', cmsRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // 404 Handler for unknown API routes
 app.use('/api', (req, res) => {

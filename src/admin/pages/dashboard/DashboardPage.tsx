@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CalendarDays,
@@ -71,24 +71,83 @@ function MetricCard({
 
 export function DashboardPage() {
   const { user } = useAdminAuth();
-  const { metrics, refreshMetrics, refreshAppointments, refreshLeads } = useAdminStore();
+  const { appointments, leads, auditEntries, metrics, refreshMetrics, refreshAppointments, refreshLeads } = useAdminStore();
   const navigate = useNavigate();
 
+  const [dashboardData, setDashboardData] = useState<{
+    metrics?: any;
+    todaySchedule?: any[];
+    recentLeads?: any[];
+    recentActivity?: any[];
+    dateLabel?: string;
+  } | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const fetchDashboard = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/dashboard', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setDashboardData(data);
+        }
+      }
+    } catch (e) {
+      console.warn('[DashboardPage] /api/dashboard fallback:', e);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDashboard();
+    refreshAppointments();
+    refreshLeads();
+    refreshMetrics();
+  }, [fetchDashboard, refreshAppointments, refreshLeads, refreshMetrics]);
+
   const now = new Date();
-  const dateLabel = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const dateLabel = dashboardData?.dateLabel || now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const effectiveMetrics = dashboardData?.metrics || metrics;
 
   // Load live data
-  const todayAppts = useMemo(() => appointmentStorage.getTodayAppointments(), []);
-  const recentLeads = useMemo(() => leadStorage.getAll().slice(0, 5), []);
-  const recentActivity = useMemo(() => auditStorage.getRecent(8), []);
+  const todayAppts = useMemo(() => {
+    if (dashboardData?.todaySchedule && dashboardData.todaySchedule.length > 0) {
+      return dashboardData.todaySchedule;
+    }
+    const todayStr = new Date().toISOString().split('T')[0];
+    const storeMatches = appointments.filter(a => a.preferredDate === todayStr || a.date === todayStr);
+    if (storeMatches.length > 0) return storeMatches;
+    return appointmentStorage.getTodayAppointments();
+  }, [dashboardData, appointments]);
+
+  const recentLeads = useMemo(() => {
+    if (dashboardData?.recentLeads && dashboardData.recentLeads.length > 0) {
+      return dashboardData.recentLeads;
+    }
+    if (leads.length > 0) return leads.slice(0, 5);
+    return leadStorage.getAll().slice(0, 5);
+  }, [dashboardData, leads]);
+
+  const recentActivity = useMemo(() => {
+    if (dashboardData?.recentActivity && dashboardData.recentActivity.length > 0) {
+      return dashboardData.recentActivity;
+    }
+    if (auditEntries.length > 0) return auditEntries.slice(0, 8);
+    return auditStorage.getRecent(8);
+  }, [dashboardData, auditEntries]);
 
   const attentionItems = useMemo(() => {
     const items: { label: string; count: number; path: string; color: string; icon: React.ReactNode }[] = [];
-    if (metrics.newLeads > 0) items.push({ label: 'New inquiries', count: metrics.newLeads, path: '/admin/leads•status=New', color: 'text-[#1E40AF]', icon: <Activity size={14} /> });
-    if (metrics.cancelledToday > 0) items.push({ label: 'Cancelled today', count: metrics.cancelledToday, path: '/admin/appointments•status=Cancelled', color: 'text-red-700', icon: <XCircle size={14} /> });
-    if (metrics.pendingFollowUps > 0) items.push({ label: 'Follow-ups due', count: metrics.pendingFollowUps, path: '/admin/leads•status=Follow-up', color: 'text-amber-700', icon: <Clock size={14} /> });
+    if (effectiveMetrics.newLeads > 0) items.push({ label: 'New inquiries', count: effectiveMetrics.newLeads, path: '/admin/leads?status=New', color: 'text-[#1E40AF]', icon: <Activity size={14} /> });
+    if (effectiveMetrics.cancelledToday > 0) items.push({ label: 'Cancelled today', count: effectiveMetrics.cancelledToday, path: '/admin/appointments?status=Cancelled', color: 'text-red-700', icon: <XCircle size={14} /> });
+    if (effectiveMetrics.pendingFollowUps > 0) items.push({ label: 'Follow-ups due', count: effectiveMetrics.pendingFollowUps, path: '/admin/leads?status=Follow-up', color: 'text-amber-700', icon: <Clock size={14} /> });
     return items;
-  }, [metrics]);
+  }, [effectiveMetrics]);
 
   const activityIcons: Record<string, React.ReactNode> = {
     approved: <CheckCircle2 size={13} className="text-green-600" />,
@@ -108,6 +167,20 @@ export function DashboardPage() {
           <p className="text-sm text-[#9E968C] mt-0.5">{dateLabel}</p>
         </div>
         <div className="flex gap-2 flex-shrink-0">
+          <button
+            onClick={() => {
+              fetchDashboard();
+              refreshAppointments();
+              refreshLeads();
+              refreshMetrics();
+            }}
+            disabled={isRefreshing}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[#E5E2DC] bg-white text-xs font-medium text-[#2C2926] hover:bg-[#F8F7F4] transition-colors disabled:opacity-50"
+            title="Refresh Live Data"
+          >
+            <RefreshCw size={13} className={isRefreshing ? 'animate-spin text-[#10B981]' : 'text-[#5A544E]'} />
+            <span className="hidden sm:inline">{isRefreshing ? 'Syncing...' : 'Refresh'}</span>
+          </button>
           <button
             onClick={() => navigate('/admin/appointments/new')}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#10B981] text-white text-xs font-semibold hover:bg-[#8F3717] transition-colors"
@@ -129,15 +202,15 @@ export function DashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <MetricCard
           label="Today's Appointments"
-          value={metrics.todayAppointments}
-          sub={`${todayAppts.filter(a => a.status === 'Confirmed').length} confirmed`}
+          value={effectiveMetrics.todayAppointments}
+          sub={`${todayAppts.filter(a => (a.status || '').toLowerCase() === 'confirmed').length} confirmed`}
           icon={<CalendarDays size={17} className="text-[#0F2747]" />}
           color="bg-blue-50"
           onClick={() => navigate('/admin/appointments')}
         />
         <MetricCard
           label="New Leads"
-          value={metrics.newLeads}
+          value={effectiveMetrics.newLeads}
           sub="Awaiting contact"
           icon={<Activity size={17} className="text-[#0F2747]" />}
           color="bg-blue-50"
@@ -145,7 +218,7 @@ export function DashboardPage() {
         />
         <MetricCard
           label="Pending Follow-ups"
-          value={metrics.pendingFollowUps}
+          value={effectiveMetrics.pendingFollowUps}
           sub="Action required"
           icon={<Clock size={17} className="text-[#0F2747]" />}
           color="bg-blue-50"
@@ -153,7 +226,7 @@ export function DashboardPage() {
         />
         <MetricCard
           label="Unread Notifications"
-          value={metrics.unreadNotifications}
+          value={effectiveMetrics.unreadNotifications}
           icon={<Bell size={17} className="text-[#0F2747]" />}
           color="bg-blue-50"
           onClick={() => navigate('/admin/notifications')}
