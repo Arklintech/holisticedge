@@ -3,4 +3,12 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /favicon*
+Allow: /assets/
+
 Sitemap: https://holisticedge.in/sitemap.xml
