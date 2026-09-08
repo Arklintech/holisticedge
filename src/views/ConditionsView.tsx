@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { usePublishedConditions, usePublishedCondition } from '../hooks/useCmsContent';
@@ -109,7 +109,7 @@ export const ConditionsView: React.FC<ConditionsViewProps> = ({
                   onError={(e) => {
                     const target = e.currentTarget;
                     target.onerror = null;
-                    target.src = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef•q=80&w=900&auto=format&fit=crop';
+                    target.src = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=900&auto=format&fit=crop';
                   }}
                   referrerPolicy="no-referrer"
                 />
@@ -202,7 +202,7 @@ export const ConditionsView: React.FC<ConditionsViewProps> = ({
           {/* Bottom Conversion Banner */}
           <div className="bg-[#1A1A1A] text-[#FAF9F6] p-8 rounded-3xl text-center space-y-4 border border-[#332E2A]">
             <h3 className="text-2xl font-normal font-serif">
-              Suffering from {title}•
+              Suffering from {title}?
             </h3>
             <p className="text-xs sm:text-sm text-[#D4CEC5] max-w-md mx-auto">
               Book an appointment with Healer Abdul Mallik to review your symptoms and reports.

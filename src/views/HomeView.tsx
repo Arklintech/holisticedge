@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { HeroSection } from '../components/sections/HeroSection';
 import { TrustStrip } from '../components/sections/TrustStrip';
 import { WhatBringsYouHere } from '../components/sections/WhatBringsYouHere';
@@ -36,7 +36,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 2. Trust Strip */}
       <TrustStrip />
 
-      {/* 3. "What Brings You Here•" Interactive Condition Triage */}
+      {/* 3. "What Brings You Here?" Interactive Condition Triage */}
       <WhatBringsYouHere onOpenBooking={() => onOpenBooking()} />
 
       {/* 4. Clinical Services Overview */}
@@ -64,7 +64,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
       {/* 12. Location, Maps & Inquiry System */}
       <LocationContactSection onOpenBooking={() => onOpenBooking()} />
 
-      {/* 13. Final Conversion CT• */}
+      {/* 13. Final Conversion CTA */}
       <FinalCtaSection onOpenBooking={() => onOpenBooking()} />
     </div>
   );

@@ -3,6 +3,7 @@ import { db } from '../db.js';
 import { authenticate } from '../middleware/auth.js';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { sendAppointmentConfirmationEmail } from '../services/emailService.js';
+import { notificationService } from '../services/notificationService.js';
 
 const router = express.Router();
 const dataProvider = getActiveDataProvider();
@@ -238,18 +239,97 @@ router.post('/', async (req, res) => {
     timestamp: new Date().toISOString(),
   });
 
+  // Trigger unified notification service for confirmation (Email & WhatsApp readiness)
+  try {
+    await notificationService.notify({
+      eventType: 'appointment_confirmed',
+      patient,
+      appointment: newAppt,
+    });
+  } catch (notifErr) {
+    console.error('[AppointmentsRoute] Notification error:', notifErr.message);
+  }
+
   res.status(201).json({ success: true, appointment: newAppt, patient, emailSent });
 });
 
-// PUT /api/appointments/:id
-router.put('/:id', authenticate, async (req, res) => {
-  let updated = db.update('appointments', req.params.id, req.body);
+// PATCH /api/appointments/:id/status
+router.patch('/:id/status', authenticate, async (req, res) => {
+  const { status } = req.body;
+  if (!status) return res.status(400).json({ error: 'Status is required' });
+
+  const apptId = req.params.id;
+  const updatePayload = { status, updatedAt: new Date().toISOString() };
+
+  // 1. Update in local db
+  let updated = db.update('appointments', apptId, updatePayload);
+
+  // 2. Persist to Google Sheets / dataProvider
+  try {
+    await dataProvider.updateAppointment(apptId, updatePayload);
+  } catch (sheetErr) {
+    console.warn('[AppointmentsRoute] Google Sheets status update notice:', sheetErr.message);
+  }
+
+  // 3. Fallback lookup if record was from Google Sheets and not yet in db.json
   if (!updated) {
     try {
       const all = await dataProvider.getAppointments();
-      const existing = all.find(a => a.id === req.params.id);
+      const existing = all.find(a => a.id === apptId);
       if (existing) {
-        updated = { ...existing, ...req.body, updatedAt: new Date().toISOString() };
+        updated = { ...existing, ...updatePayload };
+        db.insert('appointments', updated);
+      }
+    } catch (_) {}
+  }
+
+  if (!updated) return res.status(404).json({ error: 'Appointment not found' });
+
+  // 4. Audit Log
+  db.insert('auditLogs', {
+    id: `audit_${Date.now()}`,
+    actor: req.user?.name || 'Admin',
+    action: 'updated_status',
+    entity: 'appointment',
+    entityId: apptId,
+    description: `Updated appointment status to ${status}`,
+    timestamp: new Date().toISOString(),
+  });
+
+  // 5. Trigger notification event
+  try {
+    const patient = db.find('patients', p => p.id === updated.patientId || p.phone === updated.patientPhone);
+    const eventType = status.toUpperCase() === 'CANCELLED' ? 'appointment_cancelled' : 'appointment_rescheduled';
+    await notificationService.notify({
+      eventType,
+      patient,
+      appointment: updated,
+    });
+  } catch (_) {}
+
+  res.json({ success: true, appointment: updated });
+});
+
+// PUT & PATCH /api/appointments/:id
+const handleUpdateAppointment = async (req, res) => {
+  const apptId = req.params.id;
+  const updatePayload = { ...req.body, updatedAt: new Date().toISOString() };
+
+  let updated = db.update('appointments', apptId, updatePayload);
+
+  // Persist to Google Sheets / dataProvider
+  try {
+    await dataProvider.updateAppointment(apptId, updatePayload);
+  } catch (sheetErr) {
+    console.warn('[AppointmentsRoute] Google Sheets update notice:', sheetErr.message);
+  }
+
+  if (!updated) {
+    try {
+      const all = await dataProvider.getAppointments();
+      const existing = all.find(a => a.id === apptId);
+      if (existing) {
+        updated = { ...existing, ...updatePayload };
         db.insert('appointments', updated);
       }
     } catch (e) {}
@@ -261,13 +341,16 @@ router.put('/:id', authenticate, async (req, res) => {
     actor: req.user?.name || 'Admin',
     action: 'updated',
     entity: 'appointment',
-    entityId: req.params.id,
-    description: `Updated appointment status to ${updated.status}`,
+    entityId: apptId,
+    description: `Updated appointment fields (${Object.keys(req.body).join(', ')})`,
     timestamp: new Date().toISOString(),
   });
 
   res.json({ success: true, appointment: updated });
-});
+};
+
+router.put('/:id', authenticate, handleUpdateAppointment);
+router.patch('/:id', authenticate, handleUpdateAppointment);
 
 // DELETE /api/appointments/:id
 router.delete('/:id', authenticate, (req, res) => {
@@ -277,3 +360,4 @@ router.delete('/:id', authenticate, (req, res) => {
 });
 
 export default router;
+

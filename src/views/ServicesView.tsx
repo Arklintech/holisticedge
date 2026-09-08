@@ -140,7 +140,7 @@ export const ServicesView: React.FC<ServicesViewProps> = ({
                   onError={(e) => {
                     const target = e.currentTarget;
                     target.onerror = null;
-                    target.src = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef•q=80&w=900&auto=format&fit=crop';
+                    target.src = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=900&auto=format&fit=crop';
                   }}
                   referrerPolicy="no-referrer"
                 />
@@ -187,7 +187,7 @@ export const ServicesView: React.FC<ServicesViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card padding="lg" className="border-[#E8E4DC] space-y-4 text-left bg-white">
               <h3 className="text-lg font-bold text-[#1A1A1A] font-serif">
-                Who Is This Treatment Recommended For•
+                Who Is This Treatment Recommended For?
               </h3>
               <ul className="space-y-2.5 text-xs sm:text-sm text-[#3E3A35]">
                 {whoIsItFor.map((w, idx) => (
@@ -274,7 +274,7 @@ export const ServicesView: React.FC<ServicesViewProps> = ({
           {/* Bottom Conversion Banner */}
           <div className="bg-[#1A1A1A] text-[#FAF9F6] p-8 rounded-3xl text-center space-y-4 border border-[#332E2A]">
             <h3 className="text-2xl font-normal font-serif">
-              Ready to schedule your {selectedService.title}•
+              Ready to schedule your {selectedService.title}?
             </h3>
             <p className="text-xs sm:text-sm text-[#D4CEC5] max-w-md mx-auto">
               Book a consultation with Healer Abdul Mallik to assess your symptoms and start your recovery.

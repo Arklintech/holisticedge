@@ -53,7 +53,7 @@ function MainContent() {
 
   return (
     <Routes>
-      {/* Isolated Admin SP• */}
+      {/* Isolated Admin SPA */}
       <Route path="/admin/*" element={<AdminApp />} />
 
       {/* Public facing website layout */}
@@ -90,7 +90,7 @@ function MainContent() {
             {/* Floating WhatsApp Action */}
             <FloatingWhatsApp />
 
-            {/* Sticky Mobile Bottom CT• Bar */}
+            {/* Sticky Mobile Bottom CTA Bar */}
             <MobileBottomBar onOpenBooking={handleOpenBooking} />
 
             {/* Global Consultation Booking Modal */}

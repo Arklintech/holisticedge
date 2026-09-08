@@ -106,7 +106,7 @@ export const LocationContactSection: React.FC<LocationContactProps> = ({ onOpenB
     }, 600);
   };
 
-  const googleMapsUrl = `https://www.google.com/maps/search/•api=1&query=${encodeURIComponent(
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     'Susheel Apartments, Olive Hospital, Mehdipatnam, Hyderabad 500028'
   )}`;
 

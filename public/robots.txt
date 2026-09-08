@@ -11,4 +11,5 @@ Allow: /
 Allow: /favicon*
 Allow: /assets/
 
+Sitemap: https://www.holisticedge.in/sitemap.xml
 Sitemap: https://holisticedge.in/sitemap.xml
