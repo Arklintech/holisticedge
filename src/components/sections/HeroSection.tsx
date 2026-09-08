@@ -52,17 +52,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Core Value Proposition */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-left min-w-0">
             {/* Top Pill */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2"
+              className="inline-flex items-center gap-2 max-w-full"
             >
-              <Badge variant="editorial" size="md" className="py-1 px-3.5 shadow-sm">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#0F2747]" />
-                <span>Mehdipatnam, Hyderabad · Founded by Healer Abdul Mallik</span>
+              <Badge variant="editorial" size="md" className="py-1 px-3.5 shadow-sm whitespace-normal sm:whitespace-nowrap text-left leading-snug rounded-2xl sm:rounded-full">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#0F2747] shrink-0 mt-0.5 sm:mt-0" />
+                <span className="break-words">Mehdipatnam, Hyderabad · Founded by Healer Abdul Mallik</span>
               </Badge>
             </motion.div>
 
@@ -71,7 +71,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-normal text-[#1A1A1A] leading-[1.12] font-serif tracking-tight"
+              className="text-[28px] xs:text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-normal text-[#1A1A1A] leading-[1.14] font-serif tracking-tight break-words"
             >
               Non-Surgical Spine & Joint Realignment
             </motion.h1>
@@ -81,7 +81,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base sm:text-lg text-[#5A544E] leading-relaxed max-w-2xl"
+              className="text-base sm:text-lg text-[#5A544E] leading-relaxed max-w-2xl break-words"
             >
               Personalized, non-surgical and non-medicinal approaches for spine, joint, and musculoskeletal conditions. Combining precision Chiropractic care, Acupuncture, and our signature{' '}
               <strong className="text-[#1A1A1A] font-semibold">A.M.M Method™</strong> in Hyderabad.
@@ -93,42 +93,42 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, ease: 'easeOut' }}
-                className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F2747] via-[#0B1D3A] to-[#081528] text-white p-4 sm:p-5 shadow-xl shadow-[#0F2747]/25 border border-white/15"
+                className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F2747] via-[#0B1D3A] to-[#081528] text-white p-4 sm:p-5 shadow-xl shadow-[#0F2747]/25 border border-white/15 max-w-full"
               >
                 {/* Subtle Ambient Decorative Glow */}
                 <div className="absolute -top-12 -right-12 w-36 h-36 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
                 <div className="absolute -bottom-8 -left-8 w-28 h-28 bg-[#10B981]/10 rounded-full blur-xl pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full">
                   {/* Content Side */}
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center flex-shrink-0 mt-0.5 shadow-inner">
-                      <Sparkles size={18} className="text-blue-200" />
+                  <div className="flex items-start gap-3 min-w-0 flex-1 w-full sm:w-auto">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-inner">
+                      <Sparkles size={16} className="text-blue-200" />
                     </div>
-                    <div className="space-y-1.5 text-left">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-bold tracking-wider uppercase bg-white text-[#0F2747] px-2.5 py-0.5 rounded-full shadow-xs">
+                    <div className="space-y-1.5 text-left min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                        <span className="text-[10px] font-bold tracking-wider uppercase bg-white text-[#0F2747] px-2 py-0.5 rounded-full shadow-xs shrink-0">
                           {heroOffer.label || 'Special Promotion'}
                         </span>
                         {heroOffer.discountValue && (
-                          <span className="text-[10.5px] font-bold text-[#FAF9F6] bg-white/15 backdrop-blur-xs border border-white/20 px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] sm:text-[10.5px] font-bold text-[#FAF9F6] bg-white/15 backdrop-blur-xs border border-white/20 px-2 py-0.5 rounded-full shrink-0">
                             {heroOffer.discountValue}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-base sm:text-lg font-bold text-white font-serif tracking-tight leading-snug">
+                      <h3 className="text-base sm:text-lg font-bold text-white font-serif tracking-tight leading-snug break-words">
                         {heroOffer.title}
                       </h3>
-                      <p className="text-xs sm:text-[13px] text-white/85 leading-relaxed max-w-xl">
+                      <p className="text-xs sm:text-[13px] text-white/85 leading-relaxed max-w-xl break-words">
                         {heroOffer.shortDescription}
                       </p>
                     </div>
                   </div>
 
-                  {/* High Contrast CT• Button */}
+                  {/* High Contrast CTA Button */}
                   <button
                     onClick={() => handleHeroCtaClick(heroOffer)}
-                    className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white hover:bg-blue-50 text-[#0F2747] text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap shadow-md hover:shadow-lg active:scale-98 flex-shrink-0"
+                    className="w-full sm:w-auto px-5 py-2.5 sm:py-3 rounded-xl bg-white hover:bg-blue-50 text-[#0F2747] text-xs sm:text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-98 shrink-0"
                   >
                     <span>{heroOffer.ctaText || 'Claim Offer'}</span>
                     <ArrowRight size={14} className="text-[#0F2747]" />
