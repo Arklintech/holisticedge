@@ -12,7 +12,7 @@
     "clean": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\"",
     "type-check": "node ./node_modules/typescript/bin/tsc --noEmit",
     "check:encoding": "node --test tests/checkEncoding.test.mjs",
-    "test": "node --test tests/auditExports.test.mjs tests/checkEncoding.test.mjs tests/apiContracts.test.mjs && node --experimental-strip-types --test tests/regression_HE_QA.test.mjs"
+    "test": "node --test tests/auditExports.test.mjs tests/checkEncoding.test.mjs tests/apiContracts.test.mjs tests/whatsappWebhook.test.mjs && node --experimental-strip-types --test tests/regression_HE_QA.test.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

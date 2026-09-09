@@ -7442,6 +7442,24 @@
   ],
   "auditLogs": [
     {
+      "id": "audit_wa_1788950404607_z83s",
+      "actor": "WhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wamid.HBgTESTMSG123",
+      "description": "WhatsApp message wamid.HBgTESTMSG123 to 918142642051: DELIVERED",
+      "timestamp": "2026-09-09T10:40:04.000Z"
+    },
+    {
+      "id": "audit_wa_1788950376601_ogeo",
+      "actor": "WhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wamid.HBgTESTMSG123",
+      "description": "WhatsApp message wamid.HBgTESTMSG123 to 918142642051: DELIVERED",
+      "timestamp": "2026-09-09T10:39:36.000Z"
+    },
+    {
       "id": "audit_1788521938419",
       "actor": "SYSTEM / PUBLIC_BOOKING",
       "actorId": "pt_1788521937227_a2km4",
