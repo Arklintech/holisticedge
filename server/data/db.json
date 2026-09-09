@@ -6250,7 +6250,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "RC Audit Patient (HE-001301) booked for 2026-09-05 at 04:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:38:58.411Z"
     },
     {
@@ -6258,7 +6258,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "RC Audit Patient (HE-001301) booked for 2026-09-04 at 06:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:38:57.273Z"
     },
     {
@@ -6266,7 +6266,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-05 at 04:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:30:08.316Z"
     },
     {
@@ -6274,7 +6274,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-04 at 04:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:30:07.510Z"
     },
     {
@@ -6282,7 +6282,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:30:05.215Z"
     },
     {
@@ -6290,7 +6290,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-04 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:30:04.333Z"
     },
     {
@@ -6298,7 +6298,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "abbu (HE-001288) booked for 2026-09-05 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:30:01.941Z"
     },
     {
@@ -6306,7 +6306,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "abbu (HE-001288) booked for 2026-09-04 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:30:01.099Z"
     },
     {
@@ -6314,7 +6314,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-05 at 10:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:58.725Z"
     },
     {
@@ -6322,7 +6322,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Invalid Email (HE-001300) booked for 2026-09-04 at 09:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:57.337Z"
     },
     {
@@ -6330,7 +6330,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-05 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:40.142Z"
     },
     {
@@ -6338,7 +6338,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-04 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:39.333Z"
     },
     {
@@ -6346,7 +6346,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Invalid Email (HE-001300) booked for 2026-09-04 at 09:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:38.410Z"
     },
     {
@@ -6354,7 +6354,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-05 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:05.153Z"
     },
     {
@@ -6362,7 +6362,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-04 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:04.402Z"
     },
     {
@@ -6370,7 +6370,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-05 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:02.873Z"
     },
     {
@@ -6378,7 +6378,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-04 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:02.057Z"
     },
     {
@@ -6386,7 +6386,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "abbu (HE-001288) booked for 2026-09-05 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:29:00.503Z"
     },
     {
@@ -6394,7 +6394,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "abbu (HE-001288) booked for 2026-09-04 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:28:59.695Z"
     },
     {
@@ -6402,7 +6402,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-05 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:28:58.064Z"
     },
     {
@@ -6410,7 +6410,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-04 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:28:57.141Z"
     },
     {
@@ -6418,7 +6418,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Invalid Email (HE-001300) booked for 2026-09-04 at 09:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-04T11:28:55.259Z"
     },
     {
@@ -6426,7 +6426,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Cap Test Patient 5 (HE-001298) booked for 2026-09-25 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:53.011Z"
     },
     {
@@ -6434,7 +6434,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Cap Test Patient 4 (HE-001297) booked for 2026-09-25 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:51.533Z"
     },
     {
@@ -6442,7 +6442,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Cap Test Patient 3 (HE-001296) booked for 2026-09-25 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:49.979Z"
     },
     {
@@ -6450,7 +6450,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Cap Test Patient 2 (HE-001295) booked for 2026-09-25 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:48.319Z"
     },
     {
@@ -6458,7 +6458,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Cap Test Patient 1 (HE-001294) booked for 2026-09-25 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:46.744Z"
     },
     {
@@ -6466,7 +6466,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-19 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:38.417Z"
     },
     {
@@ -6474,7 +6474,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-19 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:37.295Z"
     },
     {
@@ -6482,7 +6482,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-18 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:31.137Z"
     },
     {
@@ -6493,7 +6493,7 @@
       "entityId": "HE-APPT-862101",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-862101",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:02.113Z"
     },
     {
@@ -6504,7 +6504,7 @@
       "entityId": "HE-APPT-861420",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-861420",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:01.452Z"
     },
     {
@@ -6515,7 +6515,7 @@
       "entityId": "HE-APPT-860705",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-860705",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:00.762Z"
     },
     {
@@ -6526,7 +6526,7 @@
       "entityId": "HE-APPT-859971",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-859971",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:51:00.022Z"
     },
     {
@@ -6537,7 +6537,7 @@
       "entityId": "HE-APPT-859272",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-859272",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:59.303Z"
     },
     {
@@ -6548,7 +6548,7 @@
       "entityId": "HE-APPT-858537",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-858537",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:58.618Z"
     },
     {
@@ -6559,7 +6559,7 @@
       "entityId": "HE-APPT-857829",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-857829",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:57.862Z"
     },
     {
@@ -6570,7 +6570,7 @@
       "entityId": "HE-APPT-857125",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-857125",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:57.170Z"
     },
     {
@@ -6581,7 +6581,7 @@
       "entityId": "HE-APPT-856387",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-856387",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:56.419Z"
     },
     {
@@ -6592,7 +6592,7 @@
       "entityId": "HE-APPT-855722",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-855722",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:55.739Z"
     },
     {
@@ -6603,7 +6603,7 @@
       "entityId": "HE-APPT-855065",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-855065",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:55.078Z"
     },
     {
@@ -6614,7 +6614,7 @@
       "entityId": "HE-APPT-854341",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-854341",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:54.378Z"
     },
     {
@@ -6625,7 +6625,7 @@
       "entityId": "HE-APPT-853703",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-853703",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:53.713Z"
     },
     {
@@ -6636,7 +6636,7 @@
       "entityId": "HE-APPT-852994",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-852994",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:53.039Z"
     },
     {
@@ -6647,7 +6647,7 @@
       "entityId": "HE-APPT-852322",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-852322",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:52.341Z"
     },
     {
@@ -6658,7 +6658,7 @@
       "entityId": "HE-APPT-851671",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-851671",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:51.689Z"
     },
     {
@@ -6669,7 +6669,7 @@
       "entityId": "HE-APPT-850928",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-850928",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:50.959Z"
     },
     {
@@ -6680,7 +6680,7 @@
       "entityId": "HE-APPT-850261",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-850261",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:50.274Z"
     },
     {
@@ -6691,7 +6691,7 @@
       "entityId": "HE-APPT-849597",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-849597",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:49.619Z"
     },
     {
@@ -6702,7 +6702,7 @@
       "entityId": "HE-APPT-848952",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-848952",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:48.964Z"
     },
     {
@@ -6713,7 +6713,7 @@
       "entityId": "HE-APPT-848239",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-848239",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:48.289Z"
     },
     {
@@ -6724,7 +6724,7 @@
       "entityId": "HE-APPT-847537",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-847537",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:47.579Z"
     },
     {
@@ -6735,7 +6735,7 @@
       "entityId": "HE-APPT-846828",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-846828",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:46.856Z"
     },
     {
@@ -6746,7 +6746,7 @@
       "entityId": "HE-APPT-846116",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-846116",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:46.167Z"
     },
     {
@@ -6757,7 +6757,7 @@
       "entityId": "HE-APPT-845436",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-845436",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:45.446Z"
     },
     {
@@ -6768,7 +6768,7 @@
       "entityId": "HE-APPT-844744",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-844744",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:44.776Z"
     },
     {
@@ -6779,7 +6779,7 @@
       "entityId": "HE-APPT-844060",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-844060",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:44.105Z"
     },
     {
@@ -6790,7 +6790,7 @@
       "entityId": "HE-APPT-843419",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-843419",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:43.431Z"
     },
     {
@@ -6801,7 +6801,7 @@
       "entityId": "HE-APPT-842762",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-842762",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:42.780Z"
     },
     {
@@ -6812,7 +6812,7 @@
       "entityId": "HE-APPT-842038",
       "entityType": "appointment",
       "link": "/admin/appointments/HE-APPT-842038",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:42.059Z"
     },
     {
@@ -6820,7 +6820,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-08 at 03:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:41.359Z"
     },
     {
@@ -6828,7 +6828,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-08 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:39.708Z"
     },
     {
@@ -6836,7 +6836,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-07 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:38.077Z"
     },
     {
@@ -6844,7 +6844,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-07 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:36.410Z"
     },
     {
@@ -6852,7 +6852,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-06 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:34.645Z"
     },
     {
@@ -6860,7 +6860,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 05 (HE-001293) booked for 2026-09-06 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:32.911Z"
     },
     {
@@ -6868,7 +6868,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-08 at 03:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:30.918Z"
     },
     {
@@ -6876,7 +6876,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-08 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:29.348Z"
     },
     {
@@ -6884,7 +6884,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-07 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:27.747Z"
     },
     {
@@ -6892,7 +6892,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-07 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:26.185Z"
     },
     {
@@ -6900,7 +6900,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-06 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:24.522Z"
     },
     {
@@ -6908,7 +6908,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 04 (HE-001292) booked for 2026-09-06 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:22.828Z"
     },
     {
@@ -6916,7 +6916,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 03 (HE-001291) booked for 2026-09-08 at 03:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:20.613Z"
     },
     {
@@ -6924,7 +6924,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 03 (HE-001291) booked for 2026-09-08 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:18.939Z"
     },
     {
@@ -6932,7 +6932,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 03 (HE-001291) booked for 2026-09-07 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:17.373Z"
     },
     {
@@ -6940,7 +6940,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 03 (HE-001291) booked for 2026-09-07 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:15.780Z"
     },
     {
@@ -6948,7 +6948,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 03 (HE-001291) booked for 2026-09-06 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:13.879Z"
     },
     {
@@ -6956,7 +6956,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 03 (HE-001291) booked for 2026-09-06 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:11.872Z"
     },
     {
@@ -6964,7 +6964,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-08 at 03:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:09.577Z"
     },
     {
@@ -6972,7 +6972,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-08 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:07.673Z"
     },
     {
@@ -6980,7 +6980,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-07 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:06.060Z"
     },
     {
@@ -6988,7 +6988,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-07 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:04.266Z"
     },
     {
@@ -6996,7 +6996,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-06 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:02.610Z"
     },
     {
@@ -7004,7 +7004,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-06 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:50:00.860Z"
     },
     {
@@ -7012,7 +7012,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-08 at 03:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:49:59.149Z"
     },
     {
@@ -7020,7 +7020,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-08 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:49:57.329Z"
     },
     {
@@ -7028,7 +7028,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-07 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:49:55.315Z"
     },
     {
@@ -7036,7 +7036,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-04 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:48:00.708Z"
     },
     {
@@ -7044,7 +7044,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-04 at 11:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:46:35.359Z"
     },
     {
@@ -7052,7 +7052,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient 01 (HE-001290) booked for 2026-09-04 at 10:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:42:33.406Z"
     },
     {
@@ -7060,7 +7060,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Test Patient (HE-001289) booked for 2026-09-04 at 10:30 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:14:04.242Z"
     },
     {
@@ -7068,7 +7068,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "abbu (HE-001288) booked for 2026-09-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T22:01:23.683Z"
     },
     {
@@ -7076,7 +7076,7 @@
       "title": "New Online Appointment Automatically Confirmed",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-04 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-03T09:58:10.078Z"
     },
     {
@@ -7084,7 +7084,7 @@
       "title": "New Appointment Booked",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-05 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-02T10:55:55.079Z"
     },
     {
@@ -7092,7 +7092,7 @@
       "title": "New Appointment Booked",
       "message": "Anas Ahmed Khan (HE-001284) booked for 2026-09-05 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-02T10:46:57.416Z"
     },
     {
@@ -7100,7 +7100,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788340264755 (HE-001287) booked for 2027-03-08 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-02T09:11:05.003Z"
     },
     {
@@ -7108,7 +7108,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788340264755 (HE-001287) booked for 2027-02-07 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-02T09:11:04.774Z"
     },
     {
@@ -7116,7 +7116,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788340264755 (HE-001287) booked for 2027-01-06 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-02T09:11:04.764Z"
     },
     {
@@ -7124,7 +7124,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788340218610 (HE-001286) booked for 2026-11-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-02T09:10:18.621Z"
     },
     {
@@ -7132,7 +7132,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788261696272 (HE-001285) booked for 2026-12-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:21:36.483Z"
     },
     {
@@ -7140,7 +7140,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788261696272 (HE-001285) booked for 2026-11-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:21:36.287Z"
     },
     {
@@ -7148,7 +7148,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788261696272 (HE-001285) booked for 2026-11-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:21:36.278Z"
     },
     {
@@ -7156,7 +7156,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788260777160 (HE-000009) booked for 2026-12-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:06:17.392Z"
     },
     {
@@ -7164,7 +7164,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788260777160 (HE-000009) booked for 2026-11-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:06:17.186Z"
     },
     {
@@ -7172,7 +7172,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788260777160 (HE-000009) booked for 2026-11-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:06:17.171Z"
     },
     {
@@ -7180,7 +7180,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-10-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:06:11.874Z"
     },
     {
@@ -7188,7 +7188,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-09-20 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:06:07.172Z"
     },
     {
@@ -7196,7 +7196,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788260585041 (HE-000008) booked for 2026-12-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:03:05.249Z"
     },
     {
@@ -7204,7 +7204,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788260585041 (HE-000008) booked for 2026-11-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:03:05.063Z"
     },
     {
@@ -7212,7 +7212,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788260585041 (HE-000008) booked for 2026-11-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T11:03:05.056Z"
     },
     {
@@ -7220,7 +7220,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259414655 (HE-000007) booked for 2026-12-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:43:34.913Z"
     },
     {
@@ -7228,7 +7228,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259414655 (HE-000007) booked for 2026-11-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:43:34.700Z"
     },
     {
@@ -7236,7 +7236,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259414655 (HE-000007) booked for 2026-11-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:43:34.679Z"
     },
     {
@@ -7244,7 +7244,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-10-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:43:33.234Z"
     },
     {
@@ -7252,7 +7252,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-09-20 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:43:29.082Z"
     },
     {
@@ -7260,7 +7260,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259190390 (HE-000006) booked for 2026-12-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:50.612Z"
     },
     {
@@ -7268,7 +7268,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259190390 (HE-000006) booked for 2026-11-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:50.419Z"
     },
     {
@@ -7276,7 +7276,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259190390 (HE-000006) booked for 2026-11-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:50.404Z"
     },
     {
@@ -7284,7 +7284,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-10-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:48.891Z"
     },
     {
@@ -7292,7 +7292,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-09-20 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:44.070Z"
     },
     {
@@ -7300,7 +7300,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788259160527 (HE-000005) booked for 2026-09-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:20.558Z"
     },
     {
@@ -7308,7 +7308,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-10-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:19.507Z"
     },
     {
@@ -7316,7 +7316,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-09-20 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:39:14.963Z"
     },
     {
@@ -7324,7 +7324,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-10-05 at 02:30 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:36:50.055Z"
     },
     {
@@ -7332,7 +7332,7 @@
       "title": "New Appointment Booked",
       "message": "SMTP Patient 1788259004707 (HE-000004) booked for 2026-09-20 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-09-01T10:36:44.720Z"
     },
     {
@@ -7340,7 +7340,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788199879460 (HE-000003) booked for 2026-10-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:11:19.681Z"
     },
     {
@@ -7348,7 +7348,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788199879460 (HE-000003) booked for 2026-09-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:11:19.486Z"
     },
     {
@@ -7356,7 +7356,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788199879460 (HE-000003) booked for 2026-09-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:11:19.469Z"
     },
     {
@@ -7364,7 +7364,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788199760493 (HE-000002) booked for 2026-10-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:09:20.757Z"
     },
     {
@@ -7372,7 +7372,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788199760493 (HE-000002) booked for 2026-09-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:09:20.507Z"
     },
     {
@@ -7380,7 +7380,7 @@
       "title": "New Appointment Booked",
       "message": "Patient Test 1788199760493 (HE-000002) booked for 2026-09-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:09:20.498Z"
     },
     {
@@ -7388,7 +7388,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-10-01 at 11:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:38.020Z"
     },
     {
@@ -7396,7 +7396,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-09-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:37.958Z"
     },
     {
@@ -7404,7 +7404,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-09-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:37.954Z"
     },
     {
@@ -7412,7 +7412,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-09-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:21.582Z"
     },
     {
@@ -7420,7 +7420,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-09-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:21.577Z"
     },
     {
@@ -7428,7 +7428,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-09-15 at 02:00 PM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:11.266Z"
     },
     {
@@ -7436,7 +7436,7 @@
       "title": "New Appointment Booked",
       "message": "John Doe Lifecycle (HE-000001) booked for 2026-09-10 at 10:00 AM",
       "type": "appointment",
-      "status": "unread",
+      "status": "read",
       "createdAt": "2026-08-31T18:08:11.262Z"
     }
   ],

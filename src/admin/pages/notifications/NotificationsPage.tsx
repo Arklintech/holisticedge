@@ -28,19 +28,22 @@ function formatRelative(iso: string): string {
 
 export function NotificationsPage() {
   const navigate = useNavigate();
-  const { notifications, markNotificationRead, markAllNotificationsRead, clearAllNotifications, refreshNotifications } = useAdminStore();
+  const {
+    notifications,
+    markNotificationRead,
+    markAllNotificationsRead,
+    clearAllNotifications,
+    archiveNotification,
+    refreshNotifications,
+  } = useAdminStore();
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
-
-  React.useEffect(() => {
-    markAllNotificationsRead();
-  }, [markAllNotificationsRead]);
 
   const filtered = notifications
     .filter(n => n.status !== 'archived')
-    .filter(n => filter === 'all' ? true: n.status === filter);
+    .filter(n => filter === 'all' ? true : n.status === filter);
 
-  const handleArchive = (id: string) => {
-    notificationStorage.archive(id);
+  const handleArchive = async (id: string) => {
+    await archiveNotification(id);
     refreshNotifications();
   };
 

@@ -53,14 +53,29 @@ export function LeadsPage() {
 
   const handleStatusChange = useCallback(async (lead: AdminLead, newStatus: LeadStatus) => {
     setChangingStatus(lead.id);
-    await new Promise(r => setTimeout(r, 200));
-    const updated = leadStorage.update(lead.id, { status: newStatus });
-    if (updated) {
-      refreshLeads();
-      refreshMetrics();
-      logAudit('status_changed', 'lead', lead.id, `Lead ${lead.fullName} status changed to ${newStatus}`);
-      showToast('success', 'Status updated', `${lead.fullName} → ${newStatus}`);
+    leadStorage.update(lead.id, { status: newStatus, lastContactedAt: new Date().toISOString() });
+
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/leads/${lead.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          status: newStatus,
+          lastContactedAt: new Date().toISOString(),
+        }),
+      });
+    } catch (err) {
+      console.warn('Backend lead status update failed, updated locally:', err);
     }
+
+    refreshLeads();
+    refreshMetrics();
+    logAudit('status_changed', 'lead', lead.id, `Lead ${lead.fullName} status changed to ${newStatus}`);
+    showToast('success', 'Status updated', `${lead.fullName} → ${newStatus}`);
     setChangingStatus(null);
   }, [refreshLeads, refreshMetrics, logAudit, showToast]);
 

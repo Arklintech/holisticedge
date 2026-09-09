@@ -306,6 +306,16 @@ export const notificationStorage = {
     write(KEYS.NOTIFICATIONS, all);
     notifyAdminDataUpdated();
   },
+  delete(id: string): boolean {
+    const all = read<AdminNotification>(KEYS.NOTIFICATIONS);
+    const filtered = all.filter(n => n.id !== id);
+    if (filtered.length !== all.length) {
+      write(KEYS.NOTIFICATIONS, filtered);
+      notifyAdminDataUpdated();
+      return true;
+    }
+    return false;
+  },
   getUnreadCount(): number {
     return this.getAll().filter(n => n.status === 'unread').length;
   },

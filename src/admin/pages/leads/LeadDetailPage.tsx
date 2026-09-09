@@ -20,9 +20,10 @@ function formatTs(iso: string): string {
 export function LeadDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { refreshLeads, refreshMetrics, showToast, logAudit, user } = useAdminStore() as any;
+  const { leads, appointments, refreshLeads, refreshMetrics, showToast, logAudit, user } = useAdminStore() as any;
 
   const [lead, setLead] = useState<AdminLead | null>(null);
+  const [loading, setLoading] = useState(true);
   const [note, setNote] = useState('');
   const [addingNote, setAddingNote] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -31,13 +32,47 @@ export function LeadDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    const data = leadStorage.getById(id);
-    setLead(data);
-    if (data) {
-      const appts = appointmentStorage.getAll().filter(a => a.leadId === id || a.phone === data.phone);
-      setLinkedAppts(appts);
+
+    let found: AdminLead | null = null;
+    if (Array.isArray(leads) && leads.length > 0) {
+      found = leads.find((l: AdminLead) => l.id === id) || null;
     }
-  }, [id]);
+    if (!found) {
+      found = leadStorage.getById(id) || null;
+    }
+
+    if (found) {
+      setLead(found);
+      const appts = Array.isArray(appointments) && appointments.length > 0
+        ? appointments.filter((a: any) => a.leadId === id || a.phone === found?.phone)
+        : appointmentStorage.getAll().filter(a => a.leadId === id || a.phone === found?.phone);
+      setLinkedAppts(appts);
+      setLoading(false);
+    }
+
+    // Always fetch latest from backend
+    fetch(`/api/leads/${id}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.success && data.lead) {
+          setLead(data.lead);
+          const appts = Array.isArray(appointments) && appointments.length > 0
+            ? appointments.filter((a: any) => a.leadId === id || a.phone === data.lead.phone)
+            : appointmentStorage.getAll().filter(a => a.leadId === id || a.phone === data.lead.phone);
+          setLinkedAppts(appts);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [id, leads, appointments]);
+
+  if (loading && !lead) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-sm text-[#9E968C]">Loading lead details...</p>
+      </div>
+    );
+  }
 
   if (!lead) {
     return (
@@ -49,43 +84,96 @@ export function LeadDetailPage() {
   }
 
   const handleStatusChange = async (newStatus: LeadStatus) => {
-    const updated = leadStorage.update(lead.id, {
+    const updatedLead: AdminLead = {
+      ...lead,
       status: newStatus,
       lastContactedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+    };
+    setLead(updatedLead);
+    leadStorage.update(lead.id, {
+      status: newStatus,
+      lastContactedAt: updatedLead.lastContactedAt,
+      updatedAt: updatedLead.updatedAt,
     });
-    if (updated) {
-      setLead(updated);
-      refreshLeads();
-      refreshMetrics();
-      logAudit('status_changed', 'lead', lead.id, `Lead ${lead.fullName} status changed to ${newStatus}`);
-      showToast('success', 'Status updated', `${lead.fullName} → ${newStatus}`);
+
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/leads/${lead.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          status: newStatus,
+          lastContactedAt: updatedLead.lastContactedAt,
+        }),
+      });
+    } catch (err) {
+      console.warn('Backend lead status update failed, updated locally:', err);
     }
+
+    refreshLeads();
+    refreshMetrics();
+    logAudit('status_changed', 'lead', lead.id, `Lead ${lead.fullName} status changed to ${newStatus}`);
+    showToast('success', 'Status updated', `${lead.fullName} → ${newStatus}`);
   };
 
   const handleAddNote = async () => {
     if (!note.trim()) return;
     setAddingNote(true);
-    await new Promise(r => setTimeout(r, 200));
-    const updated = leadStorage.addNote(lead.id, { content: note.trim(), author: 'Admin' });
-    if (updated) {
-      setLead(updated);
-      setNote('');
-      refreshLeads();
-      showToast('success', 'Note added');
-      logAudit('note_added', 'lead', lead.id, `Note added to lead ${lead.fullName}`);
+    const newNoteObj = {
+      id: `note_${Date.now()}`,
+      content: note.trim(),
+      author: user?.name || 'Admin',
+      createdAt: new Date().toISOString(),
+    };
+    const updatedNotes = [...(lead.notes || []), newNoteObj];
+    const updatedLead: AdminLead = { ...lead, notes: updatedNotes, updatedAt: new Date().toISOString() };
+    setLead(updatedLead);
+    setNote('');
+
+    leadStorage.addNote(lead.id, { content: note.trim(), author: user?.name || 'Admin' });
+
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/leads/${lead.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ notes: updatedNotes }),
+      });
+    } catch (err) {
+      console.warn('Backend note update failed, saved locally:', err);
     }
+
+    refreshLeads();
+    showToast('success', 'Note added', 'New observation saved');
+    logAudit('note_added', 'lead', lead.id, `Note added to lead ${lead.fullName}`);
     setAddingNote(false);
   };
 
   const handleDelete = async () => {
     setActionLoading(true);
-    await new Promise(r => setTimeout(r, 300));
     leadStorage.delete(lead.id);
+
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/leads/${lead.id}`, {
+        method: 'DELETE',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (err) {
+      console.warn('Backend lead deletion failed, deleted locally:', err);
+    }
+
     refreshLeads();
     refreshMetrics();
     logAudit('deleted', 'lead', lead.id, `Lead ${lead.fullName} deleted`);
-    showToast('success', 'Lead deleted');
+    showToast('success', 'Lead deleted', lead.fullName);
     navigate('/admin/leads');
   };
 

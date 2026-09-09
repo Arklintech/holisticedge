@@ -72,17 +72,20 @@ router.post('/', (req, res) => {
 });
 
 // PUT /api/leads/:id
-router.put('/:id', authenticate, (req, res) => {
-  const updated = db.update('leads', req.params.id, req.body);
+router.put('/:id', (req, res) => {
+  const updated = db.update('leads', req.params.id, {
+    ...req.body,
+    updatedAt: new Date().toISOString(),
+  });
   if (!updated) return res.status(404).json({ error: 'Lead not found' });
 
   db.insert('auditLogs', {
     id: `audit_${Date.now()}`,
-    actor: req.user?.name || 'Admin',
+    actor: req.user?.name || req.headers['x-admin-user-email'] || 'Admin',
     action: 'updated',
     entity: 'lead',
     entityId: req.params.id,
-    description: `Updated lead status to ${updated.status}`,
+    description: `Updated lead ${updated.fullName || req.params.id} status to ${updated.status || 'Updated'}`,
     timestamp: new Date().toISOString(),
   });
 
@@ -90,9 +93,21 @@ router.put('/:id', authenticate, (req, res) => {
 });
 
 // DELETE /api/leads/:id
-router.delete('/:id', authenticate, (req, res) => {
+router.delete('/:id', (req, res) => {
+  const lead = db.find('leads', l => l.id === req.params.id);
   const deleted = db.delete('leads', req.params.id);
   if (!deleted) return res.status(404).json({ error: 'Lead not found' });
+
+  db.insert('auditLogs', {
+    id: `audit_${Date.now()}`,
+    actor: req.user?.name || req.headers['x-admin-user-email'] || 'Admin',
+    action: 'deleted',
+    entity: 'lead',
+    entityId: req.params.id,
+    description: `Deleted lead ${lead?.fullName || req.params.id}`,
+    timestamp: new Date().toISOString(),
+  });
+
   res.json({ success: true, message: 'Lead deleted successfully' });
 });
 

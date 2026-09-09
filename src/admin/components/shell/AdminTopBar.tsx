@@ -164,11 +164,9 @@ export function AdminTopBar({ onSearchOpen, onMobileMenuOpen }: AdminTopBarProps
         {/* Notifications Popover */}
         <div ref={notifRef} className="relative">
           <button
-            onClick={() => setNotifOpen(v => {
-              if (!v) markAllNotificationsRead();
-              return !v;
-            })}
+            onClick={() => setNotifOpen(v => !v)}
             className="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200/60"
+            title="Notifications"
           >
             <Bell size={16} />
             {unreadCount > 0 && (
@@ -181,14 +179,22 @@ export function AdminTopBar({ onSearchOpen, onMobileMenuOpen }: AdminTopBarProps
             <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200/80 overflow-hidden z-50">
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50/50">
                 <span className="text-xs font-bold text-slate-900">Notifications</span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   {recentNotifs.length > 0 && (
-                    <button
-                      onClick={clearAllNotifications}
-                      className="text-[11px] text-[#0284C7] font-bold hover:underline"
-                    >
-                      Clear All
-                    </button>
+                    <>
+                      <button
+                        onClick={() => markAllNotificationsRead()}
+                        className="text-[11px] text-[#0284C7] font-bold hover:underline"
+                      >
+                        Mark read
+                      </button>
+                      <button
+                        onClick={clearAllNotifications}
+                        className="text-[11px] text-red-600 font-bold hover:underline"
+                      >
+                        Clear All
+                      </button>
+                    </>
                   )}
                   <button onClick={() => setNotifOpen(false)} className="text-slate-400 hover:text-slate-600">
                     <X size={14} />

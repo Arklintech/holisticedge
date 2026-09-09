@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { leadStorage, notificationStorage } from '../../services/adminStorage';
@@ -10,7 +10,7 @@ const SOURCES: LeadSource[] = ['Website Form', 'WhatsApp', 'Phone', 'Booking Mod
 
 export function LeadForm() {
   const navigate = useNavigate();
-  const { refreshLeads, refreshMetrics, showToast, logAudit } = useAdminStore();
+  const { refreshLeads, refreshMetrics, refreshNotifications, showToast, logAudit } = useAdminStore();
 
   const [form, setForm] = useState({
     fullName: '', phone: '', email: '', condition: conditionsData[0]?.title || 'Back Pain',
@@ -37,22 +37,62 @@ export function LeadForm() {
     e.preventDefault();
     if (!validate()) return;
     setSaving(true);
-    await new Promise(r => setTimeout(r, 400));
-    const created = leadStorage.create({
-      fullName: form.fullName.trim(), phone: form.phone.trim(),
-      email: form.email || undefined, condition: form.condition,
-      message: form.message || undefined, source: form.source, status: form.status,
+
+    const leadPayload = {
+      fullName: form.fullName.trim(),
+      phone: form.phone.trim(),
+      email: form.email || undefined,
+      condition: form.condition,
+      message: form.message || undefined,
+      source: form.source,
+      status: form.status,
+    };
+
+    let createdId = '';
+
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(leadPayload),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.success && data.lead) {
+          createdId = data.lead.id;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend lead creation failed, saving locally:', err);
+    }
+
+    // Save locally as fallback / instant cache
+    const localCreated = leadStorage.create({
+      ...(createdId ? { id: createdId } : {}),
+      ...leadPayload,
     });
+    if (!createdId) createdId = localCreated.id;
+
     notificationStorage.create({
-      type: 'lead', title: 'New Lead Added',
-      message: `${created.fullName} — ${created.condition}`,
-      entityId: created.id, entityType: 'lead', link: `/admin/leads/${created.id}`,
+      type: 'lead',
+      title: 'New Lead Added',
+      message: `${leadPayload.fullName} — ${leadPayload.condition}`,
+      entityId: createdId,
+      entityType: 'lead',
+      link: `/admin/leads/${createdId}`,
     });
-    refreshLeads(); refreshMetrics();
-    logAudit('created', 'lead', created.id, `Lead created for ${created.fullName}`);
-    showToast('success', 'Lead created', created.fullName);
+
+    refreshLeads();
+    refreshMetrics();
+    refreshNotifications();
+    logAudit('created', 'lead', createdId, `Lead created for ${leadPayload.fullName}`);
+    showToast('success', 'Lead created', leadPayload.fullName);
     setSaving(false);
-    navigate(`/admin/leads/${created.id}`);
+    navigate(`/admin/leads/${createdId}`);
   };
 
   const ic = (f: string) => `w-full h-10 px-3 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-all ${errors[f] ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-[#E5E2DC] focus:border-[#0F2747] focus:ring-[#0F2747]/10'}`;

@@ -44,10 +44,15 @@ interface AdminStoreContextValue {
   // Notifications
   notifications: AdminNotification[];
   unreadCount: number;
+  unreadNotificationsCount: number;
+  activeLeadsCount: number;
+  dueFollowUpsCount: number;
   refreshNotifications: () => void;
-  markNotificationRead: (id: string) => void;
-  markAllNotificationsRead: () => void;
-  clearAllNotifications: () => void;
+  markNotificationRead: (id: string) => Promise<void> | void;
+  markAllNotificationsRead: () => Promise<void> | void;
+  clearAllNotifications: () => Promise<void> | void;
+  archiveNotification: (id: string) => Promise<void> | void;
+  deleteNotification: (id: string) => Promise<void> | void;
   // Audit
   auditEntries: AuditEntry[];
   logAudit: (action: string, entity: string, entityId: string, description: string, metadata?: Record<string, unknown>) => void;
@@ -302,21 +307,78 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
     return res;
   }, [user, refreshOffers]);
 
-  const markNotificationRead = useCallback((id: string) => {
+  const markNotificationRead = useCallback(async (id: string) => {
     notificationStorage.markRead(id);
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, status: 'read' as const } : n));
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/notifications/${id}/read`, {
+        method: 'PUT',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (e) {
+      console.warn('Backend mark read error:', e);
+    }
     refreshMetrics();
   }, [refreshMetrics]);
 
-  const markAllNotificationsRead = useCallback(() => {
+  const markAllNotificationsRead = useCallback(async () => {
     notificationStorage.markAllRead();
     setNotifications(prev => prev.map(n => n.status === 'unread' ? { ...n, status: 'read' as const } : n));
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch('/api/notifications/read-all', {
+        method: 'PUT',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (e) {
+      console.warn('Backend mark all read error:', e);
+    }
     refreshMetrics();
   }, [refreshMetrics]);
 
-  const clearAllNotifications = useCallback(() => {
+  const clearAllNotifications = useCallback(async () => {
     notificationStorage.clearAll();
     setNotifications([]);
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch('/api/notifications', {
+        method: 'DELETE',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (e) {
+      console.warn('Backend clear all notifications error:', e);
+    }
+    refreshMetrics();
+  }, [refreshMetrics]);
+
+  const archiveNotification = useCallback(async (id: string) => {
+    notificationStorage.archive(id);
+    setNotifications(prev => prev.filter(n => n.id !== id));
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/notifications/${id}/archive`, {
+        method: 'PUT',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (e) {
+      console.warn('Backend archive notification error:', e);
+    }
+    refreshMetrics();
+  }, [refreshMetrics]);
+
+  const deleteNotification = useCallback(async (id: string) => {
+    notificationStorage.delete(id);
+    setNotifications(prev => prev.filter(n => n.id !== id));
+    try {
+      const token = localStorage.getItem('admin_token');
+      await fetch(`/api/notifications/${id}`, {
+        method: 'DELETE',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+    } catch (e) {
+      console.warn('Backend delete notification error:', e);
+    }
     refreshMetrics();
   }, [refreshMetrics]);
 
@@ -353,6 +415,12 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
   }, []);
 
   const unreadCount = notifications.filter(n => n.status === 'unread').length;
+  const unreadNotificationsCount = unreadCount;
+  const activeLeadsCount = leads.filter(l => {
+    const s = (l.status || '').toLowerCase();
+    return s === 'new' || s === 'follow-up' || s === 'interested' || s === 'contacted';
+  }).length;
+  const dueFollowUpsCount = metrics.pendingFollowUps ?? 0;
 
   return (
     <AdminStoreContext.Provider value={{
@@ -371,10 +439,15 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       deleteOffer,
       notifications,
       unreadCount,
+      unreadNotificationsCount,
+      activeLeadsCount,
+      dueFollowUpsCount,
       refreshNotifications,
       markNotificationRead,
       markAllNotificationsRead,
       clearAllNotifications,
+      archiveNotification,
+      deleteNotification,
       auditEntries,
       logAudit,
       metrics,
