@@ -230,10 +230,10 @@ export function LeadDetailPage() {
 
           {/* Notes */}
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
-            <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Notes ({lead.notes.length})</h2>
-            {lead.notes.length > 0 && (
+            <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Notes ({(lead.notes || []).length})</h2>
+            {(lead.notes || []).length > 0 && (
               <div className="space-y-2">
-                {[...lead.notes].reverse().map(note => (
+                {[...(lead.notes || [])].reverse().map(note => (
                   <div key={note.id} className="bg-[#F8F7F4] rounded-xl p-3">
                     <p className="text-sm text-[#1A1A1A] leading-relaxed">{note.content}</p>
                     <p className="text-[10.5px] text-[#9E968C] mt-1">{note.author} · {formatTs(note.createdAt)}</p>

@@ -34,8 +34,10 @@ export function LeadsPage() {
   const [page, setPage] = useState(1);
   const [changingStatus, setChangingStatus] = useState<string | null>(null);
 
+  const leadsList = Array.isArray(leads) ? leads : [];
+
   const filtered = useMemo(() => {
-    let data = [...leads].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    let data = [...leadsList].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
     if (statusFilter !== 'All') data = data.filter(l => l.status === statusFilter);
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -46,7 +48,7 @@ export function LeadsPage() {
       );
     }
     return data;
-  }, [leads, statusFilter, search]);
+  }, [leadsList, statusFilter, search]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -81,10 +83,10 @@ export function LeadsPage() {
 
   // CRM summary counts
   const counts = useMemo(() => {
-    const c: Record<string, number> = { All: leads.length };
-    STATUSES.forEach(s => { c[s] = leads.filter(l => l.status === s).length; });
+    const c: Record<string, number> = { All: leadsList.length };
+    STATUSES.forEach(s => { c[s] = leadsList.filter(l => l.status === s).length; });
     return c;
-  }, [leads]);
+  }, [leadsList]);
 
   return (
     <div className="p-3 sm:p-6 space-y-5">
@@ -92,7 +94,7 @@ export function LeadsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-lg font-bold text-[#1A1A1A]">Leads & Inquiries</h1>
-          <p className="text-sm text-[#9E968C]">{leads.length} total · {counts['New'] || 0} new</p>
+          <p className="text-sm text-[#9E968C]">{leadsList.length} total · {counts['New'] || 0} new</p>
         </div>
         <button
           onClick={() => navigate('/admin/leads/new')}
@@ -185,9 +187,9 @@ export function LeadsPage() {
                       </select>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-[11.5px] text-[#9E968C]">{lead.notes.length} note{lead.notes.length !== 1 ? 's' : ''}</span>
+                      <span className="text-[11.5px] text-[#9E968C]">{(lead.notes?.length || 0)} note{(lead.notes?.length || 0) !== 1 ? 's' : ''}</span>
                     </td>
-                    <td className="px-4 py-3 text-[11px] text-[#9E968C] whitespace-nowrap">{formatRelative(lead.createdAt)}</td>
+                    <td className="px-4 py-3 text-[11px] text-[#9E968C] whitespace-nowrap">{formatRelative(lead.createdAt || new Date().toISOString())}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                         <a
