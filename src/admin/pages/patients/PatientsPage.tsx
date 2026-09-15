@@ -207,20 +207,11 @@ export function PatientsPage() {
                   <button
                     type="button"
                     onClick={() => setShowFollowUpModal(true)}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#0F2747] hover:bg-[#0B1D3A] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
                   >
                     <BellPlus className="w-4 h-4" />
-                    <span>Set Follow-up & Live Preview</span>
+                    <span>Set Follow-up & Dispatch Email</span>
                   </button>
-                  <a
-                    href={`https://wa.me/91${selectedPatient.phone.replace(/\D/g, '')}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold flex items-center gap-1 border border-emerald-200 transition-all"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>WhatsApp</span>
-                  </a>
                 </div>
               </div>
 

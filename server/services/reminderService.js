@@ -1,4 +1,4 @@
-﻿import crypto from 'crypto';
+import crypto from 'crypto';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { sendFollowUpReminderEmail } from './emailService.js';
 import { db } from '../db.js';
@@ -53,8 +53,8 @@ export async function scheduleReminder({ patientId, scheduledDate, scheduledTime
       id: patientId,
       registrationTokenNumber: 'HE-001281',
       name: 'Valued Patient',
-      email: 'holisticedges@gmail.com',
-      phone: '+91 81426 42051',
+      email: '',
+      phone: '',
     };
   }
 
@@ -71,8 +71,8 @@ export async function scheduleReminder({ patientId, scheduledDate, scheduledTime
     patientId: patient.id,
     registrationTokenNumber: patient.registrationTokenNumber || 'HE-001281',
     patientName: patient.name || 'Valued Patient',
-    patientEmail: patient.email || 'holisticedges@gmail.com',
-    patientPhone: patient.phone || '+91 81426 42051',
+    patientEmail: patient.email || '',
+    patientPhone: patient.phone || '',
     scheduledDate: targetDate || new Date().toISOString().split('T')[0],
     scheduledTime: scheduledTime || '10:00 AM',
     notes: notes || 'Administrative Follow-up Reminder',

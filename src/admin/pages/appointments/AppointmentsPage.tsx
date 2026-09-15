@@ -13,6 +13,7 @@ import type { AdminAppointment, AppointmentStatus } from '../../types/admin.type
 import { cn } from '../../../lib/utils';
 
 const STATUSES: AppointmentStatus[] = ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'No-show'];
+const FILTER_TABS = ['Active', 'History', 'All', ...STATUSES] as const;
 const PAGE_SIZE = 10;
 
 function formatDate(dateStr: string): string {
@@ -27,7 +28,7 @@ export function AppointmentsPage() {
   const { appointments, refreshAppointments, refreshMetrics, showToast, logAudit } = useAdminStore();
 
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'All');
+  const [statusFilter, setStatusFilter] = useState<string>(searchParams.get('status') || 'Active');
   const [page, setPage] = useState(1);
   const [confirmAction, setConfirmAction] = useState<{ id: string; action: AppointmentStatus; label: string } | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -36,13 +37,40 @@ export function AppointmentsPage() {
     refreshAppointments();
   }, [refreshAppointments]);
 
+  // Per-tab counts for badges
+  const tabCounts = useMemo(() => {
+    const counts: Record<string, number> = { All: appointments.length, Active: 0, History: 0 };
+    STATUSES.forEach(s => {
+      counts[s] = appointments.filter(a => (a.status || '').toLowerCase().replace(/[\s_]+/g, '-') === s.toLowerCase().replace(/[\s_]+/g, '-')).length;
+    });
+    counts['Active'] = appointments.filter(a => {
+      const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+      return s !== 'completed' && s !== 'cancelled' && s !== 'no-show';
+    }).length;
+    counts['History'] = appointments.filter(a => {
+      const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+      return s === 'completed' || s === 'cancelled' || s === 'no-show';
+    }).length;
+    return counts;
+  }, [appointments]);
+
   // Filter + search
   const filtered = useMemo(() => {
     let data = [...appointments].sort((a, b) =>
       new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
     );
-    if (statusFilter !== 'All') {
-      data = data.filter(a => a.status?.toLowerCase() === statusFilter.toLowerCase());
+    if (statusFilter === 'Active') {
+      data = data.filter(a => {
+        const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+        return s !== 'completed' && s !== 'cancelled' && s !== 'no-show';
+      });
+    } else if (statusFilter === 'History') {
+      data = data.filter(a => {
+        const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+        return s === 'completed' || s === 'cancelled' || s === 'no-show';
+      });
+    } else if (statusFilter !== 'All') {
+      data = data.filter(a => (a.status || '').toLowerCase().replace(/[\s_]+/g, '-') === statusFilter.toLowerCase().replace(/[\s_]+/g, '-'));
     }
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -70,21 +98,31 @@ export function AppointmentsPage() {
           'Content-Type': 'application/json',
           Authorization: token ? `Bearer ${token}` : '',
         },
-        body: JSON.stringify({ status: newStatus.toUpperCase() }),
+        body: JSON.stringify({ status: newStatus.toUpperCase().replace(/[\s-]+/g, '_') }),
       });
     } catch {}
     const updated = appointmentStorage.update(apptId, { status: newStatus });
     refreshAppointments();
     refreshMetrics();
     logAudit(newStatus.toLowerCase(), 'appointment', apptId, `Appointment ${apptId} marked as ${newStatus}`);
-    showToast('success', `Appointment ${newStatus}`, `${updated?.fullName || 'Patient'}'s appointment has been updated.`);
+
+    if (newStatus === 'Completed') {
+      showToast('success', 'Appointment Completed', 'Appointment completed — moved to history.');
+    } else if (newStatus === 'Cancelled') {
+      showToast('success', 'Appointment Cancelled', 'Appointment cancelled — moved to history.');
+    } else if (newStatus === 'No-show') {
+      showToast('success', 'Marked No-show', 'Marked as No-show — moved to history.');
+    } else {
+      showToast('success', `Appointment ${newStatus}`, `${updated?.fullName || 'Patient'}'s appointment has been updated.`);
+    }
+
     setActionLoading(false);
     setConfirmAction(null);
   }, [refreshAppointments, refreshMetrics, logAudit, showToast]);
 
   const quickActions = (appt: AdminAppointment) => {
     const actions: { label: string; status: AppointmentStatus; icon: React.ReactNode; color: string }[] = [];
-    const s = (appt.status || '').toLowerCase();
+    const s = (appt.status || '').toLowerCase().replace(/[\s_]+/g, '-');
     if (s === 'pending') {
       actions.push({ label: 'Confirm', status: 'Confirmed', icon: <Check size={11} />, color: 'bg-green-50 text-green-700 hover:bg-green-100' });
       actions.push({ label: 'Cancel', status: 'Cancelled', icon: <X size={11} />, color: 'bg-red-50 text-red-700 hover:bg-red-100' });
@@ -102,8 +140,15 @@ export function AppointmentsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg font-bold text-[#1A1A1A]">Appointments</h1>
-          <p className="text-sm text-[#9E968C]">{filtered.length} appointment{filtered.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-lg font-bold text-[#1A1A1A]">
+            {statusFilter === 'Active' ? 'Active Work Queue' : 'Appointments'}
+          </h1>
+          <p className="text-sm text-[#9E968C]">
+            {statusFilter === 'Active'
+              ? `${filtered.length} active appointment${filtered.length !== 1 ? 's' : ''} needing attention`
+              : `${filtered.length} appointment${filtered.length !== 1 ? 's' : ''}`
+            }
+          </p>
         </div>
         <button
           onClick={() => navigate('/admin/appointments/new')}
@@ -129,20 +174,37 @@ export function AppointmentsPage() {
 
         {/* Status Filter */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          {['All', ...STATUSES].map(s => (
-            <button
-              key={s}
-              onClick={() => { setStatusFilter(s); setPage(1); }}
-              className={cn(
-                'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
-                statusFilter === s
-                  ? 'bg-[#1A1A1A] text-white'
-                  : 'bg-white border border-[#E5E2DC] text-[#5A544E] hover:bg-[#F8F7F4]'
-              )}
-            >
-              {s}
-            </button>
-          ))}
+          {FILTER_TABS.map(s => {
+            const count = tabCounts[s] ?? 0;
+            const isActive = statusFilter === s;
+            const isActiveTab = s === 'Active';
+            return (
+              <button
+                key={s}
+                onClick={() => { setStatusFilter(s); setPage(1); }}
+                className={cn(
+                  'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5',
+                  isActive
+                    ? isActiveTab ? 'bg-[#0F2747] text-white' : 'bg-[#1A1A1A] text-white'
+                    : 'bg-white border border-[#E5E2DC] text-[#5A544E] hover:bg-[#F8F7F4]'
+                )}
+              >
+                <span>{s}</span>
+                {count > 0 && (
+                  <span className={cn(
+                    'inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold leading-none',
+                    isActive
+                      ? 'bg-white/25 text-white'
+                      : isActiveTab && count > 0
+                        ? 'bg-[#0F2747] text-white'
+                        : 'bg-[#F0ECE4] text-[#5A544E]'
+                  )}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 

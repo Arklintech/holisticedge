@@ -15,6 +15,13 @@ router.get('/', async (req, res) => {
       appointments = db.get('appointments') || [];
     }
 
+    let reminders = [];
+    try {
+      reminders = (await dataProvider.getReminders()) || [];
+    } catch (e) {
+      reminders = db.get('reminders') || [];
+    }
+
     let leads = [];
     try {
       leads = db.get('leads') || [];
@@ -74,12 +81,30 @@ router.get('/', async (req, res) => {
     const nowIST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
     const todayStr = nowIST.toISOString().split('T')[0];
 
+    const tomorrowIST = new Date(nowIST);
+    tomorrowIST.setDate(tomorrowIST.getDate() + 1);
+    const tomorrowStr = tomorrowIST.toISOString().split('T')[0];
+
     const todayAppts = enrichedAppointments.filter(a => (a.date === todayStr || a.preferredDate === todayStr));
+    const activeTodayAppts = todayAppts.filter(a => {
+      const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+      return s !== 'completed' && s !== 'cancelled' && s !== 'no-show';
+    });
+
     const upcomingAppts = enrichedAppointments.filter(a => {
       const d = a.date || a.preferredDate;
-      const s = (a.status || '').toLowerCase();
-      return d > todayStr && s !== 'cancelled' && s !== 'completed';
+      const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+      return d > todayStr && s !== 'cancelled' && s !== 'completed' && s !== 'no-show';
     });
+
+    const activeReminders = reminders.filter(r => {
+      const s = (r.status || '').toUpperCase();
+      return s !== 'COMPLETED' && s !== 'CANCELLED';
+    });
+
+    const overdueFollowUps = activeReminders.filter(r => r.scheduledDate < todayStr);
+    const dueTodayFollowUps = activeReminders.filter(r => r.scheduledDate === todayStr);
+    const tomorrowFollowUps = activeReminders.filter(r => r.scheduledDate === tomorrowStr);
 
     const newLeads = leads.filter(l => (l.status || '').toLowerCase() === 'new');
     const pendingFollowUps = leads.filter(l => (l.status || '').toLowerCase() === 'follow-up');
@@ -103,16 +128,28 @@ router.get('/', async (req, res) => {
       dateLabel: nowIST.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
       metrics: {
         todayAppointments: todayAppts.length,
+        activeTodayAppointments: activeTodayAppts.length,
         todayConfirmed: confirmedToday.length,
         upcomingAppointments: upcomingAppts.length,
         newLeads: newLeads.length,
         pendingFollowUps: pendingFollowUps.length,
+        overdueFollowUps: overdueFollowUps.length,
+        dueTodayFollowUps: dueTodayFollowUps.length,
+        tomorrowFollowUps: tomorrowFollowUps.length,
+        activeFollowUps: activeReminders.length,
         unreadNotifications: unreadNotifications.length,
         cancelledToday: cancelledToday.length,
         totalAppointments: enrichedAppointments.length,
         totalPatients: patients.length || localPatients.length,
       },
-      todaySchedule: todayAppts,
+      todaySchedule: activeTodayAppts.length > 0 ? activeTodayAppts : todayAppts,
+      allTodayAppointments: todayAppts,
+      followUpsSummary: {
+        overdue: overdueFollowUps.length,
+        dueToday: dueTodayFollowUps.length,
+        tomorrow: tomorrowFollowUps.length,
+        totalActive: activeReminders.length,
+      },
       recentLeads,
       recentActivity,
     });

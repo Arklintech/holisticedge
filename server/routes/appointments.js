@@ -4,6 +4,7 @@ import { authenticate } from '../middleware/auth.js';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { sendAppointmentConfirmationEmail } from '../services/emailService.js';
 import { notificationService } from '../services/notificationService.js';
+import { scheduleReminder } from '../services/reminderService.js';
 
 const router = express.Router();
 const dataProvider = getActiveDataProvider();
@@ -239,6 +240,32 @@ router.post('/', async (req, res) => {
     timestamp: new Date().toISOString(),
   });
 
+  // Auto-schedule pre-appointment reminder (appointment date - 1 day)
+  try {
+    const apptDate = new Date(pDate || new Date().toISOString().split('T')[0] + 'T00:00:00');
+    apptDate.setDate(apptDate.getDate() - 1);
+    const reminderDate = apptDate.toISOString().split('T')[0];
+    await scheduleReminder({
+      patientId: patient.id,
+      scheduledDate: reminderDate,
+      scheduledTime: pTime || '10:00 AM',
+      notes: `Pre-appointment reminder — please confirm your ${service} appointment scheduled for ${pDate || 'your booked date'}.`,
+    });
+    db.insert('notifications', {
+      id: `notif_rem_${Date.now()}`,
+      type: 'reminder',
+      title: 'Pre-Appointment Reminder Scheduled',
+      message: `Reminder queued for ${pName} on ${reminderDate} (1 day before ${pDate}).`,
+      entityId: apptId,
+      entityType: 'appointment',
+      link: `/admin/follow-ups`,
+      status: 'unread',
+      createdAt: new Date().toISOString(),
+    });
+  } catch (remErr) {
+    console.warn('[AppointmentsRoute] Pre-appointment reminder schedule notice:', remErr.message);
+  }
+
   // Trigger unified notification service for confirmation (Email & WhatsApp readiness)
   try {
     await notificationService.notify({
@@ -253,13 +280,42 @@ router.post('/', async (req, res) => {
   res.status(201).json({ success: true, appointment: newAppt, patient, emailSent });
 });
 
+// Helper to attach metadata based on status transition
+function enrichStatusPayload(body, user) {
+  const payload = { ...body, updatedAt: new Date().toISOString() };
+  if (!payload.status) return payload;
+
+  const raw = payload.status.toString().trim();
+  const normalized = raw.toUpperCase().replace(/[\s-]+/g, '_');
+  const actor = user?.name || user?.email || 'Admin';
+
+  if (normalized === 'COMPLETED') {
+    payload.status = 'COMPLETED';
+    payload.completedAt = payload.completedAt || new Date().toISOString();
+    payload.completedBy = payload.completedBy || actor;
+  } else if (normalized === 'CANCELLED') {
+    payload.status = 'CANCELLED';
+    payload.cancelledAt = payload.cancelledAt || new Date().toISOString();
+    payload.cancelledBy = payload.cancelledBy || actor;
+  } else if (normalized === 'NO_SHOW') {
+    payload.status = 'NO_SHOW';
+    payload.noShowAt = payload.noShowAt || new Date().toISOString();
+    payload.noShowMarkedBy = payload.noShowMarkedBy || actor;
+  } else if (normalized === 'CONFIRMED') {
+    payload.status = 'CONFIRMED';
+    payload.confirmedAt = payload.confirmedAt || new Date().toISOString();
+    payload.confirmedBy = payload.confirmedBy || actor;
+  }
+  return payload;
+}
+
 // PATCH /api/appointments/:id/status
 router.patch('/:id/status', authenticate, async (req, res) => {
   const { status } = req.body;
   if (!status) return res.status(400).json({ error: 'Status is required' });
 
   const apptId = req.params.id;
-  const updatePayload = { status, updatedAt: new Date().toISOString() };
+  const updatePayload = enrichStatusPayload(req.body, req.user);
 
   // 1. Update in local db
   let updated = db.update('appointments', apptId, updatePayload);
@@ -288,18 +344,18 @@ router.patch('/:id/status', authenticate, async (req, res) => {
   // 4. Audit Log
   db.insert('auditLogs', {
     id: `audit_${Date.now()}`,
-    actor: req.user?.name || 'Admin',
+    actor: req.user?.name || req.user?.email || 'Admin',
     action: 'updated_status',
     entity: 'appointment',
     entityId: apptId,
-    description: `Updated appointment status to ${status}`,
+    description: `Updated appointment status to ${updatePayload.status}`,
     timestamp: new Date().toISOString(),
   });
 
   // 5. Trigger notification event
   try {
     const patient = db.find('patients', p => p.id === updated.patientId || p.phone === updated.patientPhone);
-    const eventType = status.toUpperCase() === 'CANCELLED' ? 'appointment_cancelled' : 'appointment_rescheduled';
+    const eventType = updatePayload.status === 'CANCELLED' ? 'appointment_cancelled' : 'appointment_rescheduled';
     await notificationService.notify({
       eventType,
       patient,
@@ -307,13 +363,15 @@ router.patch('/:id/status', authenticate, async (req, res) => {
     });
   } catch (_) {}
 
+  // Post-visit follow-ups are ADMIN-INITIATED via Patient → Set Follow-up workflow.
+  // No automatic follow-up is created here.
   res.json({ success: true, appointment: updated });
 });
 
 // PUT & PATCH /api/appointments/:id
 const handleUpdateAppointment = async (req, res) => {
   const apptId = req.params.id;
-  const updatePayload = { ...req.body, updatedAt: new Date().toISOString() };
+  const updatePayload = enrichStatusPayload(req.body, req.user);
 
   let updated = db.update('appointments', apptId, updatePayload);
 
@@ -338,7 +396,7 @@ const handleUpdateAppointment = async (req, res) => {
 
   db.insert('auditLogs', {
     id: `audit_${Date.now()}`,
-    actor: req.user?.name || 'Admin',
+    actor: req.user?.name || req.user?.email || 'Admin',
     action: 'updated',
     entity: 'appointment',
     entityId: apptId,

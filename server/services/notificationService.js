@@ -125,6 +125,26 @@ class NotificationService {
 
     // 2. WhatsApp Notification Dispatch (Meta WhatsApp Cloud API Provider Abstraction)
     if (patientPhone) {
+      // Idempotency guard: skip if this exact event was already SENT for this appointment
+      const appointmentId = appointment?.id || null;
+      if (appointmentId) {
+        try {
+          const existingLogs = db.filter('notificationLogs', log =>
+            log.metadata?.appointmentId === appointmentId &&
+            log.eventType === eventType &&
+            (log.provider || '').startsWith('META_WHATSAPP') &&
+            log.status === 'SENT'
+          );
+          if (existingLogs && existingLogs.length > 0) {
+            console.log(`[NotificationService] Idempotency skip: ${eventType} for appointment ${appointmentId} already dispatched via WhatsApp.`);
+            results.whatsApp = { status: 'SKIPPED_DUPLICATE', appointmentId, eventType };
+            return results;
+          }
+        } catch (_) {
+          // If notificationLogs collection doesn't exist yet, proceed with dispatch
+        }
+      }
+
       try {
         const components = [];
         if (patient?.name || appointment?.patientName) {

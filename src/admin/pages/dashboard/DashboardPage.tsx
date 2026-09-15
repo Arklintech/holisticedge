@@ -144,8 +144,9 @@ export function DashboardPage() {
   const attentionItems = useMemo(() => {
     const items: { label: string; count: number; path: string; color: string; icon: React.ReactNode }[] = [];
     if (effectiveMetrics.newLeads > 0) items.push({ label: 'New inquiries', count: effectiveMetrics.newLeads, path: '/admin/leads?status=New', color: 'text-[#1E40AF]', icon: <Activity size={14} /> });
+    if (effectiveMetrics.overdueFollowUps > 0) items.push({ label: 'Overdue follow-ups', count: effectiveMetrics.overdueFollowUps, path: '/admin/follow-ups', color: 'text-red-700', icon: <AlertCircle size={14} /> });
+    if (effectiveMetrics.dueTodayFollowUps > 0) items.push({ label: 'Follow-ups due today', count: effectiveMetrics.dueTodayFollowUps, path: '/admin/follow-ups', color: 'text-amber-700', icon: <Clock size={14} /> });
     if (effectiveMetrics.cancelledToday > 0) items.push({ label: 'Cancelled today', count: effectiveMetrics.cancelledToday, path: '/admin/appointments?status=Cancelled', color: 'text-red-700', icon: <XCircle size={14} /> });
-    if (effectiveMetrics.pendingFollowUps > 0) items.push({ label: 'Follow-ups due', count: effectiveMetrics.pendingFollowUps, path: '/admin/leads?status=Follow-up', color: 'text-amber-700', icon: <Clock size={14} /> });
     return items;
   }, [effectiveMetrics]);
 
@@ -183,7 +184,7 @@ export function DashboardPage() {
           </button>
           <button
             onClick={() => navigate('/admin/appointments/new')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#10B981] text-white text-xs font-semibold hover:bg-[#8F3717] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#10B981] text-white text-xs font-semibold hover:bg-[#0B9B6A] transition-colors"
           >
             <CalendarPlus size={13} />
             New Appointment
@@ -201,12 +202,12 @@ export function DashboardPage() {
       {/* Primary Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <MetricCard
-          label="Today's Appointments"
-          value={effectiveMetrics.todayAppointments}
-          sub={`${todayAppts.filter(a => (a.status || '').toLowerCase() === 'confirmed').length} confirmed`}
+          label="Today's Active"
+          value={effectiveMetrics.todayAppointments ?? 0}
+          sub={`${effectiveMetrics.todayConfirmed ?? todayAppts.filter(a => (a.status || '').toLowerCase() === 'confirmed').length} confirmed`}
           icon={<CalendarDays size={17} className="text-[#0F2747]" />}
           color="bg-blue-50"
-          onClick={() => navigate('/admin/appointments')}
+          onClick={() => navigate('/admin/appointments?status=Active')}
         />
         <MetricCard
           label="New Leads"
@@ -217,12 +218,12 @@ export function DashboardPage() {
           onClick={() => navigate('/admin/leads?status=New')}
         />
         <MetricCard
-          label="Pending Follow-ups"
-          value={effectiveMetrics.pendingFollowUps}
-          sub="Action required"
+          label="Follow-up Queue"
+          value={effectiveMetrics.activeFollowUps ?? (effectiveMetrics.pendingFollowUps || 0)}
+          sub={effectiveMetrics.overdueFollowUps ? `${effectiveMetrics.overdueFollowUps} overdue · ${effectiveMetrics.dueTodayFollowUps || 0} today` : `${effectiveMetrics.dueTodayFollowUps || 0} due today`}
           icon={<Clock size={17} className="text-[#0F2747]" />}
           color="bg-blue-50"
-          onClick={() => navigate('/admin/leads?status=Follow-up')}
+          onClick={() => navigate('/admin/follow-ups')}
         />
         <MetricCard
           label="Unread Notifications"
@@ -241,10 +242,10 @@ export function DashboardPage() {
               <p className="text-[11px] text-[#9E968C] mt-0.5">{todayAppts.length} appointment{todayAppts.length !== 1 ? 's' : ''} today</p>
             </div>
             <button
-              onClick={() => navigate('/admin/appointments')}
+              onClick={() => navigate('/admin/appointments?status=Active')}
               className="text-xs text-[#10B981] hover:underline flex items-center gap-1"
             >
-              View all <ArrowRight size={11} />
+              View active <ArrowRight size={11} />
             </button>
           </div>
 

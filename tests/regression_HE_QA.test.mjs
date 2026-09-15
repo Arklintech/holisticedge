@@ -186,13 +186,14 @@ test('Keyboard Safety: isEditableTarget prevents global shortcut hijacking', () 
 // ============================================================
 test('Clinical Workflow: Returning patient matching preserves permanent registration token', async () => {
   const testPhone = '+91 81426 42051';
-  const existingPatient = db.find('patients', p => p.phone && p.phone.includes('81426'));
-  const originalToken = existingPatient ? existingPatient.registrationTokenNumber : 'HE-001281';
+  const testEmail = 'test.returning@holisticedge.in';
+  const matchResult = await matchPatient({ phone: testPhone, email: testEmail });
+  const originalToken = matchResult.patient ? matchResult.patient.registrationTokenNumber : 'HE-001299';
 
   const result = await findOrCreatePatient({
     name: 'Ahmed Khan Returning',
     phone: testPhone,
-    email: 'test.returning@holisticedge.in',
+    email: testEmail,
   });
 
   const matched = result.patient;

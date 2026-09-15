@@ -2,6 +2,10 @@ import { db } from '../db.js';
 import { getAuthProvider } from '../providers/index.js';
 
 export async function authenticate(req, res, next) {
+  if (req.user && req.user.id) {
+    return next();
+  }
+
   const authHeader = req.headers.authorization;
   const authUserHeader = req.headers['x-admin-user-email'];
 

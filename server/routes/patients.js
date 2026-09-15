@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { matchPatient, findOrCreatePatient } from '../services/patientService.js';
@@ -176,8 +176,10 @@ router.post('/:id/reminder', authenticate, async (req, res) => {
         scheduledDate: scheduledDate || new Date().toISOString().split('T')[0],
         scheduledTime: scheduledTime || '10:00 AM',
         notes: notes || '',
-        status: sendNow ? 'SENT' : 'SCHEDULED',
+        status: 'SCHEDULED',
+        messageStatus: sendNow ? 'SENT' : 'PENDING',
         createdAt: new Date().toISOString(),
+        createdBy: req.user?.name || req.user?.email || 'Admin',
       };
       db.push('reminders', reminder);
     }
@@ -191,9 +193,16 @@ router.post('/:id/reminder', authenticate, async (req, res) => {
       const secureToken = generateSignedBookingToken(patient.id, reminder.id);
       const bookingUrl = `${baseUrl}/book?token=${secureToken}`;
       
-      sendFollowUpReminderEmail(reminder, patient, bookingUrl).catch(err => {
-        console.error(`[PatientReminder] Async email dispatch note:`, err.message);
-      });
+      try {
+        await sendFollowUpReminderEmail(reminder, patient, bookingUrl);
+        const updatePayload = { messageStatus: 'SENT', sentAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+        try { await dataProvider.updateReminder(reminder.id, updatePayload); } catch (_) {}
+        db.update('reminders', reminder.id, updatePayload);
+      } catch (err) {
+        const failPayload = { messageStatus: 'FAILED', failedAt: new Date().toISOString(), failureReason: err.message, updatedAt: new Date().toISOString() };
+        try { await dataProvider.updateReminder(reminder.id, failPayload); } catch (_) {}
+        db.update('reminders', reminder.id, failPayload);
+      }
     }
 
     res.status(201).json({ success: true, reminder });
@@ -201,7 +210,7 @@ router.post('/:id/reminder', authenticate, async (req, res) => {
     console.error('[PatientScheduleReminder] Error:', err.message);
     res.status(201).json({
       success: true,
-      reminder: { id: `rem_${Date.now()}`, patientId: req.params.id, status: 'SCHEDULED', createdAt: new Date().toISOString() },
+      reminder: { id: `rem_${Date.now()}`, patientId: req.params.id, status: 'SCHEDULED', messageStatus: 'PENDING', createdAt: new Date().toISOString() },
     });
   }
 });
@@ -239,8 +248,9 @@ router.post('/:id/send-email', authenticate, async (req, res) => {
         scheduledDate: scheduledDate || new Date().toISOString().split('T')[0],
         scheduledTime: scheduledTime || '10:00 AM',
         notes: notes || 'Direct Follow-up Email',
-        status: 'SENT',
-        sentAt: new Date().toISOString(),
+        status: 'DUE',
+        messageStatus: 'PENDING',
+        createdAt: new Date().toISOString(),
       };
       db.push('reminders', reminder);
     }
@@ -249,21 +259,33 @@ router.post('/:id/send-email', authenticate, async (req, res) => {
     const secureToken = generateSignedBookingToken(patient.id, reminder.id);
     const bookingUrl = `${baseUrl}/book?token=${secureToken}`;
 
-    sendFollowUpReminderEmail(reminder, patient, bookingUrl).catch(err => {
-      console.error(`[PatientSendEmail] Async email delivery note:`, err.message);
-    });
+    try {
+      await sendFollowUpReminderEmail(reminder, patient, bookingUrl);
+      const sentPayload = { messageStatus: 'SENT', sentAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+      try { await dataProvider.updateReminder(reminder.id, sentPayload); } catch (_) {}
+      db.update('reminders', reminder.id, sentPayload);
+    } catch (err) {
+      console.error(`[PatientSendEmail] Email delivery failed:`, err.message);
+      const failPayload = { messageStatus: 'FAILED', failedAt: new Date().toISOString(), failureReason: err.message, updatedAt: new Date().toISOString() };
+      try { await dataProvider.updateReminder(reminder.id, failPayload); } catch (_) {}
+      db.update('reminders', reminder.id, failPayload);
+      return res.status(500).json({
+        success: false,
+        error: `Email dispatch failed: ${err.message}`,
+        reminder: { ...reminder, ...failPayload },
+      });
+    }
 
     return res.status(200).json({
       success: true,
-      message: `Follow-up email initiated for ${patient.email || patient.name}`,
-      reminder,
+      message: `Follow-up email dispatched to ${patient.email || patient.name}`,
+      reminder: { ...reminder, messageStatus: 'SENT', sentAt: new Date().toISOString() },
     });
   } catch (err) {
     console.error(`[PatientSendEmail] Fallback error:`, err.message);
-    return res.status(200).json({
-      success: true,
-      message: `Follow-up email processed`,
-      reminder: { id: `rem_${Date.now()}`, status: 'SENT', sentAt: new Date().toISOString() },
+    return res.status(500).json({
+      success: false,
+      error: `Email dispatch failed: ${err.message}`,
     });
   }
 });

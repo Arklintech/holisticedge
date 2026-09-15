@@ -16,9 +16,19 @@ router.get('/', (req, res) => {
   res.json({ success: true, count: notifications.length, notifications });
 });
 
+// PUT /api/notifications/read-all  (literal route — must be ABOVE /:id/* param routes)
+router.put('/read-all', (req, res) => {
+  const now = new Date().toISOString();
+  const notifications = (db.get('notifications') || []).map(n =>
+    n.status === 'unread' ? { ...n, status: 'read', readAt: now, updatedAt: now } : n
+  );
+  db.set('notifications', notifications);
+  res.json({ success: true, message: 'All notifications marked as read' });
+});
+
 // PUT /api/notifications/:id/read
 router.put('/:id/read', (req, res) => {
-  const updated = db.update('notifications', req.params.id, { 
+  const updated = db.update('notifications', req.params.id, {
     status: 'read',
     readAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -29,23 +39,13 @@ router.put('/:id/read', (req, res) => {
 
 // PUT /api/notifications/:id/archive
 router.put('/:id/archive', (req, res) => {
-  const updated = db.update('notifications', req.params.id, { 
+  const updated = db.update('notifications', req.params.id, {
     status: 'archived',
     archivedAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
   if (!updated) return res.status(404).json({ error: 'Notification not found' });
   res.json({ success: true, notification: updated });
-});
-
-// PUT /api/notifications/read-all
-router.put('/read-all', (req, res) => {
-  const now = new Date().toISOString();
-  const notifications = (db.get('notifications') || []).map(n => 
-    n.status === 'unread' ? { ...n, status: 'read', readAt: now, updatedAt: now } : n
-  );
-  db.set('notifications', notifications);
-  res.json({ success: true, message: 'All notifications marked as read' });
 });
 
 // DELETE /api/notifications/:id

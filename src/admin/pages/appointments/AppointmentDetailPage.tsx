@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Phone, MessageSquare, Calendar, Clock,
-  User, Tag, FileText, Check, X, RefreshCw, Trash2,
+  User, Tag, FileText, Check, X, RefreshCw, Trash2, CalendarCheck,
 } from 'lucide-react';
 import { appointmentStorage, notificationStorage } from '../../services/adminStorage';
 import { useAdminStore } from '../../context/AdminStoreContext';
@@ -34,6 +34,7 @@ export function AppointmentDetailPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [loadingAppt, setLoadingAppt] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [followUpPrompt, setFollowUpPrompt] = useState<'Completed' | 'No-show' | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -100,7 +101,7 @@ export function AppointmentDetailPage() {
           'Content-Type': 'application/json',
           Authorization: token ? `Bearer ${token}` : '',
         },
-        body: JSON.stringify({ status: newStatus.toUpperCase() }),
+        body: JSON.stringify({ status: newStatus.toUpperCase().replace(/[\s-]+/g, '_') }),
       });
     } catch {}
     const updated = appointmentStorage.update(appt.id, { status: newStatus });
@@ -118,10 +119,18 @@ export function AppointmentDetailPage() {
         entityType: 'appointment',
         link: `/admin/appointments/${appt.id}`,
       });
+      showToast('success', 'Appointment Cancelled', 'Appointment cancelled — moved to history.');
+    } else if (newStatus === 'Completed') {
+      showToast('success', 'Appointment Completed', 'Appointment completed — moved to history.');
+    } else if (newStatus === 'No-show') {
+      showToast('success', 'Marked No-show', 'Marked as No-show — moved to history.');
+    } else {
+      showToast('success', `Status updated to ${newStatus}`);
     }
-    showToast('success', `Status updated to ${newStatus}`);
     setActionLoading(false);
     setConfirmAction(null);
+    // Surface a non-blocking informational prompt for terminal statuses
+    if (newStatus === 'Completed' || newStatus === 'No-show') setFollowUpPrompt(newStatus as 'Completed' | 'No-show');
   };
 
   const handleSaveNotes = async () => {
@@ -194,11 +203,8 @@ export function AppointmentDetailPage() {
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Phone</label>
                 <div className="flex items-center gap-2 mt-0.5">
                   <p className="text-sm text-[#1A1A1A]">{appt.phone}</p>
-                  <a href={`tel:${appt.phone}`} className="w-6 h-6 rounded-md bg-[#F4F1EA] flex items-center justify-center text-[#5A544E] hover:bg-[#E8E4DC]">
+                  <a href={`tel:${appt.phone}`} className="w-6 h-6 rounded-md bg-[#F4F1EA] flex items-center justify-center text-[#5A544E] hover:bg-[#E8E4DC]" title="Call">
                     <Phone size={11} />
-                  </a>
-                  <a href={`https://wa.me/${appt.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-md bg-green-50 flex items-center justify-center text-green-700 hover:bg-green-100">
-                    <MessageSquare size={11} />
                   </a>
                 </div>
               </div>
@@ -282,6 +288,49 @@ export function AppointmentDetailPage() {
                   {action.label}
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Post-status informational prompt — admin-initiated follow-up only */}
+          {followUpPrompt && (
+            <div className={`rounded-2xl p-4 border ${
+              followUpPrompt === 'Completed'
+                ? 'bg-emerald-50 border-emerald-200'
+                : 'bg-slate-50 border-slate-200'
+            }`}>
+              <div className="flex items-start gap-2.5">
+                <CalendarCheck size={15} className={followUpPrompt === 'Completed' ? 'text-emerald-600 mt-0.5' : 'text-slate-500 mt-0.5'} />
+                <div className="flex-1 min-w-0">
+                  <p className={`text-xs font-semibold ${
+                    followUpPrompt === 'Completed' ? 'text-emerald-800' : 'text-slate-700'
+                  }`}>
+                    {followUpPrompt === 'Completed'
+                      ? 'Appointment completed — patient history preserved.'
+                      : 'Marked no-show — patient history preserved.'
+                    }
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    {followUpPrompt === 'Completed'
+                      ? 'To schedule a follow-up, open the patient profile and use Set Follow-up.'
+                      : 'To schedule a follow-up or re-engagement, open the patient profile.'
+                    }
+                  </p>
+                  {appt.patientId && (
+                    <button
+                      onClick={() => navigate(`/admin/patients/${appt.patientId}`)}
+                      className="text-[11px] font-medium mt-1 text-[#0F2747] hover:underline"
+                    >
+                      Open Patient Profile →
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => setFollowUpPrompt(null)}
+                  className="text-[#9E968C] hover:text-[#5A544E] transition-colors"
+                >
+                  <X size={12} />
+                </button>
+              </div>
             </div>
           )}
 

@@ -66,15 +66,28 @@ export class MockDataProvider extends DataProvider {
   }
 
   async getAppointments(filters = {}) {
-    let appointments = db.get('appointments');
+    let appointments = db.get('appointments') || [];
     if (filters.patientId) {
       appointments = appointments.filter(a => a.patientId === filters.patientId);
     }
     if (filters.date) {
-      appointments = appointments.filter(a => a.date === filters.date);
+      appointments = appointments.filter(a => (a.date || a.preferredDate) === filters.date);
     }
     if (filters.status) {
-      appointments = appointments.filter(a => a.status === filters.status);
+      const sFilter = filters.status.toLowerCase().replace(/[\s_]+/g, '-');
+      if (sFilter === 'active') {
+        appointments = appointments.filter(a => {
+          const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+          return s !== 'completed' && s !== 'cancelled' && s !== 'no-show';
+        });
+      } else if (sFilter === 'history' || sFilter === 'historical') {
+        appointments = appointments.filter(a => {
+          const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+          return s === 'completed' || s === 'cancelled' || s === 'no-show';
+        });
+      } else if (sFilter !== 'all') {
+        appointments = appointments.filter(a => (a.status || '').toLowerCase().replace(/[\s_]+/g, '-') === sFilter);
+      }
     }
     return appointments;
   }
@@ -102,12 +115,25 @@ export class MockDataProvider extends DataProvider {
   }
 
   async getReminders(filters = {}) {
-    let reminders = db.get('reminders');
+    let reminders = db.get('reminders') || [];
     if (filters.patientId) {
       reminders = reminders.filter(r => r.patientId === filters.patientId);
     }
     if (filters.status) {
-      reminders = reminders.filter(r => r.status === filters.status);
+      const sFilter = filters.status.toLowerCase();
+      if (sFilter === 'active') {
+        reminders = reminders.filter(r => {
+          const s = (r.status || '').toLowerCase();
+          return s !== 'completed' && s !== 'cancelled';
+        });
+      } else if (sFilter === 'history' || sFilter === 'historical') {
+        reminders = reminders.filter(r => {
+          const s = (r.status || '').toLowerCase();
+          return s === 'completed' || s === 'cancelled';
+        });
+      } else if (sFilter !== 'all') {
+        reminders = reminders.filter(r => (r.status || '').toLowerCase() === sFilter);
+      }
     }
     return reminders;
   }
@@ -364,18 +390,54 @@ export class GoogleSheetsDataProvider extends DataProvider {
       appointments.forEach(a => mergedMap.set(a.id, a));
       localAppts.forEach(a => mergedMap.set(a.id, a));
 
-      let result = Array.from(mergedMap.values());
-      if (filters.patientId) result = result.filter(a => a.patientId === filters.patientId);
-      if (filters.date) result = result.filter(a => a.date === filters.date);
-      if (filters.status) result = result.filter(a => a.status === filters.status);
+      const applyFilters = (list) => {
+        let result = list;
+        if (filters.patientId) result = result.filter(a => a.patientId === filters.patientId);
+        if (filters.date) result = result.filter(a => (a.date || a.preferredDate) === filters.date);
+        if (filters.status) {
+          const sFilter = filters.status.toLowerCase().replace(/[\s_]+/g, '-');
+          if (sFilter === 'active') {
+            result = result.filter(a => {
+              const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+              return s !== 'completed' && s !== 'cancelled' && s !== 'no-show';
+            });
+          } else if (sFilter === 'history' || sFilter === 'historical') {
+            result = result.filter(a => {
+              const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+              return s === 'completed' || s === 'cancelled' || s === 'no-show';
+            });
+          } else if (sFilter !== 'all') {
+            result = result.filter(a => (a.status || '').toLowerCase().replace(/[\s_]+/g, '-') === sFilter);
+          }
+        }
+        return result;
+      };
 
-      return result;
+      return applyFilters(Array.from(mergedMap.values()));
     } catch (err) {
-      let result = localAppts;
-      if (filters.patientId) result = result.filter(a => a.patientId === filters.patientId);
-      if (filters.date) result = result.filter(a => a.date === filters.date);
-      if (filters.status) result = result.filter(a => a.status === filters.status);
-      return result;
+      const applyFilters = (list) => {
+        let result = list;
+        if (filters.patientId) result = result.filter(a => a.patientId === filters.patientId);
+        if (filters.date) result = result.filter(a => (a.date || a.preferredDate) === filters.date);
+        if (filters.status) {
+          const sFilter = filters.status.toLowerCase().replace(/[\s_]+/g, '-');
+          if (sFilter === 'active') {
+            result = result.filter(a => {
+              const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+              return s !== 'completed' && s !== 'cancelled' && s !== 'no-show';
+            });
+          } else if (sFilter === 'history' || sFilter === 'historical') {
+            result = result.filter(a => {
+              const s = (a.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+              return s === 'completed' || s === 'cancelled' || s === 'no-show';
+            });
+          } else if (sFilter !== 'all') {
+            result = result.filter(a => (a.status || '').toLowerCase().replace(/[\s_]+/g, '-') === sFilter);
+          }
+        }
+        return result;
+      };
+      return applyFilters(localAppts);
     }
   }
 
@@ -476,9 +538,24 @@ export class GoogleSheetsDataProvider extends DataProvider {
   }
 
   async getReminders(filters = {}) {
-    let reminders = db.get('reminders');
+    let reminders = db.get('reminders') || [];
     if (filters.patientId) reminders = reminders.filter(r => r.patientId === filters.patientId);
-    if (filters.status) reminders = reminders.filter(r => r.status === filters.status);
+    if (filters.status) {
+      const sFilter = filters.status.toLowerCase();
+      if (sFilter === 'active') {
+        reminders = reminders.filter(r => {
+          const s = (r.status || '').toLowerCase();
+          return s !== 'completed' && s !== 'cancelled';
+        });
+      } else if (sFilter === 'history' || sFilter === 'historical') {
+        reminders = reminders.filter(r => {
+          const s = (r.status || '').toLowerCase();
+          return s === 'completed' || s === 'cancelled';
+        });
+      } else if (sFilter !== 'all') {
+        reminders = reminders.filter(r => (r.status || '').toLowerCase() === sFilter);
+      }
+    }
     return reminders;
   }
 
