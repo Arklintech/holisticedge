@@ -115,16 +115,19 @@ export const appointmentStorage = {
   },
   create(data: Omit<AdminAppointment, 'id' | 'createdAt' | 'updatedAt'>): AdminAppointment {
     const now = new Date().toISOString();
+    const apptName = data.fullName || data.patientName || '';
     const appt: AdminAppointment = {
       ...data,
+      fullName: apptName,
+      patientName: apptName,
       id: nextAppointmentId(),
       createdAt: now,
       updatedAt: now,
     };
     upsert(KEYS.APPOINTMENTS, appt);
     patientStorage.findOrCreate({
-      name: appt.fullName,
-      phone: appt.phone,
+      name: apptName,
+      phone: appt.phone || '',
       email: appt.email,
       patientType: 'Chiropractic Care',
     });
@@ -759,13 +762,15 @@ export const patientStorage = {
     return readOne<AdminPatient>(KEYS.PATIENTS, id) || this.getAll().find(p => p.id === id) || null;
   },
 
-  findOrCreate(data: { name: string; phone: string; email?: string; patientType?: string }): AdminPatient {
+  findOrCreate(data: { name?: string; phone?: string; email?: string; patientType?: string }): AdminPatient {
     const all = this.getAll();
-    const cleanPhone = data.phone.trim().replace(/[^\d+]/g, '');
-    const cleanEmail = (data.email || '').trim().toLowerCase();
+    const rawName = (data?.name || '').trim();
+    const rawPhone = (data?.phone || '').trim();
+    const cleanPhone = rawPhone.replace(/[^\d+]/g, '');
+    const cleanEmail = (data?.email || '').trim().toLowerCase();
 
     const match = all.find(p => {
-      const pPhone = p.phone.trim().replace(/[^\d+]/g, '');
+      const pPhone = (p.phone || '').trim().replace(/[^\d+]/g, '');
       const pEmail = (p.email || '').trim().toLowerCase();
       return (cleanPhone && pPhone === cleanPhone) || (cleanEmail && pEmail && pEmail === cleanEmail);
     });
@@ -773,9 +778,9 @@ export const patientStorage = {
     if (match) {
       const updated = {
         ...match,
-        name: data.name.trim() || match.name,
-        email: data.email?.trim() || match.email,
-        patientType: data.patientType || match.patientType,
+        name: rawName || match.name,
+        email: data?.email?.trim() || match.email,
+        patientType: data?.patientType || match.patientType,
         updatedAt: new Date().toISOString(),
       };
       upsert(KEYS.PATIENTS, updated);
@@ -786,10 +791,10 @@ export const patientStorage = {
     const newPatient: AdminPatient = {
       id: generateId('patient'),
       registrationTokenNumber: nextPatientToken(),
-      name: data.name.trim(),
-      phone: data.phone.trim(),
-      email: data.email?.trim() || undefined,
-      patientType: data.patientType || 'Standard Care',
+      name: rawName || 'Valued Patient',
+      phone: rawPhone || '',
+      email: data?.email?.trim() || undefined,
+      patientType: data?.patientType || 'Standard Care',
       createdAt: now,
       updatedAt: now,
     };
@@ -1017,7 +1022,7 @@ export function seedDemoData(): void {
       slug: 'free-initial-consultation',
       shortDescription: 'Comprehensive posture, alignment, and mobility assessment with Healer Abdul Mallik.',
       description: 'Experience a thorough clinical examination including physical range of motion testing, spinal palpation, and personalized treatment roadmap discussion at zero consultation fee.',
-      label: 'Zero-Cost Initial Consult',
+      label: 'Zero-cost initial consult',
       type: 'CONSULTATION',
       ctaAction: 'BOOKING_MODAL',
       ctaText: 'Claim Free Consultation',

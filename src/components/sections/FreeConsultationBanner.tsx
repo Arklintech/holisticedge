@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Sparkles, Calendar, Phone, CheckCircle2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { clinicInfo } from '../../data/clinicInfo';
@@ -23,7 +23,7 @@ export const FreeConsultationBanner: React.FC<FreeConsultationBannerProps> = ({ 
               </div>
 
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-normal font-serif text-[#FAF9F6] tracking-tight">
-                Ready to Take the Next Step•
+                Ready to Take the Next Step?
               </h2>
 
               <p className="text-sm sm:text-base text-[#D4CEC5] leading-relaxed max-w-2xl">

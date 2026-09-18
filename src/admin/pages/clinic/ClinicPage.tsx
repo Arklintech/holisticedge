@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Building2,
   Phone,
@@ -173,7 +173,7 @@ export function ClinicPage() {
 
           <div className="space-y-2">
             {form.openingHours.map((h, i) => (
-              <div key={i} className="grid grid-cols-2 gap-3">
+              <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input
                   value={h.days}
                   onChange={e => {

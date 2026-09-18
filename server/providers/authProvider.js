@@ -1,4 +1,4 @@
-﻿import { db } from '../db.js';
+import { db } from '../db.js';
 
 export class AuthProvider {
   getStatus() { throw new Error('getStatus must be implemented'); }
@@ -240,7 +240,7 @@ export class FirebaseAuthProvider extends AuthProvider {
         // If user not found on a fresh Firebase project, attempt sign up for pre-approved staff
         if (data.error?.message?.includes('EMAIL_NOT_FOUND') || data.error?.message?.includes('INVALID_LOGIN_CREDENTIALS')) {
           const isStandardStaff = cleanEmail === 'admin@holisticedge.in' || cleanEmail === 'reception@holisticedge.in';
-          if (isStandardStaff && password === 'HolisticEdge@2025') {
+          if (isStandardStaff && (password === 'HolisticEdge@2025' || password === 'Reception@2025')) {
             const signupRes = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.apiKey}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },

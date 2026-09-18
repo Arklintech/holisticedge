@@ -180,18 +180,18 @@ export function LeadDetailPage() {
   return (
     <div className="p-3 sm:p-6 max-w-3xl space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <button onClick={() => navigate('/admin/leads')} className="w-8 h-8 rounded-lg border border-[#E5E2DC] flex items-center justify-center text-[#5A544E] hover:bg-[#F8F7F4]">
+      <div className="flex items-center gap-3 min-w-0">
+        <button onClick={() => navigate('/admin/leads')} className="w-8 h-8 rounded-lg border border-[#E5E2DC] flex items-center justify-center text-[#5A544E] hover:bg-[#F8F7F4] flex-shrink-0">
           <ArrowLeft size={15} />
         </button>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-base font-bold text-[#1A1A1A]">{lead.fullName}</h1>
-            <StatusBadge status={lead.status} size="md" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <h1 className="text-base font-bold text-[#1A1A1A] truncate">{lead.fullName}</h1>
+            <StatusBadge status={lead.status} size="md" className="flex-shrink-0" />
           </div>
-          <p className="text-[11px] text-[#9E968C]">{lead.source} · {formatTs(lead.createdAt)}</p>
+          <p className="text-[11px] text-[#9E968C] truncate">{lead.source} · {formatTs(lead.createdAt)}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-shrink-0">
           <a href={`tel:${lead.phone}`} className="w-8 h-8 rounded-lg bg-[#F4F1EA] flex items-center justify-center text-[#5A544E] hover:bg-[#E8E4DC]" title="Call">
             <Phone size={14} />
           </a>
@@ -212,13 +212,13 @@ export function LeadDetailPage() {
           {/* Lead Info */}
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
             <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Lead Information</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div><p className="text-[10.5px] text-[#9E968C]">Phone</p><p className="text-sm text-[#1A1A1A] font-medium">{lead.phone}</p></div>
-              {lead.email && <div><p className="text-[10.5px] text-[#9E968C]">Email</p><p className="text-sm text-[#1A1A1A]">{lead.email}</p></div>}
-              <div><p className="text-[10.5px] text-[#9E968C]">Condition</p><p className="text-sm text-[#1A1A1A] font-medium">{lead.condition}</p></div>
-              <div><p className="text-[10.5px] text-[#9E968C]">Source</p><p className="text-sm text-[#1A1A1A]">{lead.source}</p></div>
-              {lead.assignedTo && <div><p className="text-[10.5px] text-[#9E968C]">Assigned To</p><p className="text-sm text-[#1A1A1A]">{lead.assignedTo}</p></div>}
-              {lead.lastContactedAt && <div><p className="text-[10.5px] text-[#9E968C]">Last Contacted</p><p className="text-sm text-[#1A1A1A]">{formatTs(lead.lastContactedAt)}</p></div>}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Phone</p><p className="text-sm text-[#1A1A1A] font-medium break-all">{lead.phone}</p></div>
+              {lead.email && <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Email</p><p className="text-sm text-[#1A1A1A] break-all">{lead.email}</p></div>}
+              <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Condition</p><p className="text-sm text-[#1A1A1A] font-medium break-words">{lead.condition}</p></div>
+              <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Source</p><p className="text-sm text-[#1A1A1A] break-words">{lead.source}</p></div>
+              {lead.assignedTo && <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Assigned To</p><p className="text-sm text-[#1A1A1A] break-words">{lead.assignedTo}</p></div>}
+              {lead.lastContactedAt && <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Last Contacted</p><p className="text-sm text-[#1A1A1A]">{formatTs(lead.lastContactedAt)}</p></div>}
             </div>
             {lead.message && (
               <div>

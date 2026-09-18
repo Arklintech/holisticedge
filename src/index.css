@@ -19,6 +19,29 @@
     --brand-surface: #F4F1EA;
     --brand-border: #E8E4DC;
     --brand-success: #1B4332;
+
+    /* Semantic Design System Tokens */
+    --font-xs: 12px;
+    --font-sm: 14px;
+    --font-base: 16px;
+    --font-lg: 18px;
+    --font-xl: 20px;
+    --font-2xl: 24px;
+    --font-3xl: 30px;
+    --font-4xl: 36px;
+    --font-5xl: 48px;
+
+    --text-heading: #1A1A1A;
+    --text-body: #5A544E;
+    --text-muted: #736C63;
+    --text-on-dark: #FAF9F6;
+    --text-primary: #0F2747;
+    --text-accent: #1B4332;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
   }
 
   body {

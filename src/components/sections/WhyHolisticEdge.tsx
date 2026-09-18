@@ -59,7 +59,7 @@ export const WhyHolisticEdge: React.FC<WhyHolisticEdgeProps> = ({
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#1A1A1A]">Transparent Assessment</h4>
+                  <h3 className="text-sm font-bold text-[#1A1A1A]">Transparent Assessment</h3>
                   <p className="text-xs text-[#5A544E] leading-relaxed">
                     We honestly assess your MRI reports and symptoms. If our conservative methods are not appropriate for your condition, we refer you transparently.
                   </p>

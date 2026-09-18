@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Clock, Calendar, Users, AlertCircle, Save, Check, Ban } from 'lucide-react';
 import {
   bookingSlotStorage,
@@ -153,7 +153,7 @@ export function SlotFormModal({
           )}
 
           {/* Date & Time Row */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-[#5A544E] mb-1">
                 Date *
@@ -185,7 +185,7 @@ export function SlotFormModal({
           </div>
 
           {/* Capacity & Status */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold text-[#5A544E] mb-1">
                 Capacity (Seats) *

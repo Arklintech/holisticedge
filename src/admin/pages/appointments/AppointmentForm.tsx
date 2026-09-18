@@ -182,7 +182,7 @@ export function AppointmentForm() {
         {/* Patient Info */}
         <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
           <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Patient Information</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Full Name *" name="appointment-full-name" error={errors.fullName}>
               <input
                 id="appointment-full-name"
@@ -224,7 +224,7 @@ export function AppointmentForm() {
         {/* Appointment Details */}
         <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
           <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Appointment Details</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Service *" name="appointment-service" error={errors.service}>
               <select
                 id="appointment-service"

@@ -39,7 +39,7 @@ export const FounderSection: React.FC<FounderSectionProps> = ({
                   </Badge>
                   <h3 className="text-2xl font-bold font-serif text-[#FAF9F6]">{founder.name}</h3>
                   <p className="text-xs text-[#D4CEC5] mt-0.5">
-                    Developer of A.M.M Method™ ? Mehdipatnam, Hyderabad
+                    Developer of A.M.M Method™ · Mehdipatnam, Hyderabad
                   </p>
                 </div>
               </div>

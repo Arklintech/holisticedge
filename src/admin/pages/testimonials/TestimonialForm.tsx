@@ -52,7 +52,7 @@ export function TestimonialForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
           <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Patient Details</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div><label className="block text-xs font-semibold text-[#5A544E] mb-1.5">Full Name *</label><input className={ic('patientName')} value={form.patientName} onChange={e => set('patientName', e.target.value)} placeholder="Patient full name" />{errors.patientName && <p className="mt-1 text-[11px] text-red-600">{errors.patientName}</p>}</div>
             <div><label className="block text-xs font-semibold text-[#5A544E] mb-1.5">Display Name</label><input className={ic('displayName')} value={form.displayName} onChange={e => set('displayName', e.target.value)} placeholder="e.g., Rashid K." /></div>
             <div><label className="block text-xs font-semibold text-[#5A544E] mb-1.5">Condition</label><select className={ic('condition')} value={form.condition} onChange={e => set('condition', e.target.value)}>{conditionsData.map(c => <option key={c.id} value={c.title}>{c.title}</option>)}</select></div>

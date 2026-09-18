@@ -115,9 +115,9 @@ export const FinalCtaSection: React.FC<FinalCtaProps> = ({ onOpenBooking }) => {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-white leading-tight">
+              <h3 className="text-sm font-bold text-white leading-tight">
                 Founder-led clinical review
-              </h4>
+              </h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Expert evaluation grounded in experience and care.
               </p>
@@ -130,9 +130,9 @@ export const FinalCtaSection: React.FC<FinalCtaProps> = ({ onOpenBooking }) => {
               <Leaf className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-white leading-tight">
+              <h3 className="text-sm font-bold text-white leading-tight">
                 No surgery or invasive drugs
-              </h4>
+              </h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Evidence-informed, natural solutions for lasting relief.
               </p>
@@ -145,9 +145,9 @@ export const FinalCtaSection: React.FC<FinalCtaProps> = ({ onOpenBooking }) => {
               <MapPin className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-white leading-tight">
+              <h3 className="text-sm font-bold text-white leading-tight">
                 Convenient Mehdipatnam location
-              </h4>
+              </h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Easily accessible care, close to where you are.
               </p>

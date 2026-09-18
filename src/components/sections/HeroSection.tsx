@@ -107,18 +107,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     </div>
                     <div className="space-y-1.5 text-left min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                        <span className="text-[10px] font-bold tracking-wider uppercase bg-white text-[#0F2747] px-2 py-0.5 rounded-full shadow-xs shrink-0">
-                          {heroOffer.label || 'Special Promotion'}
+                        <span className="text-xs font-bold tracking-normal bg-white text-[#0F2747] px-2 py-0.5 rounded-full shadow-xs shrink-0">
+                          {heroOffer.label || 'Special promotion'}
                         </span>
                         {heroOffer.discountValue && (
-                          <span className="text-[10px] sm:text-[10.5px] font-bold text-[#FAF9F6] bg-white/15 backdrop-blur-xs border border-white/20 px-2 py-0.5 rounded-full shrink-0">
+                          <span className="text-xs font-bold text-[#FAF9F6] bg-white/15 backdrop-blur-xs border border-white/20 px-2 py-0.5 rounded-full shrink-0">
                             {heroOffer.discountValue}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-base sm:text-lg font-bold text-white font-serif tracking-tight leading-snug break-words">
+                      <h2 className="text-base sm:text-lg font-bold text-white font-serif tracking-tight leading-snug break-words">
                         {heroOffer.title}
-                      </h3>
+                      </h2>
                       <p className="text-xs sm:text-[13px] text-white/85 leading-relaxed max-w-xl break-words">
                         {heroOffer.shortDescription}
                       </p>

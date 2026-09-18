@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -515,7 +515,7 @@ export function OfferFormPage() {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#E5E2DC]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#E5E2DC]">
               <div>
                 <label className="block text-xs font-semibold text-[#5A544E] mb-1">
                   Display Priority (1 = Highest)

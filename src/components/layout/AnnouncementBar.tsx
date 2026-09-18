@@ -43,15 +43,15 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ onOpenBooking 
           
           {activeOffer ? (
             <div className="flex items-center gap-1.5 sm:gap-2 text-white flex-wrap justify-center sm:justify-start min-w-0">
-              <span className="bg-white text-[#0F2747] text-[9.5px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-xs shrink-0">
+              <span className="bg-white text-[#0F2747] text-xs font-bold px-2 py-0.5 rounded-full tracking-normal flex items-center gap-1 shadow-xs shrink-0">
                 <Tag size={9} />
-                {activeOffer.label || 'Special Offer'}
+                {activeOffer.label || 'Special offer'}
               </span>
               <span className="font-bold text-xs text-white leading-tight break-words">
                 {activeOffer.title}
               </span>
               {activeOffer.discountValue && (
-                <span className="text-[10px] font-bold text-white bg-white/20 border border-white/25 px-2 py-0.5 rounded-full hidden md:inline shrink-0">
+                <span className="text-xs font-bold text-white bg-white/20 border border-white/25 px-2 py-0.5 rounded-full hidden md:inline shrink-0">
                   {activeOffer.discountValue}
                 </span>
               )}
@@ -65,7 +65,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ onOpenBooking 
 
         {/* Right Side: Phone & Action */}
         <div className="flex items-center justify-center sm:justify-end gap-2.5 sm:gap-4 text-white/80 w-full sm:w-auto flex-wrap sm:flex-nowrap pt-0.5 sm:pt-0">
-          <div className="hidden lg:flex items-center gap-1 text-[11px] text-white/70 shrink-0">
+          <div className="hidden lg:flex items-center gap-1 text-xs text-white/70 shrink-0">
             <Clock className="w-3 h-3 text-blue-300" />
             <span>Mehdipatnam, Hyderabad</span>
           </div>
@@ -83,7 +83,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ onOpenBooking 
             type="button"
             id="announcement-book-btn"
             onClick={handleCtaClick}
-            className="inline-flex items-center gap-1 bg-white hover:bg-blue-50 text-[#0F2747] px-3 py-1 sm:px-3.5 rounded-xl text-[11px] font-bold transition-all duration-200 shadow-sm active:scale-95 shrink-0"
+            className="inline-flex items-center gap-1 bg-white hover:bg-blue-50 text-[#0F2747] px-3 py-1 sm:px-3.5 rounded-xl text-xs font-bold transition-all duration-200 shadow-sm active:scale-95 shrink-0"
           >
             <span>{activeOffer?.ctaText || 'Book Appointment'}</span>
             <ArrowRight size={11} className="text-[#0F2747]" />

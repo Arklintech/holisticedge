@@ -198,6 +198,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         localStorage.setItem('holistic_edge_appointments', JSON.stringify([newBooking, ...existing]));
 
         appointmentStorage.create({
+          fullName: fullName.trim(),
           patientName: fullName.trim(),
           phone: phone.trim(),
           email: email.trim() || undefined,

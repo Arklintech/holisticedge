@@ -36,19 +36,19 @@ export const AmmMethodDeepDive: React.FC<AmmMethodDeepDiveProps> = ({ onOpenBook
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#061D38] border border-[#193252] text-[#10B981] text-xs font-semibold">
             <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
-            <span>FLAGSHIP PROTOCOL ? Proprietary to Holistic Edge</span>
+            <span>FLAGSHIP PROTOCOL · Proprietary to Holistic Edge</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-white font-serif tracking-tight">
             The A.M.M Method™
           </h2>
 
-          <p className="text-xs sm:text-sm font-semibold tracking-widest text-[#10B981] uppercase">
-            ADJUSTMENT ? MOBILIZATION ? MUSCLE STRENGTHENING
+          <p className="text-xs sm:text-sm font-semibold text-[#10B981]">
+            Adjustment · Mobilization · Muscle strengthening
           </p>
 
           <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
-            Developed by Healer Abdul Mallik over 25 years of practice. ? complete 3-phase care framework that aligns misaligned joints, decompresses tight fascia, and strengthens stabilizing muscles for lasting pain relief.
+            Developed by Healer Abdul Mallik over 25 years of practice. A complete 3-phase care framework that aligns misaligned joints, decompresses tight fascia, and strengthens stabilizing muscles for lasting pain relief.
           </p>
         </div>
 

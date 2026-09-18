@@ -209,7 +209,7 @@ export const LocationContactSection: React.FC<LocationContactProps> = ({ onOpenB
             {/* Travel Distance Helper */}
             <div className="bg-white p-4 rounded-2xl border border-[#E8E4DC] text-xs text-[#5A544E] space-y-1.5 shadow-xs">
               <span className="font-bold text-[#1A1A1A] block">Convenient Driving Distance From:</span>
-              <p>• Banjara Hills (8-12 mins) ? Tolichowki (5 mins) ? Masab Tank (6 mins) ? Attapur (8 mins) ? Hitec City / Gachibowli (20-25 mins via PVNR Expressway / Mehdipatnam Flyover).</p>
+              <p>• Banjara Hills (8-12 mins) · Tolichowki (5 mins) · Masab Tank (6 mins) · Attapur (8 mins) · Hitec City / Gachibowli (20-25 mins via PVNR Expressway / Mehdipatnam Flyover).</p>
             </div>
           </div>
 

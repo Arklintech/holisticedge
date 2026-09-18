@@ -127,7 +127,7 @@ export function LeadForm() {
       >
         <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
           <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Contact Information</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[['fullName', 'Full Name *', 'text', 'Patient name'], ['phone', 'Phone *', 'tel', '+91 XXXXX XXXXX'], ['email', 'Email', 'email', 'patient@email.com']].map(([f, l, t, p]) => (
               <div key={f} className={f === 'email' ? 'col-span-2' : ''}>
                 <label htmlFor={`lead-${f}`} className="block text-xs font-semibold text-[#5A544E] mb-1.5">{l}</label>
@@ -139,7 +139,7 @@ export function LeadForm() {
         </div>
         <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
           <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Inquiry Details</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="lead-condition" className="block text-xs font-semibold text-[#5A544E] mb-1.5">Condition *</label>
               <select id="lead-condition" className={ic('condition')} value={form.condition} onChange={e => set('condition', e.target.value)}>

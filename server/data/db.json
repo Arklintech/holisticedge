@@ -1022,13 +1022,17 @@
       "preferredDate": "2026-09-15",
       "preferredTime": "10:00 AM",
       "notes": "",
-      "status": "Pending",
+      "status": "COMPLETED",
       "source": "Website",
       "createdAt": "2026-09-15T09:16:02.538Z",
-      "updatedAt": "2026-09-15T09:16:12.747Z",
+      "updatedAt": "2026-09-15T10:20:54.053Z",
       "patientId": "pt_1789463762538_juxa",
       "registrationTokenNumber": "HE-762538",
-      "emailStatus": "SENT"
+      "emailStatus": "SENT",
+      "confirmedAt": "2026-09-15T10:20:49.201Z",
+      "confirmedBy": "Admin",
+      "completedAt": "2026-09-15T10:20:54.041Z",
+      "completedBy": "Admin"
     },
     {
       "id": "HE-APPT-733885",
@@ -5251,6 +5255,76 @@
   ],
   "emailLogs": [
     {
+      "id": "elog_1789561312154_v4juh",
+      "idempotencyKey": "email_appt_HE-APPT-312154_1789561312154",
+      "appointmentId": "HE-APPT-312154",
+      "patientId": "pt_admin_test_01",
+      "recipient": "anasahmedkhan845@gmail.com",
+      "template": "APPOINTMENT_CONFIRMATION",
+      "subject": "Appointment Confirmed - HE-133993 | Holistic Edge",
+      "status": "SENT",
+      "queuedAt": "2026-09-16T12:21:52.154Z",
+      "sentAt": "2026-09-16T12:21:57.840Z",
+      "providerMessageId": "<23313ca1-4abe-7d8b-769e-dcb8e8ccdd05@gmail.com>",
+      "updatedAt": "2026-09-16T12:21:57.840Z"
+    },
+    {
+      "id": "elog_1789561189371_okvbe",
+      "idempotencyKey": "email_appt_HE-APPT-189371_1789561189371",
+      "appointmentId": "HE-APPT-189371",
+      "patientId": "pt_1788472883665_o8qpd",
+      "recipient": "ahmedkhananas57@gmail.com",
+      "template": "APPOINTMENT_CONFIRMATION",
+      "subject": "Appointment Confirmed - HE-001288 | Holistic Edge",
+      "status": "SENT",
+      "queuedAt": "2026-09-16T12:19:49.371Z",
+      "sentAt": "2026-09-16T12:19:54.225Z",
+      "providerMessageId": "<dd11afa8-5a65-50ae-2fd9-3a0f3630c804@gmail.com>",
+      "updatedAt": "2026-09-16T12:19:54.225Z"
+    },
+    {
+      "id": "elog_1789561184736_r7fjk",
+      "idempotencyKey": "email_appt_HE-APPT-184736_1789561184736",
+      "appointmentId": "HE-APPT-184736",
+      "patientId": "pt_1788475353352_sz08v",
+      "recipient": "anasahmedkhan4535@gmail.com",
+      "template": "APPOINTMENT_CONFIRMATION",
+      "subject": "Appointment Confirmed - HE-001290 | Holistic Edge",
+      "status": "SENT",
+      "queuedAt": "2026-09-16T12:19:44.736Z",
+      "sentAt": "2026-09-16T12:19:49.355Z",
+      "providerMessageId": "<cc32aa8d-1053-d600-f52f-cd8efc829c59@gmail.com>",
+      "updatedAt": "2026-09-16T12:19:49.355Z"
+    },
+    {
+      "id": "elog_1789561179796_qk62t",
+      "idempotencyKey": "email_appt_HE-APPT-179795_1789561179796",
+      "appointmentId": "HE-APPT-179795",
+      "patientId": "pt_test_1789464070128",
+      "recipient": "anasahmedkhan845@gmail.com",
+      "template": "APPOINTMENT_CONFIRMATION",
+      "subject": "Appointment Confirmed - HE-070128 | Holistic Edge",
+      "status": "SENT",
+      "queuedAt": "2026-09-16T12:19:39.796Z",
+      "sentAt": "2026-09-16T12:19:44.719Z",
+      "providerMessageId": "<875b676e-6bd5-fbf2-f84f-663994fde8b6@gmail.com>",
+      "updatedAt": "2026-09-16T12:19:44.719Z"
+    },
+    {
+      "id": "elog_1789560524591_soy38",
+      "idempotencyKey": "email_appt_TEST-APPT-001_1789560524591",
+      "appointmentId": "TEST-APPT-001",
+      "patientId": "pt_test_01",
+      "recipient": "holisticedges@gmail.com",
+      "template": "APPOINTMENT_CONFIRMATION",
+      "subject": "Appointment Confirmed - HE-009999 | Holistic Edge",
+      "status": "SENT",
+      "queuedAt": "2026-09-16T12:08:44.591Z",
+      "sentAt": "2026-09-16T12:08:50.035Z",
+      "providerMessageId": "<1ea8cde3-c61a-2d87-fa8f-f9ee00e79cd2@gmail.com>",
+      "updatedAt": "2026-09-16T12:08:50.035Z"
+    },
+    {
       "id": "elog_1789466815179_uf530",
       "idempotencyKey": "email_reminder_rem_1789464246780_w1blt_1789466815176",
       "reminderId": "rem_1789464246780_w1blt",
@@ -8654,6 +8728,16 @@
   ],
   "bookingSlots": [
     {
+      "id": "slot_1789561154118_7vxz",
+      "date": "2026-09-18",
+      "time": "11:30 AM",
+      "capacity": 5,
+      "booked": 0,
+      "status": "AVAILABLE",
+      "createdAt": "2026-09-16T12:19:14.118Z",
+      "updatedAt": "2026-09-16T12:19:14.118Z"
+    },
+    {
       "id": "slot_1788521937331_kdi8",
       "date": "2026-09-05",
       "time": "04:00 PM",
@@ -11409,13 +11493,58 @@
   ],
   "auditLogs": [
     {
-      "id": "audit_wa_1789467041421_i2aj",
+      "id": "audit_wa_1789582989221_8tfw",
       "actor": "WhatsAppWebhook",
       "action": "whatsapp_delivered",
       "entity": "whatsapp_message",
       "entityId": "wamid.HBgTESTMSG123",
       "description": "WhatsApp message wamid.HBgTESTMSG123 to 918142642051: DELIVERED",
-      "timestamp": "2026-09-15T10:10:41.000Z"
+      "timestamp": "2026-09-16T18:23:08.000Z"
+    },
+    {
+      "id": "audit_wa_1789561687900_ef3m",
+      "actor": "WhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wamid.HBgTESTMSG123",
+      "description": "WhatsApp message wamid.HBgTESTMSG123 to 918142642051: DELIVERED",
+      "timestamp": "2026-09-16T12:28:07.000Z"
+    },
+    {
+      "id": "audit_wa_1789560307778_u7o6",
+      "actor": "WhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wamid.HBgTESTMSG123",
+      "description": "WhatsApp message wamid.HBgTESTMSG123 to 918142642051: DELIVERED",
+      "timestamp": "2026-09-16T12:05:07.000Z"
+    },
+    {
+      "id": "audit_wa_1789560249453_1ypp",
+      "actor": "WhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wamid.HBgTESTMSG123",
+      "description": "WhatsApp message wamid.HBgTESTMSG123 to 918142642051: DELIVERED",
+      "timestamp": "2026-09-16T12:04:08.000Z"
+    },
+    {
+      "id": "audit_1789467654065",
+      "actor": "Admin",
+      "action": "updated",
+      "entity": "appointment",
+      "entityId": "HE-APPT-762537",
+      "description": "Updated appointment fields (status)",
+      "timestamp": "2026-09-15T10:20:54.065Z"
+    },
+    {
+      "id": "audit_1789467649222",
+      "actor": "Admin",
+      "action": "updated",
+      "entity": "appointment",
+      "entityId": "HE-APPT-762537",
+      "description": "Updated appointment fields (status)",
+      "timestamp": "2026-09-15T10:20:49.222Z"
     },
     {
       "id": "audit_1789466869932",

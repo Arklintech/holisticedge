@@ -166,23 +166,23 @@ export function AppointmentDetailPage() {
   return (
     <div className="p-3 sm:p-6 max-w-3xl space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={() => navigate('/admin/appointments')}
-          className="w-8 h-8 rounded-lg border border-[#E5E2DC] flex items-center justify-center text-[#5A544E] hover:bg-[#F8F7F4] transition-colors"
+          className="w-8 h-8 rounded-lg border border-[#E5E2DC] flex items-center justify-center text-[#5A544E] hover:bg-[#F8F7F4] transition-colors flex-shrink-0"
         >
           <ArrowLeft size={15} />
         </button>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-base font-bold text-[#1A1A1A]">{appt.fullName}</h1>
-            <StatusBadge status={appt.status} size="md" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <h1 className="text-base font-bold text-[#1A1A1A] truncate">{appt.fullName}</h1>
+            <StatusBadge status={appt.status} size="md" className="flex-shrink-0" />
           </div>
-          <p className="text-xs text-[#9E968C] font-mono">{appt.id}</p>
+          <p className="text-xs text-[#9E968C] font-mono truncate">{appt.id}</p>
         </div>
         <button
           onClick={() => setDeleteConfirm(true)}
-          className="w-8 h-8 rounded-lg border border-red-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors"
+          className="w-8 h-8 rounded-lg border border-red-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
           title="Delete appointment"
         >
           <Trash2 size={13} />
@@ -194,56 +194,56 @@ export function AppointmentDetailPage() {
         <div className="md:col-span-2 space-y-4">
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
             <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Patient Information</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Full Name</label>
-                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5">{appt.fullName}</p>
+                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5 break-words">{appt.fullName}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Phone</label>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <p className="text-sm text-[#1A1A1A]">{appt.phone}</p>
-                  <a href={`tel:${appt.phone}`} className="w-6 h-6 rounded-md bg-[#F4F1EA] flex items-center justify-center text-[#5A544E] hover:bg-[#E8E4DC]" title="Call">
+                  <p className="text-sm text-[#1A1A1A] break-all">{appt.phone}</p>
+                  <a href={`tel:${appt.phone}`} className="w-6 h-6 rounded-md bg-[#F4F1EA] flex items-center justify-center text-[#5A544E] hover:bg-[#E8E4DC] flex-shrink-0" title="Call">
                     <Phone size={11} />
                   </a>
                 </div>
               </div>
               {appt.email && (
-                <div>
+                <div className="min-w-0">
                   <label className="text-[10.5px] text-[#9E968C] font-medium">Email</label>
-                  <p className="text-sm text-[#1A1A1A] mt-0.5">{appt.email}</p>
+                  <p className="text-sm text-[#1A1A1A] mt-0.5 break-all">{appt.email}</p>
                 </div>
               )}
-              <div>
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Source</label>
-                <p className="text-sm text-[#1A1A1A] mt-0.5">{appt.source}</p>
+                <p className="text-sm text-[#1A1A1A] mt-0.5 break-words">{appt.source}</p>
               </div>
             </div>
           </div>
 
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
             <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Appointment Details</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Service</label>
-                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5">{appt.service}</p>
+                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5 break-words">{appt.service}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Condition</label>
-                <p className="text-sm text-[#1A1A1A] mt-0.5">{appt.condition}</p>
+                <p className="text-sm text-[#1A1A1A] mt-0.5 break-words">{appt.condition}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Date</label>
                 <p className="text-sm text-[#1A1A1A] mt-0.5">{formatDate(appt.preferredDate)}</p>
               </div>
-              <div>
+              <div className="min-w-0">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Time</label>
                 <p className="text-sm text-[#1A1A1A] mt-0.5">{appt.preferredTime}</p>
               </div>
               {appt.assignedTo && (
-                <div>
+                <div className="min-w-0">
                   <label className="text-[10.5px] text-[#9E968C] font-medium">Assigned To</label>
-                  <p className="text-sm text-[#1A1A1A] mt-0.5">{appt.assignedTo}</p>
+                  <p className="text-sm text-[#1A1A1A] mt-0.5 break-words">{appt.assignedTo}</p>
                 </div>
               )}
             </div>

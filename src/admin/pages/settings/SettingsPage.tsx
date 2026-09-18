@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Save, Loader2, Key, Building2, Phone, Share2, Search, Award } from 'lucide-react';
 import { settingsStorage, sessionStorage_admin } from '../../services/adminStorage';
 import { useAdminStore } from '../../context/AdminStoreContext';
@@ -60,7 +60,7 @@ export function SettingsPage() {
             <Building2 size={16} className="text-[#0F2747]" />
             <h2 className="text-sm font-semibold text-[#1A1A1A]">Clinic Profile</h2>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-[#5A544E] mb-1.5">Clinic Name</label>
               <input
@@ -94,7 +94,7 @@ export function SettingsPage() {
             <Phone size={16} className="text-[#1A365D]" />
             <h2 className="text-sm font-semibold text-[#1A1A1A]">Contact & Location</h2>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-[#5A544E] mb-1.5">Display Phone</label>
               <input

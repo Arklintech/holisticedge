@@ -27,7 +27,7 @@ export const SuccessStoriesSection: React.FC<SuccessStoriesProps> = ({
       document.body.appendChild(script);
     }
 
-    // Continuously hide Elfsight watermark inside Shadow DOM & Light DOM
+    // Continuously hide Elfsight watermark inside Shadow DOM & Light DOM using non-destructive CSS rules
     const removeBadge = () => {
       const scan = (root: ParentNode) => {
         if (!root) return;
@@ -44,10 +44,9 @@ export const SuccessStoriesSection: React.FC<SuccessStoriesProps> = ({
               (el as HTMLElement).style.setProperty('visibility', 'hidden', 'important');
               (el as HTMLElement).style.setProperty('opacity', '0', 'important');
               (el as HTMLElement).style.setProperty('height', '0', 'important');
+              (el as HTMLElement).style.setProperty('max-height', '0', 'important');
+              (el as HTMLElement).style.setProperty('overflow', 'hidden', 'important');
               (el as HTMLElement).style.setProperty('pointer-events', 'none', 'important');
-              if (el.parentNode) {
-                try { el.parentNode.removeChild(el); } catch (e) {}
-              }
             }
           });
         } catch (err) {}

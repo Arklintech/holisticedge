@@ -77,7 +77,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 2: Clinical Services (lg:col-span-2) */}
           <div className="lg:col-span-2 sm:col-span-1">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#F8FAFC]">
+            <h4 className="text-sm font-bold text-[#F8FAFC]">
               Clinical Services
             </h4>
             <div className="w-6 h-0.5 bg-[#0284C7] mb-4 mt-1.5" />
@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 3: Conditions Treated (lg:col-span-3) */}
           <div className="lg:col-span-3 sm:col-span-1">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#F8FAFC]">
+            <h4 className="text-sm font-bold text-[#F8FAFC]">
               Conditions Treated
             </h4>
             <div className="w-6 h-0.5 bg-[#0284C7] mb-4 mt-1.5" />
@@ -137,7 +137,7 @@ export const Footer: React.FC = () => {
 
           {/* Col 4: Patient Resources (lg:col-span-2) */}
           <div className="lg:col-span-2 sm:col-span-1">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#F8FAFC]">
+            <h4 className="text-sm font-bold text-[#F8FAFC]">
               Patient Resources
             </h4>
             <div className="w-6 h-0.5 bg-[#0284C7] mb-4 mt-1.5" />
@@ -234,7 +234,7 @@ export const Footer: React.FC = () => {
         <div className="pt-6 mt-6 border-t border-slate-800/80 pb-20 sm:pb-10 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
           <div className="space-y-1">
             <p className="text-xs sm:text-sm text-slate-200 font-medium">© {new Date().getFullYear()} Holistic Edge Chiropractic & Wellness Clinic. All rights reserved.</p>
-            <p className="text-[11px] text-slate-400">Founded by Healer Abdul Mallik · Mehdipatnam, Hyderabad</p>
+            <p className="text-xs text-slate-400">Founded by Healer Abdul Mallik · Mehdipatnam, Hyderabad</p>
           </div>
 
           <div className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/80 shadow-md">

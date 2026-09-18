@@ -168,30 +168,53 @@ export class GoogleSheetsDataProvider extends DataProvider {
     this.credentialsPath = process.env.GOOGLE_CREDENTIALS_PATH;
     this.schemaInitialized = false;
 
-    this.isConfigured = Boolean(this.spreadsheetId);
+    let parsedCreds = null;
+    if (this.credentialsPath && fs.existsSync(this.credentialsPath)) {
+      try {
+        parsedCreds = JSON.parse(fs.readFileSync(this.credentialsPath, 'utf8'));
+      } catch (e) {
+        console.error('[GoogleSheetsDataProvider] Error loading JSON credentials file:', e.message);
+      }
+    } else if (process.env.GOOGLE_CREDENTIALS && process.env.GOOGLE_CREDENTIALS.trim().startsWith('{')) {
+      try {
+        parsedCreds = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+      } catch (e) {}
+    } else if (process.env.GOOGLE_PRIVATE_KEY && process.env.GOOGLE_PRIVATE_KEY.trim().startsWith('{')) {
+      try {
+        parsedCreds = JSON.parse(process.env.GOOGLE_PRIVATE_KEY);
+      } catch (e) {}
+    }
+
+    this.isConfigured = Boolean(this.spreadsheetId && (parsedCreds || (this.credentialsPath && fs.existsSync(this.credentialsPath)) || (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY)));
+
     if (this.isConfigured) {
       try {
-        if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-          const auth = new google.auth.JWT({
+        let auth;
+        if (parsedCreds) {
+          auth = new google.auth.GoogleAuth({
+            credentials: parsedCreds,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+          });
+        } else if (this.credentialsPath && fs.existsSync(this.credentialsPath)) {
+          auth = new google.auth.GoogleAuth({
+            keyFile: this.credentialsPath,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+          });
+        } else if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+          auth = new google.auth.JWT({
             email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
             key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
             scopes: ['https://www.googleapis.com/auth/spreadsheets'],
           });
-          this.sheetsApi = google.sheets({ version: 'v4', auth });
-        } else if (this.credentialsPath && fs.existsSync(this.credentialsPath)) {
-          const auth = new google.auth.GoogleAuth({
-            keyFile: this.credentialsPath,
-            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-          });
+        }
+        if (auth) {
           this.sheetsApi = google.sheets({ version: 'v4', auth });
         } else {
           this.isConfigured = false;
-          console.warn('[GoogleSheets] Missing keyFile or private key credentials. Falling back to Mock.');
-          return;
         }
       } catch (err) {
         this.isConfigured = false;
-        console.error('[GoogleSheets] Init error:', err.message);
+        console.error('[GoogleSheets] Auth init error:', err.message);
       }
     }
   }

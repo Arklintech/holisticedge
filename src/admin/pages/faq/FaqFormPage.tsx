@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -154,7 +154,7 @@ export function FaqFormPage() {
           {errors.question && <p className="text-[11px] text-red-600 mt-1">{errors.question}</p>}
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-semibold text-[#5A544E] mb-1">Category</label>
             <select

@@ -227,7 +227,11 @@ export async function sendAppointmentConfirmationEmail(appointment, patient) {
   const html = buildCleanEmailLayout({ title: 'Your Appointment is Confirmed', bodyHtml });
   const text = `Dear ${patient.name}, your appointment (${appointment.service}) on ${appointment.date} at ${appointment.time} is confirmed. Token: ${patient.registrationTokenNumber}. Location: Ground Floor, Susheel Apartments, Behind Olive Hospital, Mehdipatnam, Hyderabad - 500028. For assistance: Call +91 81426 42051 | WhatsApp +91 81426 42051.`;
 
-  const targetRecipient = appointment.patientEmail || patient.email || 'patient@example.com';
+  const targetRecipient = (appointment.patientEmail || appointment.email || patient?.email || '').trim();
+  if (!targetRecipient || targetRecipient === 'patient@example.com' || !targetRecipient.includes('@')) {
+    console.warn(`[emailService] Skipping confirmation email for appointment ${appointment.id}: No valid recipient email provided.`);
+    return { success: false, error: 'No valid recipient email provided', logId: null };
+  }
   const logId = `elog_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   const logRecord = {
     id: logId, idempotencyKey,
@@ -308,7 +312,11 @@ export async function sendFollowUpReminderEmail(reminder, patient, bookingUrl) {
   const html = buildCleanEmailLayout({ title: 'Health Follow-up Reminder', bodyHtml });
   const text = `Dear ${patient.name}, it is time for your follow-up assessment. Token: ${patient.registrationTokenNumber}. Book online: ${bookingUrl}`;
 
-  const targetRecipient = reminder.patientEmail || patient.email || 'patient@example.com';
+  const targetRecipient = (reminder.patientEmail || reminder.email || patient?.email || '').trim();
+  if (!targetRecipient || targetRecipient === 'patient@example.com' || !targetRecipient.includes('@')) {
+    console.warn(`[emailService] Skipping follow-up reminder email for reminder ${reminder.id}: No valid recipient email provided.`);
+    return { success: false, error: 'No valid recipient email provided', logId: null };
+  }
   const logId = `elog_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   db.insert('emailLogs', {
     id: logId, idempotencyKey, reminderId: reminder.id, patientId: patient.id,

@@ -101,7 +101,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
         {/* Bottom Banner */}
         <div className="mt-10 bg-white p-6 rounded-2xl border border-[#E8E4DC] text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            <h4 className="text-sm font-bold text-[#1A1A1A] font-serif">Have a specific question about your symptoms•</h4>
+            <h3 className="text-sm font-bold text-[#1A1A1A] font-serif">Have a specific question about your symptoms?</h3>
             <p className="text-xs text-[#5A544E] mt-0.5">
               Healer Abdul Mallik addresses all individual questions during your clinical consultation.
             </p>
