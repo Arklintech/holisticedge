@@ -212,13 +212,13 @@ export function LeadDetailPage() {
           {/* Lead Info */}
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
             <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Lead Information</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Phone</p><p className="text-sm text-[#1A1A1A] font-medium break-all">{lead.phone}</p></div>
-              {lead.email && <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Email</p><p className="text-sm text-[#1A1A1A] break-all">{lead.email}</p></div>}
-              <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Condition</p><p className="text-sm text-[#1A1A1A] font-medium break-words">{lead.condition}</p></div>
-              <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Source</p><p className="text-sm text-[#1A1A1A] break-words">{lead.source}</p></div>
-              {lead.assignedTo && <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Assigned To</p><p className="text-sm text-[#1A1A1A] break-words">{lead.assignedTo}</p></div>}
-              {lead.lastContactedAt && <div className="min-w-0"><p className="text-[10.5px] text-[#9E968C]">Last Contacted</p><p className="text-sm text-[#1A1A1A]">{formatTs(lead.lastContactedAt)}</p></div>}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full overflow-hidden">
+              <div className="min-w-0 max-w-full overflow-hidden"><p className="text-[10.5px] text-[#9E968C]">Phone</p><p className="text-sm text-[#1A1A1A] font-medium break-all max-w-full overflow-hidden">{lead.phone}</p></div>
+              {lead.email && <div className="min-w-0 max-w-full overflow-hidden"><p className="text-[10.5px] text-[#9E968C]">Email</p><p className="text-sm text-[#1A1A1A] break-all max-w-full overflow-hidden">{lead.email}</p></div>}
+              <div className="min-w-0 max-w-full overflow-hidden"><p className="text-[10.5px] text-[#9E968C]">Condition</p><p className="text-sm text-[#1A1A1A] font-medium break-words max-w-full overflow-hidden">{lead.condition}</p></div>
+              <div className="min-w-0 max-w-full overflow-hidden"><p className="text-[10.5px] text-[#9E968C]">Source</p><p className="text-sm text-[#1A1A1A] break-words max-w-full overflow-hidden">{lead.source}</p></div>
+              {lead.assignedTo && <div className="min-w-0 max-w-full overflow-hidden"><p className="text-[10.5px] text-[#9E968C]">Assigned To</p><p className="text-sm text-[#1A1A1A] break-words max-w-full overflow-hidden">{lead.assignedTo}</p></div>}
+              {lead.lastContactedAt && <div className="min-w-0 max-w-full overflow-hidden"><p className="text-[10.5px] text-[#9E968C]">Last Contacted</p><p className="text-sm text-[#1A1A1A]">{formatTs(lead.lastContactedAt)}</p></div>}
             </div>
             {lead.message && (
               <div>

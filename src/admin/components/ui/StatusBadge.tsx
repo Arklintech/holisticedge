@@ -41,9 +41,10 @@ interface StatusBadgeProps {
   status: StatusVariant | string;
   size?: 'sm' | 'md';
   showDot?: boolean;
+  className?: string;
 }
 
-export function StatusBadge({ status, size = 'sm', showDot = true }: StatusBadgeProps) {
+export function StatusBadge({ status, size = 'sm', showDot = true, className }: StatusBadgeProps) {
   const config = STATUS_MAP[status] || {
     label: status,
     bg: 'bg-gray-100',
@@ -56,7 +57,8 @@ export function StatusBadge({ status, size = 'sm', showDot = true }: StatusBadge
       'inline-flex items-center gap-1.5 font-medium rounded-full whitespace-nowrap',
       config.bg,
       config.text,
-      size === 'sm' ? 'text-[11px] px-2 py-0.5' : 'text-xs px-2.5 py-1'
+      size === 'sm' ? 'text-[11px] px-2 py-0.5' : 'text-xs px-2.5 py-1',
+      className
     )}>
       {showDot && <span className={cn('w-1.5 h-1.5 rounded-full flex-shrink-0', config.dot)} />}
       {config.label}

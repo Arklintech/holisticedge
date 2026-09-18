@@ -194,56 +194,56 @@ export function AppointmentDetailPage() {
         <div className="md:col-span-2 space-y-4">
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
             <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Patient Information</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="min-w-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full overflow-hidden">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Full Name</label>
-                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5 break-words">{appt.fullName}</p>
+                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5 break-words max-w-full truncate">{appt.fullName}</p>
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Phone</label>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <p className="text-sm text-[#1A1A1A] break-all">{appt.phone}</p>
+                <div className="flex items-center gap-2 mt-0.5 max-w-full">
+                  <p className="text-sm text-[#1A1A1A] break-all max-w-full overflow-hidden">{appt.phone}</p>
                   <a href={`tel:${appt.phone}`} className="w-6 h-6 rounded-md bg-[#F4F1EA] flex items-center justify-center text-[#5A544E] hover:bg-[#E8E4DC] flex-shrink-0" title="Call">
                     <Phone size={11} />
                   </a>
                 </div>
               </div>
               {appt.email && (
-                <div className="min-w-0">
+                <div className="min-w-0 max-w-full overflow-hidden">
                   <label className="text-[10.5px] text-[#9E968C] font-medium">Email</label>
-                  <p className="text-sm text-[#1A1A1A] mt-0.5 break-all">{appt.email}</p>
+                  <p className="text-sm text-[#1A1A1A] mt-0.5 break-all max-w-full overflow-hidden">{appt.email}</p>
                 </div>
               )}
-              <div className="min-w-0">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Source</label>
-                <p className="text-sm text-[#1A1A1A] mt-0.5 break-words">{appt.source}</p>
+                <p className="text-sm text-[#1A1A1A] mt-0.5 break-words max-w-full overflow-hidden">{appt.source}</p>
               </div>
             </div>
           </div>
 
           <div className="bg-white border border-[#E5E2DC] rounded-2xl p-5 space-y-4">
             <h2 className="text-xs font-semibold text-[#9E968C] uppercase tracking-wider">Appointment Details</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="min-w-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full overflow-hidden">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Service</label>
-                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5 break-words">{appt.service}</p>
+                <p className="text-sm text-[#1A1A1A] font-medium mt-0.5 break-words max-w-full overflow-hidden">{appt.service}</p>
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Condition</label>
-                <p className="text-sm text-[#1A1A1A] mt-0.5 break-words">{appt.condition}</p>
+                <p className="text-sm text-[#1A1A1A] mt-0.5 break-words max-w-full overflow-hidden">{appt.condition}</p>
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Date</label>
                 <p className="text-sm text-[#1A1A1A] mt-0.5">{formatDate(appt.preferredDate)}</p>
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 max-w-full overflow-hidden">
                 <label className="text-[10.5px] text-[#9E968C] font-medium">Time</label>
                 <p className="text-sm text-[#1A1A1A] mt-0.5">{appt.preferredTime}</p>
               </div>
               {appt.assignedTo && (
-                <div className="min-w-0">
+                <div className="min-w-0 max-w-full overflow-hidden">
                   <label className="text-[10.5px] text-[#9E968C] font-medium">Assigned To</label>
-                  <p className="text-sm text-[#1A1A1A] mt-0.5 break-words">{appt.assignedTo}</p>
+                  <p className="text-sm text-[#1A1A1A] mt-0.5 break-words max-w-full overflow-hidden">{appt.assignedTo}</p>
                 </div>
               )}
             </div>
