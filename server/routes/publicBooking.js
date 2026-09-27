@@ -309,7 +309,8 @@ router.post('/book', async (req, res) => {
 
     const whatsAppSent = Boolean(
       notifResult?.whatsApp?.status === 'SENT' ||
-      notifResult?.whatsApp?.status === 'READY_PENDING_CREDENTIALS'
+      notifResult?.whatsApp?.status === 'READY_PENDING_CREDENTIALS' ||
+      notifResult?.whatsApp?.status === 'SKIPPED_DUPLICATE'
     );
     const emailSent = Boolean(emailResult?.success || notifResult?.email?.status === 'SENT');
 

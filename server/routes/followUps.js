@@ -395,7 +395,7 @@ router.post('/:id/send-whatsapp', authenticate, async (req, res) => {
       },
     });
 
-    const isSuccess = notifRes.whatsApp?.status === 'SENT' || notifRes.whatsApp?.status === 'READY_PENDING_CREDENTIALS';
+    const isSuccess = notifRes.whatsApp?.status === 'SENT' || notifRes.whatsApp?.status === 'READY_PENDING_CREDENTIALS' || notifRes.whatsApp?.status === 'SKIPPED_DUPLICATE';
 
     if (isSuccess) {
       // Task status strictly remains active (DUE / OVERDUE / SCHEDULED)
