@@ -445,7 +445,7 @@ test('WATI WhatsApp Integration: Comprehensive Production Test Suite (15 Test Re
 
     try {
       const remId = `rem_test_due_${Date.now()}`;
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().split('T')[0];
 
       db.insert('reminders', {
         id: remId,
@@ -493,7 +493,7 @@ test('WATI WhatsApp Integration: Comprehensive Production Test Suite (15 Test Re
 
     try {
       const remId = `rem_test_fail_${Date.now()}`;
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().split('T')[0];
 
       db.insert('reminders', {
         id: remId,

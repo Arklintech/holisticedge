@@ -1,4 +1,4 @@
-﻿// ============================================================
+// ============================================================
 // HOLISTIC EDGE — useBookingSlots Hook
 // Reactive real-time hook for booking slots availability
 // ============================================================
@@ -14,9 +14,49 @@ export function useBookingSlots(date: string) {
   const [slots, setSlots] = useState<BookingSlot[]>(() =>
     date ? bookingSlotStorage.getByDate(date) : bookingSlotStorage.getAll()
   );
+  const [loading, setLoading] = useState(false);
 
   const refresh = useCallback(() => {
-    setSlots(date ? bookingSlotStorage.getByDate(date) : bookingSlotStorage.getAll());
+    if (!date) {
+      setSlots(bookingSlotStorage.getAll());
+      return;
+    }
+
+    setLoading(true);
+    fetch(`/api/public/slots?date=${encodeURIComponent(date)}`)
+      .then(res => (res.ok ? res.json() : null))
+      .then(data => {
+        if (data && data.success && Array.isArray(data.slots) && data.slots.length > 0) {
+          const liveSlots: BookingSlot[] = data.slots.map((s: any) => {
+            let mappedStatus: SlotStatus = 'OPEN';
+            if (s.status === 'FULL' || s.booked >= s.capacity) mappedStatus = 'FULL';
+            else if (s.status === 'BLOCKED') mappedStatus = 'BLOCKED';
+            else if (s.status === 'CLOSED') mappedStatus = 'CLOSED';
+
+            return {
+              id: s.id,
+              date: s.date || date,
+              time: s.time,
+              timeLabel: s.timeLabel || s.time,
+              capacity: s.capacity ?? 5,
+              booked: s.booked ?? 0,
+              status: mappedStatus,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              createdBy: 'BACKEND_API',
+            };
+          });
+          setSlots(liveSlots);
+        } else {
+          setSlots(bookingSlotStorage.getByDate(date));
+        }
+      })
+      .catch(() => {
+        setSlots(bookingSlotStorage.getByDate(date));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [date]);
 
   useEffect(() => {
@@ -46,6 +86,7 @@ export function useBookingSlots(date: string) {
     totalBooked,
     remainingSeats,
     utilizationPercent,
+    loading,
     refresh,
   };
 }

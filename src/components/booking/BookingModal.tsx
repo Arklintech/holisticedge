@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Calendar as CalendarIcon,
   Clock,
@@ -71,6 +71,29 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   // Live admin-controlled booking slots for chosen date
   const { slots: daySlots } = useBookingSlots(selectedDate);
 
+  // If selectedSlot is full on this date, auto-select the first genuinely available slot
+  useEffect(() => {
+    if (daySlots.length > 0) {
+      const currentSelectedSlotData = daySlots.find(
+        s => s.timeLabel === selectedSlot || s.time === selectedSlot
+      );
+      const isCurrentFull = currentSelectedSlotData
+        ? (currentSelectedSlotData.status === 'FULL' || currentSelectedSlotData.booked >= currentSelectedSlotData.capacity)
+        : false;
+
+      if (isCurrentFull) {
+        const firstAvailable = timeSlots.find(t => {
+          const match = daySlots.find(s => s.timeLabel === t.time || s.time === t.time);
+          if (!match) return true;
+          return match.status !== 'FULL' && match.status !== 'CLOSED' && match.status !== 'BLOCKED' && match.booked < match.capacity;
+        });
+        if (firstAvailable) {
+          setSelectedSlot(firstAvailable.time);
+        }
+      }
+    }
+  }, [daySlots, selectedDate]);
+
   // Generate next 7 days for quick booking
   const availableDates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
@@ -104,6 +127,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     } else if (step === 2) {
       if (!selectedDate) currentErrors.date = 'Please select a date.';
       if (!selectedSlot) currentErrors.slot = 'Please select a time slot.';
+      const chosenSlotData = daySlots.find(s => s.timeLabel === selectedSlot || s.time === selectedSlot);
+      if (chosenSlotData && (chosenSlotData.status === 'FULL' || chosenSlotData.booked >= chosenSlotData.capacity)) {
+        currentErrors.slot = 'This time slot is no longer available. Please select another slot.';
+      }
     } else if (step === 3) {
       if (!fullName.trim() || fullName.trim().length < 3) {
         currentErrors.fullName = 'Please enter your full name.';

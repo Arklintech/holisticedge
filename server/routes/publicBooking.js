@@ -11,7 +11,17 @@ import { db } from '../db.js';
 const router = express.Router();
 const dataProvider = getActiveDataProvider();
 
-const DEFAULT_TIME_SLOTS = ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '04:00 PM', '06:00 PM'];
+const CLINIC_OPERATING_SLOTS = [
+  '10:30 AM',
+  '11:30 AM',
+  '12:30 PM',
+  '02:30 PM',
+  '03:30 PM',
+  '04:30 PM',
+  '05:30 PM',
+  '06:30 PM',
+  '07:30 PM',
+];
 
 // GET /api/public/slots
 router.get('/slots', async (req, res) => {
@@ -19,36 +29,42 @@ router.get('/slots', async (req, res) => {
     const { date } = req.query;
     if (!date) return res.status(400).json({ error: 'Date query parameter is required' });
 
-    let slots = await dataProvider.getBookingSlots(date);
-    if (!slots || slots.length === 0) {
-      slots = DEFAULT_TIME_SLOTS.map((time, idx) => ({
-        id: `slot_${date}_${idx}`,
-        date,
-        time,
-        capacity: 5,
-        status: 'AVAILABLE',
-      }));
-    }
-
+    const existingSlots = (await dataProvider.getBookingSlots(date)) || [];
     const activeAppointments = await dataProvider.getAppointments({ date });
 
-    const availableSlots = slots.map(slot => {
+    // Combine all standard operating slots and any custom slots from provider
+    const allSlotTimes = Array.from(new Set([
+      ...CLINIC_OPERATING_SLOTS,
+      ...existingSlots.map(s => s.time),
+    ]));
+
+    const availableSlots = allSlotTimes.map(timeStr => {
+      const existing = existingSlots.find(s => s.time === timeStr);
       const bookedCount = activeAppointments.filter(
-        a => (a.slotId === slot.id || a.time === slot.time) && ['PENDING', 'CONFIRMED', 'ARRIVED', 'IN_PROGRESS'].includes(a.status)
+        a => (existing && a.slotId === existing.id || a.time === timeStr) &&
+             ['PENDING', 'CONFIRMED', 'ARRIVED', 'IN_PROGRESS'].includes(a.status)
       ).length;
 
-      const capacity = slot.capacity || 5;
-      const isAvailable = slot.status === 'AVAILABLE' && bookedCount < capacity;
+      const capacity = existing?.capacity || 5;
+      const isBlockedOrClosed = existing && (existing.status === 'BLOCKED' || existing.status === 'CLOSED');
+      const isFull = bookedCount >= capacity;
+      const isAvailable = !isBlockedOrClosed && !isFull;
+
+      let status = 'AVAILABLE';
+      if (existing?.status === 'BLOCKED') status = 'BLOCKED';
+      else if (existing?.status === 'CLOSED') status = 'CLOSED';
+      else if (isFull) status = 'FULL';
 
       return {
-        id: slot.id,
-        date: slot.date,
-        time: slot.time,
+        id: existing?.id || `slot_${date}_${timeStr.replace(/[^a-zA-Z0-9]/g, '')}`,
+        date,
+        time: timeStr,
+        timeLabel: timeStr,
         capacity,
         booked: bookedCount,
         remaining: Math.max(0, capacity - bookedCount),
         isAvailable,
-        status: !isAvailable ? (slot.status === 'BLOCKED' ? 'BLOCKED' : 'FULL') : 'AVAILABLE',
+        status,
       };
     });
 

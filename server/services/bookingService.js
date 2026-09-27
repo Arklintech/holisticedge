@@ -87,14 +87,31 @@ export async function createBookingTransaction({
     } else {
       const patientResolution = await findOrCreatePatient(patientData);
       if (patientResolution.isAmbiguous) {
-        return {
-          success: false,
-          isAmbiguous: true,
-          matches: patientResolution.matches,
-          error: 'Multiple matching patient records found. Please resolve patient identity.',
-        };
+        if (source === 'WEBSITE_PUBLIC' || source === 'WEBSITE') {
+          const matches = patientResolution.matches || [];
+          const best = matches.find(p => p.name && patientData?.name && p.name.toLowerCase().trim() === patientData.name.toLowerCase().trim()) ||
+                       matches.slice().sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0))[0];
+          if (best) {
+            patient = best;
+          } else {
+            return {
+              success: false,
+              isAmbiguous: true,
+              matches: patientResolution.matches,
+              error: 'Multiple matching patient records found. Please resolve patient identity.',
+            };
+          }
+        } else {
+          return {
+            success: false,
+            isAmbiguous: true,
+            matches: patientResolution.matches,
+            error: 'Multiple matching patient records found. Please resolve patient identity.',
+          };
+        }
+      } else {
+        patient = patientResolution.patient;
       }
-      patient = patientResolution.patient;
     }
 
     if (patientData && patientData.email && patientData.email !== patient.email) {

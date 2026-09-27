@@ -52,6 +52,19 @@ export async function matchPatient({ name, phone, email, registrationTokenNumber
           return { status: 'MATCHED_EXACT', patient: exactBoth, confidence: 'HIGH_EXACT' };
         }
       }
+      if (cleanName) {
+        const exactNameAndPhone = phoneMatches.find(p => p.name && p.name.toLowerCase().trim() === cleanName);
+        if (exactNameAndPhone) {
+          return { status: 'MATCHED_EXACT', patient: exactNameAndPhone, confidence: 'HIGH_EXACT' };
+        }
+        const partialNameAndPhone = phoneMatches.find(p => {
+          const pn = p.name ? p.name.toLowerCase().trim() : '';
+          return pn && (pn.includes(cleanName) || cleanName.includes(pn));
+        });
+        if (partialNameAndPhone) {
+          return { status: 'MATCHED_EXACT', patient: partialNameAndPhone, confidence: 'HIGH_FUZZY' };
+        }
+      }
       return { status: 'AMBIGUOUS', matches: phoneMatches, confidence: 'HIGH_AMBIGUOUS' };
     }
   }
