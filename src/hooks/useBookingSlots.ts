@@ -27,6 +27,7 @@ export function useBookingSlots(date: string) {
       .then(res => (res.ok ? res.json() : null))
       .then(data => {
         if (data && data.success && Array.isArray(data.slots) && data.slots.length > 0) {
+          bookingSlotStorage.syncFromBackend(date, data.slots);
           const liveSlots: BookingSlot[] = data.slots.map((s: any) => {
             let mappedStatus: SlotStatus = 'OPEN';
             if (s.status === 'FULL' || s.booked >= s.capacity) mappedStatus = 'FULL';

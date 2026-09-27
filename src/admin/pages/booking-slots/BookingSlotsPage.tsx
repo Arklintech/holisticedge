@@ -378,7 +378,7 @@ export function BookingSlotsPage() {
               onClick={() => {
                 const tmrw = new Date();
                 tmrw.setDate(tmrw.getDate() + 1);
-                setSelectedDate(tmrw.toISOString().split('T')[0]);
+                setSelectedDate(tmrw.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
               }}
               className="px-3 h-8 rounded-lg border border-[#E5E2DC] text-xs font-semibold text-[#5A544E] hover:bg-[#FAF9F6]"
             >
@@ -515,10 +515,16 @@ export function BookingSlotsPage() {
                       {/* Remaining */}
                       <td className="px-4 py-4">
                         <span className={cn(
-                          'font-bold text-xs',
-                          remaining === 0 ? 'text-red-600' : 'text-green-700'
+                          'font-bold text-xs inline-flex items-center gap-1',
+                          remaining === 0 ? 'text-red-600' :
+                          remaining === 1 ? 'text-red-700 bg-red-100/80 px-2 py-0.5 rounded-full border border-red-300 animate-pulse font-extrabold' :
+                          remaining === 2 ? 'text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded-full border border-amber-300 font-extrabold' :
+                          'text-green-700'
                         )}>
-                          {remaining} available
+                          {remaining === 0 ? '0 available (Full)' :
+                           remaining === 1 ? '🔥 Only 1 left!' :
+                           remaining === 2 ? '⚡ Only 2 left' :
+                           `${remaining} available`}
                         </span>
                       </td>
 

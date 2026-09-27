@@ -23,6 +23,28 @@ const CLINIC_OPERATING_SLOTS = [
   '07:30 PM',
 ];
 
+function normalizeTime(t) {
+  if (!t || typeof t !== 'string') return '';
+  const str = t.trim();
+  const m24 = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (m24) {
+    let h = parseInt(m24[1], 10);
+    const min = m24[2];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${h}:${min} ${ampm}`;
+  }
+  const m12 = str.match(/^0?(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (m12) {
+    const h = parseInt(m12[1], 10);
+    const min = m12[2];
+    const ampm = m12[3].toUpperCase();
+    return `${h}:${min} ${ampm}`;
+  }
+  return str.toUpperCase();
+}
+
 // GET /api/public/slots
 router.get('/slots', async (req, res) => {
   try {
@@ -39,15 +61,22 @@ router.get('/slots', async (req, res) => {
     ]));
 
     const availableSlots = allSlotTimes.map(timeStr => {
-      const existing = existingSlots.find(s => s.time === timeStr);
-      const bookedCount = activeAppointments.filter(
-        a => (existing && a.slotId === existing.id || a.time === timeStr) &&
-             ['PENDING', 'CONFIRMED', 'ARRIVED', 'IN_PROGRESS'].includes(a.status)
-      ).length;
+      const normTime = normalizeTime(timeStr);
+      const existing = existingSlots.find(s => normalizeTime(s.time) === normTime);
 
-      const capacity = existing?.capacity || 5;
+      const appointmentsCount = activeAppointments.filter(a => {
+        if (!['PENDING', 'CONFIRMED', 'ARRIVED', 'IN_PROGRESS'].includes(a.status)) return false;
+        if (existing && a.slotId && a.slotId === existing.id) return true;
+        return normalizeTime(a.time) === normTime;
+      }).length;
+
+      const manualBooked = typeof existing?.booked === 'number' ? existing.booked : 0;
+      const bookedCount = Math.max(manualBooked, appointmentsCount);
+      const capacity = typeof existing?.capacity === 'number' ? existing.capacity : 5;
+
       const isBlockedOrClosed = existing && (existing.status === 'BLOCKED' || existing.status === 'CLOSED');
-      const isFull = bookedCount >= capacity;
+      const isExplicitFull = existing?.status === 'FULL';
+      const isFull = bookedCount >= capacity || isExplicitFull;
       const isAvailable = !isBlockedOrClosed && !isFull;
 
       let status = 'AVAILABLE';
@@ -55,14 +84,16 @@ router.get('/slots', async (req, res) => {
       else if (existing?.status === 'CLOSED') status = 'CLOSED';
       else if (isFull) status = 'FULL';
 
+      const remaining = isFull ? 0 : Math.max(0, capacity - bookedCount);
+
       return {
-        id: existing?.id || `slot_${date}_${timeStr.replace(/[^a-zA-Z0-9]/g, '')}`,
+        id: existing?.id || `slot_${date}_${normTime.replace(/[^a-zA-Z0-9]/g, '')}`,
         date,
         time: timeStr,
         timeLabel: timeStr,
         capacity,
-        booked: bookedCount,
-        remaining: Math.max(0, capacity - bookedCount),
+        booked: isFull && bookedCount < capacity ? capacity : bookedCount,
+        remaining,
         isAvailable,
         status,
       };

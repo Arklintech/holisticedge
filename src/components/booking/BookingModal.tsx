@@ -25,7 +25,12 @@ import { conditionsData } from '../../data/conditions';
 import { AppointmentRequest } from '../../types';
 import { useBookingSlots } from '../../hooks/useBookingSlots';
 import { bookingSlotStorage } from '../../admin/services/bookingSlotStorage';
-import { calculateRemainingSlots, formatSlotAvailability } from '../../lib/slotContract';
+import {
+  calculateRemainingSlots,
+  formatSlotAvailability,
+  canonicalizeTime,
+  parseTimeToMinutes,
+} from '../../lib/slotContract';
 import {
   appointmentStorage,
   leadStorage,
@@ -54,9 +59,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   );
   const [condition, setCondition] = useState<string>('Back Pain');
   const [selectedDate, setSelectedDate] = useState<string>(() => {
-    const today = new Date();
-    today.setDate(today.getDate() + 1);
-    return today.toISOString().split('T')[0];
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
   });
   const [selectedSlot, setSelectedSlot] = useState<string>('11:30 AM');
   const [fullName, setFullName] = useState('');
@@ -71,42 +74,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   // Live admin-controlled booking slots for chosen date
   const { slots: daySlots } = useBookingSlots(selectedDate);
 
-  // If selectedSlot is full on this date, auto-select the first genuinely available slot
-  useEffect(() => {
-    if (daySlots.length > 0) {
-      const currentSelectedSlotData = daySlots.find(
-        s => s.timeLabel === selectedSlot || s.time === selectedSlot
-      );
-      const isCurrentFull = currentSelectedSlotData
-        ? (currentSelectedSlotData.status === 'FULL' || currentSelectedSlotData.booked >= currentSelectedSlotData.capacity)
-        : false;
-
-      if (isCurrentFull) {
-        const firstAvailable = timeSlots.find(t => {
-          const match = daySlots.find(s => s.timeLabel === t.time || s.time === t.time);
-          if (!match) return true;
-          return match.status !== 'FULL' && match.status !== 'CLOSED' && match.status !== 'BLOCKED' && match.booked < match.capacity;
-        });
-        if (firstAvailable) {
-          setSelectedSlot(firstAvailable.time);
-        }
-      }
-    }
-  }, [daySlots, selectedDate]);
-
-  // Generate next 7 days for quick booking
-  const availableDates = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() + i + 1);
-    return {
-      dateStr: d.toISOString().split('T')[0],
-      dayName: d.toLocaleDateString('en-US', { weekday: 'short' }),
-      dayNumber: d.getDate(),
-      month: d.toLocaleDateString('en-US', { month: 'short' })
-    };
-  });
-
-  const timeSlots = [
+  // Standard clinic operating schedule
+  const DEFAULT_OPERATING_SLOTS = [
     { time: '10:30 AM', period: 'Morning' },
     { time: '11:30 AM', period: 'Morning' },
     { time: '12:30 PM', period: 'Morning' },
@@ -118,6 +87,78 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     { time: '07:30 PM', period: 'Evening' }
   ];
 
+  // Dynamically derive time slots from daySlots and standard schedule, sorted chronologically
+  const timeSlots = React.useMemo(() => {
+    const slotMap = new Map<string, { time: string; period: string }>();
+
+    DEFAULT_OPERATING_SLOTS.forEach(s => {
+      slotMap.set(canonicalizeTime(s.time), s);
+    });
+
+    daySlots.forEach(s => {
+      const label = s.timeLabel || s.time;
+      const canon = canonicalizeTime(label);
+      if (!slotMap.has(canon)) {
+        const mins = parseTimeToMinutes(canon);
+        let period = 'Morning';
+        if (mins >= 720 && mins < 1020) period = 'Afternoon';
+        else if (mins >= 1020) period = 'Evening';
+        slotMap.set(canon, { time: label, period });
+      }
+    });
+
+    return Array.from(slotMap.values()).sort((a, b) => {
+      return parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time);
+    });
+  }, [daySlots]);
+
+  // If selectedSlot is full on this date, auto-select the first genuinely available slot
+  useEffect(() => {
+    if (daySlots.length > 0) {
+      const canonSelected = canonicalizeTime(selectedSlot);
+      const currentSelectedSlotData = daySlots.find(
+        s => canonicalizeTime(s.timeLabel || s.time) === canonSelected
+      );
+      const isCurrentFull = currentSelectedSlotData
+        ? (currentSelectedSlotData.status === 'FULL' || currentSelectedSlotData.booked >= currentSelectedSlotData.capacity)
+        : false;
+
+      if (isCurrentFull) {
+        const firstAvailable = timeSlots.find(t => {
+          const canonT = canonicalizeTime(t.time);
+          const match = daySlots.find(s => canonicalizeTime(s.timeLabel || s.time) === canonT);
+          if (!match) return true;
+          return match.status !== 'FULL' && match.status !== 'CLOSED' && match.status !== 'BLOCKED' && match.booked < match.capacity;
+        });
+        if (firstAvailable) {
+          setSelectedSlot(firstAvailable.time);
+        }
+      }
+    }
+  }, [daySlots, selectedDate, timeSlots]);
+
+  // Generate next 7 days for quick booking (strictly in Asia/Kolkata IST)
+  const availableDates = React.useMemo(() => {
+    const dates: Array<{ dateStr: string; dayName: string; dayNumber: number; month: string; isToday: boolean }> = [];
+    const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    const [y, m, d] = todayIST.split('-').map(Number);
+    const baseDate = new Date(y, m - 1, d);
+
+    for (let i = 0; i < 7; i++) {
+      const target = new Date(baseDate);
+      target.setDate(baseDate.getDate() + i);
+      const dateStr = target.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+      dates.push({
+        dateStr,
+        dayName: i === 0 ? 'Today' : target.toLocaleDateString('en-US', { weekday: 'short' }),
+        dayNumber: target.getDate(),
+        month: target.toLocaleDateString('en-US', { month: 'short' }),
+        isToday: i === 0,
+      });
+    }
+    return dates;
+  }, []);
+
   const handleNext = () => {
     const currentErrors: { [key: string]: string } = {};
 
@@ -127,7 +168,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     } else if (step === 2) {
       if (!selectedDate) currentErrors.date = 'Please select a date.';
       if (!selectedSlot) currentErrors.slot = 'Please select a time slot.';
-      const chosenSlotData = daySlots.find(s => s.timeLabel === selectedSlot || s.time === selectedSlot);
+      const canonSelected = canonicalizeTime(selectedSlot);
+      const chosenSlotData = daySlots.find(s => canonicalizeTime(s.timeLabel || s.time) === canonSelected);
       if (chosenSlotData && (chosenSlotData.status === 'FULL' || chosenSlotData.booked >= chosenSlotData.capacity)) {
         currentErrors.slot = 'This time slot is no longer available. Please select another slot.';
       }
@@ -455,8 +497,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
             <div className="grid grid-cols-3 gap-2">
               {timeSlots.map(slotObj => {
-                const matchingAdminSlot = daySlots.find(
-                  s => s.timeLabel === slotObj.time || s.time === slotObj.time
+                const canonTime = canonicalizeTime(slotObj.time);
+                const matchingAdminSlot = daySlots.find(s =>
+                  canonicalizeTime(s.timeLabel || s.time) === canonTime ||
+                  s.timeLabel === slotObj.time ||
+                  s.time === slotObj.time
                 );
 
                 const remaining = matchingAdminSlot
@@ -465,7 +510,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 const isFull = matchingAdminSlot
                   ? (matchingAdminSlot.status === 'FULL' || remaining <= 0 || matchingAdminSlot.status === 'CLOSED' || matchingAdminSlot.status === 'BLOCKED')
                   : false;
-                const isSelected = selectedSlot === slotObj.time;
+                const isSelected = canonicalizeTime(selectedSlot) === canonTime;
+                const isCritical = !isFull && remaining === 1;
+                const isWarning = !isFull && remaining === 2;
 
                 return (
                   <button
@@ -478,25 +525,72 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                         setErrors(prev => ({ ...prev, slot: '' }));
                       }
                     }}
-                    className={`p-2.5 rounded-xl border text-xs font-medium transition-all flex flex-col items-center justify-center gap-0.5 ${
+                    className={`p-2.5 rounded-xl border text-xs font-medium transition-all flex flex-col items-center justify-center gap-1 relative ${
                       isFull
                         ? 'border-[#E8E4DC] bg-[#F5F2EC] text-[#A69E92] cursor-not-allowed opacity-60'
                         : isSelected
-                        ? 'border-[#0F2747] bg-[#F0F4F8] text-[#0F2747] font-bold ring-1 ring-[#0F2747]'
+                        ? 'border-[#0F2747] bg-[#F0F4F8] text-[#0F2747] font-bold ring-2 ring-[#0F2747] shadow-xs'
+                        : isCritical
+                        ? 'border-red-300 bg-red-50/50 text-[#2C2926] hover:bg-red-50/80 hover:border-red-400'
+                        : isWarning
+                        ? 'border-amber-300 bg-amber-50/50 text-[#2C2926] hover:bg-amber-50/80 hover:border-amber-400'
                         : 'border-[#E8E4DC] bg-white text-[#2C2926] hover:bg-[#FAF8F5]'
                     }`}
                   >
                     <div className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[#736C63]" />
-                      <span>{slotObj.time}</span>
+                      <Clock className={`w-3 h-3 ${isSelected ? 'text-[#0F2747]' : isCritical ? 'text-red-600' : isWarning ? 'text-amber-600' : 'text-[#736C63]'}`} />
+                      <span className="font-semibold">{slotObj.time}</span>
                     </div>
-                    <span className="text-[10px] text-[#736C63]">
-                      {formatSlotAvailability(matchingAdminSlot ? { ...matchingAdminSlot, remaining, capacity: matchingAdminSlot.capacity ?? 5, booked: matchingAdminSlot.booked ?? 0 } : { capacity: 5, booked: 0, remaining: 5, status: 'OPEN' })}
-                    </span>
+
+                    {isFull ? (
+                      <span className="text-[10px] font-medium text-red-700 bg-red-100/70 px-1.5 py-0.5 rounded">
+                        Fully booked
+                      </span>
+                    ) : isCritical ? (
+                      <span className="text-[10px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full border border-red-200 animate-pulse flex items-center gap-1 shadow-2xs">
+                        <span>🔥 Only 1 left!</span>
+                      </span>
+                    ) : isWarning ? (
+                      <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300 flex items-center gap-1 shadow-2xs">
+                        <span>⚡ Only 2 left</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-[#736C63] font-medium">
+                        {remaining} slots left
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
+
+            {/* Selected Slot Low-Capacity Notice */}
+            {selectedSlot && (() => {
+              const canonTime = canonicalizeTime(selectedSlot);
+              const selectedSlotData = daySlots.find(s =>
+                canonicalizeTime(s.timeLabel || s.time) === canonTime ||
+                s.timeLabel === selectedSlot ||
+                s.time === selectedSlot
+              );
+              const remaining = selectedSlotData
+                ? calculateRemainingSlots(selectedSlotData.capacity ?? 5, selectedSlotData.booked ?? 0)
+                : 5;
+
+              if (remaining <= 2 && remaining > 0) {
+                return (
+                  <div className="mt-3 p-2.5 px-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-center justify-between shadow-2xs">
+                    <div className="flex items-center gap-1.5 font-medium">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+                      <span>Filling fast: <strong>{selectedSlot}</strong> on {selectedDate}</span>
+                    </div>
+                    <span className="font-bold text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-md text-[11px]">
+                      Only {remaining} {remaining === 1 ? 'seat' : 'seats'} left!
+                    </span>
+                  </div>
+                );
+              }
+              return null;
+            })()}
           </div>
         </div>
       )}

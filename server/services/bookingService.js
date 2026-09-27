@@ -24,6 +24,28 @@ async function acquireSlotLock(dateSlotKey) {
   return release;
 }
 
+function normalizeTime(t) {
+  if (!t || typeof t !== 'string') return '';
+  const str = t.trim();
+  const m24 = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (m24) {
+    let h = parseInt(m24[1], 10);
+    const min = m24[2];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${h}:${min} ${ampm}`;
+  }
+  const m12 = str.match(/^0?(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (m12) {
+    const h = parseInt(m12[1], 10);
+    const min = m12[2];
+    const ampm = m12[3].toUpperCase();
+    return `${h}:${min} ${ampm}`;
+  }
+  return str.toUpperCase();
+}
+
 export async function createBookingTransaction({
   patientData,
   date,
@@ -42,12 +64,13 @@ export async function createBookingTransaction({
     }
   }
 
-  const dateSlotKey = `${date}_${time || slotId}`;
+  const normRequestedTime = normalizeTime(time);
+  const dateSlotKey = `${date}_${normRequestedTime || slotId}`;
   const releaseLock = await acquireSlotLock(dateSlotKey);
 
   try {
     const slots = await dataProvider.getBookingSlots(date);
-    let targetSlot = slots.find(s => s.id === slotId || s.time === time);
+    let targetSlot = slots.find(s => s.id === slotId || normalizeTime(s.time) === normRequestedTime);
 
     if (!targetSlot) {
       const newSlot = {
@@ -69,10 +92,10 @@ export async function createBookingTransaction({
 
     const allDateAppointments = await dataProvider.getAppointments({ date });
     const activeSlotAppointments = allDateAppointments.filter(
-      a => (a.slotId === targetSlot.id || a.time === targetSlot.time) && consumesCapacity(a.status)
+      a => (a.slotId === targetSlot.id || normalizeTime(a.time) === normalizeTime(targetSlot.time)) && consumesCapacity(a.status)
     );
 
-    const currentBookedCount = activeSlotAppointments.length;
+    const currentBookedCount = Math.max(targetSlot.booked || 0, activeSlotAppointments.length);
     const capacity = targetSlot.capacity || 5;
 
     if (currentBookedCount >= capacity) {

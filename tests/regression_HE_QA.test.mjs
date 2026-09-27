@@ -99,6 +99,13 @@ test('HE-QA-03: Slot calculation rules & canonical display bounds', () => {
   const label1 = formatSlotAvailability({ capacity: 5, booked: 2 });
   assert.strictEqual(label1, '3 slots left');
 
+  // Test low capacity filling states: "Only 2 slots left" and "Only 1 slot left!"
+  const labelOnly2 = formatSlotAvailability({ capacity: 5, booked: 3 });
+  assert.strictEqual(labelOnly2, 'Only 2 slots left');
+
+  const labelOnly1 = formatSlotAvailability({ capacity: 5, booked: 4 });
+  assert.strictEqual(labelOnly1, 'Only 1 slot left!');
+
   const label2 = formatSlotAvailability({ capacity: 5, booked: 5 });
   assert.strictEqual(label2, 'Fully booked (0 seats left)');
 
