@@ -33,7 +33,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     if (offer.ctaAction === 'BOOKING_MODAL' || !offer.ctaAction) {
       onOpenBooking(offer.preselectedService || 'Chiropractic & Wellness Consultation');
     } else if (offer.ctaAction === 'WHATSAPP') {
-      window.open(`https://wa.me/${clinicInfo.whatsapp}•text=${encodeURIComponent(`Hello Holistic Edge, I would like to claim the offer: "${offer.title}".`)}`, '_blank');
+      window.open(`https://wa.me/${clinicInfo.whatsapp}?text=${encodeURIComponent(`Hello Holistic Edge, I would like to claim the offer: "${offer.title}".`)}`, '_blank');
     } else if (offer.ctaAction === 'PHONE') {
       window.location.href = `tel:${clinicInfo.phoneRaw || clinicInfo.phone.replace(/\s+/g, '')}`;
     } else if (offer.ctaUrl) {

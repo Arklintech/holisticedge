@@ -3,7 +3,9 @@ import { authenticate } from '../middleware/auth.js';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { scheduleReminder, processDueReminders, generateSignedBookingToken } from '../services/reminderService.js';
 import { sendFollowUpReminderEmail } from '../services/emailService.js';
+import { notificationService } from '../services/notificationService.js';
 import { db } from '../db.js';
+
 
 const router = express.Router();
 const dataProvider = getActiveDataProvider();
@@ -265,6 +267,7 @@ router.post('/:id/send-now', authenticate, async (req, res) => {
     const sentPayload = {
       status: normalized.status,
       messageStatus: 'SENT',
+      messageChannel: 'email',
       sentAt: new Date().toISOString(),
       failureReason: null,
       updatedAt: new Date().toISOString(),
@@ -326,8 +329,157 @@ router.post('/:id/send-now', authenticate, async (req, res) => {
   }
 });
 
-// PATCH /api/follow-ups/:id/complete (Explicit admin completion — moves to history)
-router.patch('/:id/complete', authenticate, async (req, res) => {
+// POST /api/follow-ups/:id/send-whatsapp (Send WhatsApp template via WATI — sets messageStatus = SENT or FAILED, keeps task active)
+router.post('/:id/send-whatsapp', authenticate, async (req, res) => {
+  const reminderId = req.params.id;
+
+  // 1. Resolve reminder
+  let reminder = null;
+  try {
+    reminder = (await dataProvider.getReminderById(reminderId)) || db.find('reminders', r => r.id === reminderId);
+  } catch {
+    reminder = db.find('reminders', r => r.id === reminderId);
+  }
+  if (!reminder) {
+    return res.status(404).json({ success: false, error: 'Follow-up record not found' });
+  }
+
+  // 2. Resolve patient
+  let patient = null;
+  try {
+    patient = await dataProvider.getPatientById(reminder.patientId);
+  } catch {
+    patient = db.find('patients', p => p.id === reminder.patientId);
+  }
+  if (!patient) {
+    patient = {
+      id: reminder.patientId || 'patient_default',
+      name: reminder.patientName || 'Valued Patient',
+      email: reminder.patientEmail || '',
+      phone: reminder.patientPhone || '',
+      registrationTokenNumber: reminder.registrationTokenNumber || 'HE-001281',
+    };
+  }
+
+  const recipientPhone = reminder.patientPhone || patient.phone;
+  const today = getISTDate(0);
+  const normalized = normalizeReminder(reminder, today);
+
+  if (!recipientPhone) {
+    const failPayload = {
+      status: normalized.status, // Task status remains active!
+      messageStatus: 'FAILED',
+      failedAt: new Date().toISOString(),
+      failureReason: 'Patient does not have a phone number for WhatsApp delivery.',
+      updatedAt: new Date().toISOString(),
+    };
+    try { await dataProvider.updateReminder(reminderId, failPayload); } catch (_) {}
+    db.update('reminders', reminderId, failPayload);
+
+    return res.status(400).json({
+      success: false,
+      error: 'Patient does not have a phone number for WhatsApp delivery.',
+      reminder: { ...reminder, ...failPayload },
+    });
+  }
+
+  try {
+    const notifRes = await notificationService.notify({
+      eventType: 'appointment_reminder',
+      patient,
+      reminder,
+      data: {
+        reminderId,
+        scheduledDate: reminder.scheduledDate,
+        scheduledTime: reminder.scheduledTime,
+      },
+    });
+
+    const isSuccess = notifRes.whatsApp?.status === 'SENT' || notifRes.whatsApp?.status === 'READY_PENDING_CREDENTIALS';
+
+    if (isSuccess) {
+      // Task status strictly remains active (DUE / OVERDUE / SCHEDULED)
+      const sentPayload = {
+        status: normalized.status,
+        messageStatus: 'SENT',
+        messageChannel: 'whatsapp',
+        sentAt: new Date().toISOString(),
+        providerMessageId: notifRes.whatsApp?.providerMessageId || null,
+        failureReason: null,
+        updatedAt: new Date().toISOString(),
+      };
+
+      try { await dataProvider.updateReminder(reminderId, sentPayload); } catch (_) {}
+      db.update('reminders', reminderId, sentPayload);
+
+      db.insert('auditLogs', {
+        id: `audit_${Date.now()}`,
+        actor: req.user?.name || req.user?.email || 'Admin',
+        action: 'sent_followup_whatsapp',
+        entity: 'reminder',
+        entityId: reminderId,
+        description: `Dispatched follow-up WhatsApp to ${patient.name} (${recipientPhone}) via WATI [ID: ${sentPayload.providerMessageId || 'N/A'}]`,
+        timestamp: new Date().toISOString(),
+      });
+
+      return res.json({
+        success: true,
+        message: `Follow-up WhatsApp reminder dispatched to ${recipientPhone}`,
+        reminder: { ...reminder, ...sentPayload },
+        providerMessageId: sentPayload.providerMessageId,
+      });
+    } else {
+      const errMsg = notifRes.whatsApp?.error || 'WATI WhatsApp dispatch failed';
+      const failPayload = {
+        status: normalized.status,
+        messageStatus: 'FAILED',
+        failedAt: new Date().toISOString(),
+        failureReason: errMsg,
+        updatedAt: new Date().toISOString(),
+      };
+
+      try { await dataProvider.updateReminder(reminderId, failPayload); } catch (_) {}
+      db.update('reminders', reminderId, failPayload);
+
+      db.insert('auditLogs', {
+        id: `audit_${Date.now()}`,
+        actor: req.user?.name || req.user?.email || 'Admin',
+        action: 'followup_whatsapp_failed',
+        entity: 'reminder',
+        entityId: reminderId,
+        description: `Follow-up WhatsApp to ${patient.name} (${recipientPhone}) failed: ${errMsg}`,
+        timestamp: new Date().toISOString(),
+      });
+
+      return res.status(502).json({
+        success: false,
+        error: errMsg,
+        reminder: { ...reminder, ...failPayload },
+      });
+    }
+  } catch (err) {
+    const failPayload = {
+      status: normalized.status,
+      messageStatus: 'FAILED',
+      failedAt: new Date().toISOString(),
+      failureReason: err.message,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try { await dataProvider.updateReminder(reminderId, failPayload); } catch (_) {}
+    db.update('reminders', reminderId, failPayload);
+
+    return res.status(500).json({
+      success: false,
+      error: `WhatsApp dispatch exception: ${err.message}`,
+      reminder: { ...reminder, ...failPayload },
+    });
+  }
+});
+
+
+// PATCH & PUT /api/follow-ups/:id/complete (Explicit admin completion — moves to history)
+const handleCompleteFollowUp = async (req, res) => {
   const reminderId = req.params.id;
   const actor = req.user?.name || req.user?.email || 'Admin';
   const completePayload = {
@@ -366,10 +518,13 @@ router.patch('/:id/complete', authenticate, async (req, res) => {
   });
 
   res.json({ success: true, message: 'Follow-up completed — moved to history.', reminder: updated });
-});
+};
 
-// PATCH /api/follow-ups/:id/cancel (Explicit admin cancellation — moves to history)
-router.patch('/:id/cancel', authenticate, async (req, res) => {
+router.patch('/:id/complete', authenticate, handleCompleteFollowUp);
+router.put('/:id/complete', authenticate, handleCompleteFollowUp);
+
+// PATCH & PUT /api/follow-ups/:id/cancel (Explicit admin cancellation — moves to history)
+const handleCancelFollowUp = async (req, res) => {
   const reminderId = req.params.id;
   const actor = req.user?.name || req.user?.email || 'Admin';
   const cancelPayload = {
@@ -415,7 +570,10 @@ router.patch('/:id/cancel', authenticate, async (req, res) => {
   });
 
   res.json({ success: true, message: 'Follow-up cancelled — moved to history.', reminder: updated });
-});
+};
+
+router.patch('/:id/cancel', authenticate, handleCancelFollowUp);
+router.put('/:id/cancel', authenticate, handleCancelFollowUp);
 
 // PUT /api/follow-ups/:id (General update)
 router.put('/:id', authenticate, async (req, res) => {

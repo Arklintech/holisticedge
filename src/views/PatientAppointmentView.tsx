@@ -19,6 +19,7 @@ import {
   Sparkles,
   Info
 } from 'lucide-react';
+import { WhatsAppIcon } from '../components/ui/WhatsAppIcon';
 
 interface AppointmentData {
   id: string;
@@ -172,7 +173,7 @@ export const PatientAppointmentView: React.FC<PatientAppointmentViewProps> = ({ 
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#2D6A4F] text-white font-medium text-sm hover:bg-[#23533E] transition shadow-sm"
             >
-              <MessageCircle className="w-4 h-4" />
+              <WhatsAppIcon className="w-4 h-4 flex-shrink-0" />
               Contact on WhatsApp
             </a>
             <a
@@ -448,7 +449,7 @@ export const PatientAppointmentView: React.FC<PatientAppointmentViewProps> = ({ 
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition"
                 >
-                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  <WhatsAppIcon className="w-4 h-4 flex-shrink-0" />
                   <span>WhatsApp Support</span>
                 </a>
 

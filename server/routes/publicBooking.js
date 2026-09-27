@@ -4,7 +4,9 @@ import { createBookingTransaction } from '../services/bookingService.js';
 import { verifySignedBookingToken } from '../services/reminderService.js';
 import { verifySignedAppointmentAccessToken } from '../services/appointmentAccessTokenService.js';
 import { sendAppointmentConfirmationEmail } from '../services/emailService.js';
+import { notificationService } from '../services/notificationService.js';
 import { db } from '../db.js';
+
 
 const router = express.Router();
 const dataProvider = getActiveDataProvider();
@@ -263,25 +265,51 @@ router.post('/book', async (req, res) => {
       }
     }
 
-    // Trigger confirmation email and await delivery before responding in serverless
+    // Trigger notification dispatch (WhatsApp primary via WATI, Gmail/SMTP confirmation)
     let emailResult = null;
+    let notifResult = null;
+
     try {
       if (result.appointment && result.patient) {
-        emailResult = await sendAppointmentConfirmationEmail(result.appointment, result.patient);
+        notifResult = await notificationService.notify({
+          eventType: 'appointment_confirmed',
+          patient: result.patient,
+          appointment: result.appointment,
+        });
+        emailResult = notifResult?.email?.response || null;
       }
-    } catch (err) {
-      console.error('[PublicBooking] Confirmation email error:', err.message);
+    } catch (notifErr) {
+      console.warn('[PublicBooking] Unified notification notice:', notifErr.message);
     }
+
+    // Direct email fallback if not already sent by notification service
+    if (!emailResult && result.appointment && result.patient && result.patient.email) {
+      try {
+        emailResult = await sendAppointmentConfirmationEmail(result.appointment, result.patient);
+      } catch (err) {
+        console.error('[PublicBooking] Confirmation email error:', err.message);
+      }
+    }
+
+    const whatsAppSent = Boolean(
+      notifResult?.whatsApp?.status === 'SENT' ||
+      notifResult?.whatsApp?.status === 'READY_PENDING_CREDENTIALS'
+    );
+    const emailSent = Boolean(emailResult?.success || notifResult?.email?.status === 'SENT');
 
     res.status(201).json({
       success: true,
       appointment: result.appointment,
       patient: result.patient,
       registrationTokenNumber: result.patient.registrationTokenNumber,
-      emailSent: Boolean(emailResult?.success),
-      emailMessageId: emailResult?.providerMessageId || null,
+      emailSent,
+      emailMessageId: emailResult?.providerMessageId || notifResult?.email?.response?.providerMessageId || null,
+      whatsAppSent,
+      whatsAppMessageId: notifResult?.whatsApp?.providerMessageId || null,
+      whatsAppStatus: notifResult?.whatsApp?.status || (whatsAppSent ? 'SENT' : 'NOT_SENT'),
       message: 'Booking Confirmed!',
     });
+
   } catch (err) {
     if (err.code === 'SLOT_FULL') {
       return res.status(409).json({ error: 'This time slot is no longer available. Please select another slot.', code: 'SLOT_FULL' });

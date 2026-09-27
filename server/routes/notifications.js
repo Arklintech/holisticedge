@@ -13,7 +13,14 @@ function checkAdminAuth(req) {
 // GET /api/notifications
 router.get('/', (req, res) => {
   const notifications = db.get('notifications') || [];
-  res.json({ success: true, count: notifications.length, notifications });
+  const notificationLogs = db.get('notificationLogs') || [];
+  res.json({ success: true, count: notifications.length, notifications, notificationLogs });
+});
+
+// GET /api/notifications/logs
+router.get('/logs', (req, res) => {
+  const logs = db.get('notificationLogs') || [];
+  res.json({ success: true, count: logs.length, logs });
 });
 
 // PUT /api/notifications/read-all  (literal route — must be ABOVE /:id/* param routes)

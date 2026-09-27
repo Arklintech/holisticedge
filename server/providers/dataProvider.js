@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 import fs from 'fs';
 import { db } from '../db.js';
+import { atomicLockAuthority } from '../utils/atomicLockAuthority.js';
 
 export class DataProvider {
   getStatus() { throw new Error('getStatus must be implemented'); }
@@ -18,12 +19,17 @@ export class DataProvider {
   async getReminders(filters) { throw new Error('getReminders must be implemented'); }
   async getReminderById(id) { throw new Error('getReminderById must be implemented'); }
   async updateReminder(id, updateData) { throw new Error('updateReminder must be implemented'); }
+  async allocateNextRegistrationToken() { throw new Error('allocateNextRegistrationToken must be implemented'); }
 }
 
 export class MockDataProvider extends DataProvider {
   constructor() {
     super();
     this.name = 'MockDataProvider';
+  }
+
+  async allocateNextRegistrationToken() {
+    return atomicLockAuthority.reserveNextRegistrationToken();
   }
 
   getStatus() {
@@ -158,6 +164,7 @@ const REQUIRED_SHEET_SCHEMAS = {
   NOTIFICATIONS: ['ID', 'Title', 'Message', 'Type', 'Status', 'CreatedAt'],
   FOLLOW_UPS: ['ID', 'PatientID', 'TokenNumber', 'AppointmentID', 'ScheduledDate', 'ScheduledTime', 'Channel', 'Purpose', 'Status', 'SentAt', 'BookedAppointmentID', 'BookedAt', 'FailureReason', 'CreatedBy', 'CreatedAt'],
   AUDIT_LOGS: ['ID', 'Actor', 'ActorID', 'Action', 'Entity', 'EntityID', 'Description', 'Timestamp'],
+  SYSTEM_COUNTERS: ['CounterKey', 'SequenceValue', 'LockId', 'LockTimestamp', 'UpdatedAt'],
 };
 
 export class GoogleSheetsDataProvider extends DataProvider {
@@ -274,6 +281,40 @@ export class GoogleSheetsDataProvider extends DataProvider {
   }
 
   // --- Patients ---
+
+  async allocateNextRegistrationToken() {
+    const appsScriptUrl = process.env.APPS_SCRIPT_ALLOCATOR_URL;
+    const allocatorSecret = process.env.APPS_SCRIPT_ALLOCATOR_SECRET || 'HE_SECURE_TOKEN_ALLOCATOR_2026_SECRET_KEY';
+
+    if (appsScriptUrl) {
+      try {
+        const response = await fetch(appsScriptUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-allocator-secret': allocatorSecret,
+          },
+          body: JSON.stringify({ secret: allocatorSecret }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.token) {
+            return result.token;
+          }
+        }
+      } catch (err) {
+        console.error('[GoogleSheets] Apps Script Token Allocator error:', err.message);
+      }
+    }
+
+    if (!this.isConfigured) {
+      const mock = new MockDataProvider();
+      return mock.allocateNextRegistrationToken();
+    }
+
+    return atomicLockAuthority.reserveNextRegistrationToken();
+  }
 
   async searchPatients(query) {
     const localPatients = db.get('patients') || [];

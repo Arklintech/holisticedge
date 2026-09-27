@@ -1,6 +1,8 @@
-﻿import express from 'express';
+import express from 'express';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
+
 import { getActiveEmailProvider, SMTPEmailProvider } from '../providers/emailProvider.js';
+import { getActiveWhatsAppProvider } from '../providers/whatsAppProvider.js';
 import { renderTransactionalEmailHtml } from '../services/emailTemplateEngine.js';
 
 const router = express.Router();
@@ -8,9 +10,11 @@ const router = express.Router();
 router.get('/', (req, res) => {
   const dataProvider = getActiveDataProvider();
   const emailProvider = getActiveEmailProvider();
+  const whatsAppProvider = getActiveWhatsAppProvider();
 
   const dataHealth = dataProvider.getStatus();
   const emailHealth = emailProvider.getStatus();
+  const whatsAppHealth = whatsAppProvider.getStatus();
 
   res.json({
     status: 'ONLINE',
@@ -19,6 +23,7 @@ router.get('/', (req, res) => {
     services: {
       dataProvider: dataHealth,
       emailProvider: emailHealth,
+      whatsAppProvider: whatsAppHealth,
       bookingEngine: {
         status: 'HEALTHY',
         concurrencyLock: 'ACTIVE',
@@ -31,6 +36,22 @@ router.get('/', (req, res) => {
     },
   });
 });
+
+// GET /api/system-health/test-whatsapp (WATI WhatsApp connection check)
+router.get('/test-whatsapp', async (req, res) => {
+  try {
+    const whatsAppProvider = getActiveWhatsAppProvider();
+    const conn = await whatsAppProvider.checkConnection();
+    res.json({
+      success: conn.healthy,
+      ...conn,
+      providerDetails: whatsAppProvider.getStatus(),
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 
 // GET /api/system-health/test-smtp (Live SMTP verification check)
 router.get('/test-smtp', async (req, res) => {

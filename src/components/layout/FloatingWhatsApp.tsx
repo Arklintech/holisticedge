@@ -1,9 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { clinicInfo } from '../../data/clinicInfo';
 
 export const FloatingWhatsApp: React.FC = () => {
-  const whatsappUrl = `https://wa.me/${clinicInfo.whatsapp}•text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${clinicInfo.whatsapp}?text=${encodeURIComponent(
     'Hello Holistic Edge, I would like to book a consultation at your Mehdipatnam clinic.'
   )}`;
 

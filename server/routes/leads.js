@@ -19,8 +19,8 @@ router.get('/:id', (req, res) => {
 
 // POST /api/leads (Public contact form & Admin addition)
 router.post('/', (req, res) => {
-  const { fullName, phone, email, condition, reason, message, source, status } = req.body;
-  const pName = fullName;
+  const { fullName, name, phone, email, condition, reason, message, source, status } = req.body;
+  const pName = fullName || name;
   const pReason = condition || reason || 'Consultation Inquiry';
 
   if (!pName || !phone) {

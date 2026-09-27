@@ -7,6 +7,7 @@ interface AnnouncementBarProps {
   onOpenBooking: (serviceName: string) => void;
 }
 
+// Verified Vite HMR hot reloading active
 export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ onOpenBooking }) => {
   const activeOffer = useAnnouncementOffer();
 
@@ -19,7 +20,7 @@ export const AnnouncementBar: React.FC<AnnouncementBarProps> = ({ onOpenBooking 
     if (activeOffer.ctaAction === 'BOOKING_MODAL' || !activeOffer.ctaAction) {
       onOpenBooking(activeOffer.preselectedService || 'Chiropractic & Wellness Consultation');
     } else if (activeOffer.ctaAction === 'WHATSAPP') {
-      window.open(`https://wa.me/${clinicInfo.whatsapp}•text=${encodeURIComponent(`Hello Holistic Edge, I would like to inquire about "${activeOffer.title}".`)}`, '_blank');
+      window.open(`https://wa.me/${clinicInfo.whatsapp}?text=${encodeURIComponent(`Hello Holistic Edge, I would like to inquire about "${activeOffer.title}".`)}`, '_blank');
     } else if (activeOffer.ctaAction === 'PHONE') {
       window.location.href = `tel:${clinicInfo.phoneRaw || clinicInfo.phone.replace(/\s+/g, '')}`;
     } else if (activeOffer.ctaUrl) {

@@ -2,7 +2,8 @@ import { MockAuthProvider, FirebaseAuthProvider } from './authProvider.js';
 import { MockDataProvider, GoogleSheetsDataProvider } from './dataProvider.js';
 import { MockMediaProvider, GoogleDriveMediaProvider } from './mediaProvider.js';
 import { MockEmailProvider, SMTPEmailProvider } from './emailProvider.js';
-import { MockWhatsAppProvider, MetaWhatsAppCloudProvider, getActiveWhatsAppProvider } from './whatsAppProvider.js';
+import { MockWhatsAppProvider, MetaWhatsAppCloudProvider, WatiWhatsAppProvider, getActiveWhatsAppProvider } from './whatsAppProvider.js';
+
 
 export function getAuthProvider() {
   const providerType = (process.env.AUTH_PROVIDER || 'firebase').toLowerCase();
@@ -52,5 +53,6 @@ export const getActiveAuthProvider = getAuthProvider;
 export const getActiveDataProvider = getDataProvider;
 export const getActiveMediaProvider = getMediaProvider;
 export const getActiveEmailProvider = getEmailProvider;
-export { getActiveWhatsAppProvider };
+export { getActiveWhatsAppProvider, WatiWhatsAppProvider };
+
 

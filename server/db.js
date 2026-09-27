@@ -278,6 +278,7 @@ function getDefaultDbSchema() {
     googleReviews: DEFAULT_GOOGLE_REVIEWS,
     notifications: [],
     auditLogs: [],
+    counters: [],
   };
 }
 

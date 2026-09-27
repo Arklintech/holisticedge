@@ -10,7 +10,7 @@ export interface MobileBottomBarProps {
 export const MobileBottomBar: React.FC<MobileBottomBarProps> = ({ onOpenBooking }) => {
   const activeOffer = useMobileStickyOffer();
 
-  const whatsappUrl = `https://wa.me/${clinicInfo.whatsapp}•text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${clinicInfo.whatsapp}?text=${encodeURIComponent(
     'Hello Holistic Edge, I would like to book an appointment for pain management.'
   )}`;
 

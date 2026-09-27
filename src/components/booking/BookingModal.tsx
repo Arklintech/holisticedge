@@ -10,12 +10,12 @@ import {
   ArrowRight,
   ArrowLeft,
   Activity,
-  MessageCircle,
   FileCheck,
   ShieldCheck,
   MapPin,
   Mail
 } from 'lucide-react';
+import { WhatsAppIcon } from '../ui/WhatsAppIcon';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -578,7 +578,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
       {/* STEP 4: Factual Automatic Confirmation Success Screen */}
       {step === 4 && bookingConfirmation && (
-        <div className="space-y-5 text-center py-2">
+        <div className="space-y-5 text-center py-2 pb-6">
           <div className="w-16 h-16 bg-[#DCFCE7] text-[#166534] rounded-full flex items-center justify-center mx-auto border border-[#86EFAC] shadow-sm">
             <CheckCircle2 className="w-10 h-10" />
           </div>
@@ -626,17 +626,17 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </div>
           </div>
 
-          {/* Factual Email Notice */}
-          <div className="bg-[#F0F4F8] border border-[#CBD8E6] rounded-xl p-3 text-xs text-[#0F2747] max-w-md mx-auto flex items-center gap-2.5 text-left">
-            <Mail className="w-5 h-5 text-[#0F2747] flex-shrink-0" />
+          {/* Factual WhatsApp Confirmation Notice */}
+          <div className="bg-[#F0FDF4] border border-[#BBF7D0] rounded-xl p-3 text-xs text-[#166534] max-w-md mx-auto flex items-center gap-2.5 text-left shadow-sm">
+            <WhatsAppIcon className="w-5 h-5 flex-shrink-0" />
             <div>
-              {bookingConfirmation.email ? (
+              {bookingConfirmation.phone ? (
                 <span>
-                  ? confirmation email has been initiated for <strong>{bookingConfirmation.email}</strong>.
+                  A confirmation message has been dispatched via WhatsApp to <strong>{bookingConfirmation.phone}</strong>.
                 </span>
               ) : (
                 <span>
-                  Your appointment is confirmed. If you provided an email address, your confirmation receipt will arrive shortly.
+                  Your appointment confirmation has been dispatched via WhatsApp.
                 </span>
               )}
             </div>
@@ -645,14 +645,14 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           {/* Action buttons */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <a
-              href={`https://wa.me/${clinicInfo.whatsapp}•text=${encodeURIComponent(
+              href={`https://wa.me/${clinicInfo.whatsapp}?text=${encodeURIComponent(
                 `Hello Holistic Edge, my appointment is CONFIRMED (Reg Token: ${bookingConfirmation.registrationTokenNumber}) for ${bookingConfirmation.fullName} on ${bookingConfirmation.preferredDate} at ${bookingConfirmation.preferredTimeSlot}.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-[#0F2747] hover:bg-[#0B1D3A] text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-colors"
+              className="inline-flex items-center justify-center gap-2.5 bg-[#0F2747] hover:bg-[#0B1D3A] text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-colors"
             >
-              <MessageCircle className="w-4 h-4 text-[#25D366]" />
+              <WhatsAppIcon className="w-5 h-5 flex-shrink-0" />
               <span>Connect on WhatsApp</span>
             </a>
             <Button variant="outline" onClick={resetForm}>

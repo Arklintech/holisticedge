@@ -32,14 +32,7 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
-      hmr: isHmrDisabled
-        ? false
-        : {
-            protocol: 'ws',
-            host: 'localhost',
-            port: 3000,
-            clientPort: 3000,
-          },
+      hmr: isHmrDisabled ? false : true,
       watch: isHmrDisabled
         ? null
         : {

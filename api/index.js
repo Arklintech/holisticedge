@@ -59,6 +59,8 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/whatsapp', whatsappWebhookRoutes);
+app.use('/api/wati', whatsappWebhookRoutes);
+
 
 // 404 Handler for unknown API routes
 app.use('/api', (req, res) => {

@@ -1,10 +1,11 @@
-﻿import express from 'express';
+import express from 'express';
 import { authenticate } from '../middleware/auth.js';
 import {
   getAuthProvider,
   getDataProvider,
   getMediaProvider,
   getEmailProvider,
+  getActiveWhatsAppProvider,
 } from '../providers/index.js';
 
 const router = express.Router();
@@ -15,6 +16,9 @@ router.get('/', authenticate, async (req, res) => {
   const dataProvider = getDataProvider();
   const mediaProvider = getMediaProvider();
   const emailProvider = getEmailProvider();
+  const whatsAppProvider = getActiveWhatsAppProvider();
+  const waStatus = whatsAppProvider.getStatus();
+
 
   res.json({
     success: true,
@@ -52,9 +56,18 @@ router.get('/', authenticate, async (req, res) => {
         details: 'SMTP email delivery service active and ready for patient notifications.',
         configured: true,
       },
+      whatsapp: {
+        name: 'WATI WhatsApp Business Platform',
+        type: waStatus.provider || 'WATI Official WhatsApp Provider',
+        connected: Boolean(waStatus.configured),
+        status: waStatus.status || (waStatus.configured ? 'CONFIGURED' : 'NOT_CONFIGURED'),
+        details: waStatus.details || 'WATI WhatsApp messaging engine ready.',
+        configured: Boolean(waStatus.configured),
+      },
     },
   });
 });
+
 
 // POST /api/integrations/google-sheets/init-schema - Explicit Header Schema Initialization Trigger
 router.post('/google-sheets/init-schema', authenticate, async (req, res) => {

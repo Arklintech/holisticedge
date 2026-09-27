@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { usePublishedTeam, usePublishedClinic } from '../hooks/useCmsContent';
@@ -40,7 +40,7 @@ export const AboutView: React.FC<AboutViewProps> = ({
     role: m.role,
     profilePhoto: m.image,
     bio: m.bio,
-    qualifications: Array.isArray(m.qualifications) ? m.qualifications.join(' ? ') : m.qualifications,
+    qualifications: Array.isArray(m.qualifications) ? m.qualifications.join(' • ') : m.qualifications,
     experience: typeof m.experienceYears === 'number' ? `${m.experienceYears} Years` : String(m.experienceYears || '25+ Years'),
     specializations: m.specialization,
     profileSlug: m.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -105,7 +105,7 @@ export const AboutView: React.FC<AboutViewProps> = ({
     name: founderItem?.name || defaultFounder.name,
     role: founderItem?.role || defaultFounder.role,
     qualifications: Array.isArray(founderItem?.qualifications)
-      ? founderItem.qualifications.join(' ? ')
+      ? founderItem.qualifications.join(' • ')
       : (founderItem?.qualifications || defaultFounder.qualifications),
     bio: founderItem?.bio || defaultFounder.bio,
     philosophy: (founderItem as any)?.philosophy || defaultFounder.philosophy,
