@@ -149,10 +149,11 @@ class NotificationService {
         inFlightNotifications.add(idempotencyKey);
         try {
           const provider = this.whatsAppProvider || getActiveWhatsAppProvider();
+          const templateLanguage = templateName === 'holistic_edge_appointment_confirmed' ? 'en_US' : 'en';
           const waRes = await provider.sendTemplateMessage({
             to: patientPhone,
             templateName,
-            languageCode: 'en',
+            languageCode: templateLanguage,
             parameters: watiParameters,
             metadata: {
               patientId,

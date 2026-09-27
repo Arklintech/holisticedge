@@ -66,14 +66,18 @@ export class MockWhatsAppProvider extends WhatsAppProvider {
   }
 }
 
+const CLINIC_WATI_ENDPOINT = 'https://live-mt-server.wati.io/10258367';
+const CLINIC_WATI_TOKEN = 'wati_d11d692b-8ee4-4baf-b7c5-a480b5b85fe5.kBeqguq4gEZpHFkCrJos0wKFtjBVNpzfodWWXY-H12UshKy2p-FUglTLTXzofRztlksJ6SKvdGF9jQNsuNVo9MRlwYcJoap7xKwiAUxXQgkxbzxlNm5EKX8Xh1VXrW7f';
+const CLINIC_WATI_PHONE = '918142642051';
+
 export class WatiWhatsAppProvider extends WhatsAppProvider {
   constructor(options = {}) {
     super();
     this.name = 'WatiWhatsAppProvider';
-    const envEndpoint = options.endpoint || process.env.WATI_API_ENDPOINT || 'https://live-server.wati.io';
+    const envEndpoint = options.endpoint || process.env.WATI_API_ENDPOINT || CLINIC_WATI_ENDPOINT;
     this.endpoint = envEndpoint.replace(/\/+$/, '');
-    this.token = options.token !== undefined ? options.token : (process.env.WATI_API_TOKEN || '');
-    this.senderNumber = options.senderNumber || process.env.WATI_PHONE_NUMBER || '918142642051';
+    this.token = options.token !== undefined ? options.token : (process.env.WATI_API_TOKEN || CLINIC_WATI_TOKEN);
+    this.senderNumber = options.senderNumber || process.env.WATI_PHONE_NUMBER || CLINIC_WATI_PHONE;
     this.isEnabled = options.enabled !== undefined
       ? Boolean(options.enabled)
       : (process.env.WATI_ENABLED === 'false' ? false : Boolean(this.token));
@@ -457,13 +461,11 @@ class DynamicWhatsAppProviderProxy extends WhatsAppProvider {
     if (this.forcedProvider) return this.forcedProvider;
     if (this.cachedProvider) return this.cachedProvider;
 
-    const providerType = (process.env.WHATSAPP_PROVIDER || '').toLowerCase();
+    const providerType = (process.env.WHATSAPP_PROVIDER || 'wati').toLowerCase();
 
-    // Default to WATI when configured or explicitly selected
-    if (providerType === 'wati' || Boolean(process.env.WATI_API_TOKEN) || process.env.WATI_ENABLED === 'true') {
-      const wati = new WatiWhatsAppProvider();
-      this.cachedProvider = wati;
-      return wati;
+    if (providerType === 'mock') {
+      this.cachedProvider = new MockWhatsAppProvider();
+      return this.cachedProvider;
     }
 
     if (providerType === 'meta' || providerType === 'meta_cloud') {
@@ -472,8 +474,10 @@ class DynamicWhatsAppProviderProxy extends WhatsAppProvider {
       return meta;
     }
 
-    this.cachedProvider = new MockWhatsAppProvider();
-    return this.cachedProvider;
+    // Default to WATI as clinic primary WhatsApp provider
+    const wati = new WatiWhatsAppProvider();
+    this.cachedProvider = wati;
+    return wati;
   }
 
   async sendTemplateMessage(args) {
