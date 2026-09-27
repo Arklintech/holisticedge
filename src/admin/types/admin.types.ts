@@ -113,7 +113,7 @@ export interface AdminTestimonial {
 
 // ─── Notifications ────────────────────────────────────────────
 
-export type NotificationType = 'appointment' | 'lead' | 'testimonial' | 'system' | 'content' | 'reminder' | 'email';
+export type NotificationType = 'appointment' | 'lead' | 'testimonial' | 'system' | 'content' | 'reminder' | 'email' | 'whatsapp';
 export type NotificationStatus = 'unread' | 'read' | 'archived';
 
 export interface AdminNotification {
