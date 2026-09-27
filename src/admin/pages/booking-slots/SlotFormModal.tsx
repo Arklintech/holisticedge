@@ -82,7 +82,7 @@ export function SlotFormModal({
         timeLabel: formatTime24to12(time),
         capacity,
         status,
-        blockedReason: status === 'BLOCKED' ? blockedReason: undefined,
+        blockedReason: status === 'BLOCKED' ? blockedReason : undefined,
         notes,
       });
 
@@ -90,6 +90,23 @@ export function SlotFormModal({
         setError(res.error || 'Failed to update slot.');
         return;
       }
+
+      fetch(`/api/booking-slots/${slot.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('admin_token') || 'admin_session'}`,
+          'x-admin-user-email': 'admin@holisticedge.in',
+        },
+        body: JSON.stringify({
+          date,
+          time: formatTime24to12(time),
+          capacity,
+          status: status === 'OPEN' ? 'AVAILABLE' : status,
+          blockedReason: status === 'BLOCKED' ? blockedReason : undefined,
+          notes,
+        }),
+      }).catch(e => console.warn('Could not sync slot edit to server:', e));
 
       onSaved(res.slot!);
       onClose();
@@ -106,6 +123,21 @@ export function SlotFormModal({
         setError(res.error || 'Failed to create slot.');
         return;
       }
+
+      fetch(`/api/booking-slots`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('admin_token') || 'admin_session'}`,
+          'x-admin-user-email': 'admin@holisticedge.in',
+        },
+        body: JSON.stringify({
+          date,
+          time: formatTime24to12(time),
+          capacity,
+          notes,
+        }),
+      }).catch(e => console.warn('Could not sync slot creation to server:', e));
 
       onSaved(res.slot!);
       onClose();

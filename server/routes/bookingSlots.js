@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { consumesCapacity } from '../services/bookingService.js';
@@ -48,9 +48,19 @@ router.post('/', authenticate, async (req, res) => {
 // PUT /api/booking-slots/:id (Edit time/capacity/status)
 router.put('/:id', authenticate, async (req, res) => {
   try {
-    const slot = db.find('bookingSlots', s => s.id === req.params.id);
+    let slot = db.find('bookingSlots', s => s.id === req.params.id);
     if (!slot) {
-      return res.status(404).json({ error: 'Slot not found' });
+      const newSlot = {
+        id: req.params.id,
+        date: req.body.date || new Date().toISOString().split('T')[0],
+        time: req.body.time || '10:30 AM',
+        capacity: req.body.capacity !== undefined ? parseInt(req.body.capacity, 10) : 5,
+        booked: 0,
+        status: req.body.status || 'AVAILABLE',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      slot = db.insert('bookingSlots', newSlot);
     }
 
     const { capacity, status, time, date } = req.body;

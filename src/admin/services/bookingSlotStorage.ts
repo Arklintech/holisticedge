@@ -57,19 +57,16 @@ export function formatTime12to24(time12: string): string {
   return `${String(h).padStart(2, '0')}:${m}`;
 }
 
-/** Standard default clinic operating slots */
+/** Standard default clinic operating slots (aligned with public booking engine) */
 export const DEFAULT_TIME_SLOTS = [
-  '10:00 AM',
-  '10:45 AM',
+  '10:30 AM',
   '11:30 AM',
-  '12:15 PM',
-  '01:00 PM',
-  '03:00 PM',
-  '03:45 PM',
+  '12:30 PM',
+  '02:30 PM',
+  '03:30 PM',
   '04:30 PM',
-  '05:15 PM',
-  '06:00 PM',
-  '06:45 PM',
+  '05:30 PM',
+  '06:30 PM',
   '07:30 PM',
 ];
 
@@ -78,24 +75,19 @@ function seedDefaultSlots(): BookingSlot[] {
   const today = new Date();
   const now = new Date().toISOString();
 
-  // Seed next 14 days with default slots
-  for (let d = 0; d < 14; d++) {
+  // Seed next 30 days with standard clinic operating slots
+  for (let d = 0; d < 30; d++) {
     const targetDate = new Date(today);
     targetDate.setDate(today.getDate() + d);
-    const dateStr = targetDate.toISOString().split('T')[0];
+    const dateStr = targetDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
     const isSunday = targetDate.getDay() === 0;
 
-    // Sunday has fewer slots
-    const times = isSunday
-      ? ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM']
-      : DEFAULT_TIME_SLOTS;
+    // Sunday clinic is closed
+    if (isSunday) continue;
 
-    times.forEach(t => {
+    DEFAULT_TIME_SLOTS.forEach(t => {
       const time24 = formatTime12to24(t);
-      // Simulate realistic bookings on today and tomorrow
-      const booked = d === 0 ? Math.floor(Math.random() * 3) : (d === 1 ? Math.floor(Math.random() * 2) : 0);
-      const capacity = 4;
-      const status: SlotStatus = booked >= capacity ? 'FULL' : 'OPEN';
+      const capacity = 5;
 
       slots.push({
         id: `slot_${dateStr.replace(/-/g, '')}_${time24.replace(':', '')}`,
@@ -103,8 +95,8 @@ function seedDefaultSlots(): BookingSlot[] {
         time: time24,
         timeLabel: t,
         capacity,
-        booked,
-        status,
+        booked: 0,
+        status: 'OPEN',
         createdAt: now,
         updatedAt: now,
         createdBy: 'System Seed',
@@ -118,12 +110,21 @@ function seedDefaultSlots(): BookingSlot[] {
 function read(): BookingSlot[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+    const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
     if (!raw) {
       const seeded = seedDefaultSlots();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
       return seeded;
     }
-    return JSON.parse(raw);
+    const slots: BookingSlot[] = JSON.parse(raw);
+    const hasCurrentOrFuture = slots.some(s => s.date >= todayStr);
+    if (!hasCurrentOrFuture) {
+      const seeded = seedDefaultSlots();
+      const combined = [...slots, ...seeded];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(combined));
+      return combined;
+    }
+    return slots;
   } catch {
     return [];
   }
@@ -152,6 +153,77 @@ export const bookingSlotStorage = {
   /** Get all slots for a specific date (YYYY-MM-DD) */
   getByDate(date: string): BookingSlot[] {
     return this.getAll().filter(s => s.date === date);
+  },
+
+  /** Ensure standard schedule exists for a date (auto-creates if missing) */
+  ensureScheduleForDate(date: string): BookingSlot[] {
+    if (!date) return [];
+    const all = read();
+    const existing = all.filter(s => s.date === date);
+    if (existing.length > 0) return existing;
+
+    const d = new Date(date + 'T12:00:00Z');
+    const isSunday = d.getUTCDay() === 0;
+    if (isSunday) return [];
+
+    const now = new Date().toISOString();
+    const newSlots: BookingSlot[] = DEFAULT_TIME_SLOTS.map(t => {
+      const time24 = formatTime12to24(t);
+      return {
+        id: `slot_${date.replace(/-/g, '')}_${time24.replace(':', '')}`,
+        date,
+        time: time24,
+        timeLabel: t,
+        capacity: 5,
+        booked: 0,
+        status: 'OPEN',
+        createdAt: now,
+        updatedAt: now,
+        createdBy: 'Clinic Schedule',
+      };
+    });
+
+    write([...all, ...newSlots]);
+    return newSlots;
+  },
+
+  /** Sync slots from live backend API */
+  syncFromBackend(date: string, backendSlots: any[]): void {
+    if (!backendSlots || backendSlots.length === 0) return;
+    const all = read();
+    const otherDates = all.filter(s => s.date !== date);
+    const existingForDate = all.filter(s => s.date === date);
+
+    const mergedForDate: BookingSlot[] = backendSlots.map((bs: any) => {
+      const existing = existingForDate.find(
+        s => s.timeLabel === (bs.timeLabel || bs.time) || s.time === bs.time
+      );
+      const time24 = formatTime12to24(bs.timeLabel || bs.time);
+      const bookedCount = bs.booked !== undefined ? bs.booked : (existing?.booked || 0);
+      const capacity = bs.capacity || existing?.capacity || 5;
+
+      let status: SlotStatus = 'OPEN';
+      if (existing?.status === 'BLOCKED' || bs.status === 'BLOCKED') status = 'BLOCKED';
+      else if (existing?.status === 'CLOSED' || bs.status === 'CLOSED') status = 'CLOSED';
+      else if (bookedCount >= capacity || bs.status === 'FULL') status = 'FULL';
+
+      return {
+        id: bs.id || existing?.id || `slot_${date.replace(/-/g, '')}_${time24.replace(':', '')}`,
+        date,
+        time: time24,
+        timeLabel: bs.timeLabel || formatTime24to12(time24),
+        capacity,
+        booked: bookedCount,
+        status,
+        blockedReason: existing?.blockedReason || bs.blockedReason,
+        notes: existing?.notes || bs.notes,
+        createdAt: existing?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        createdBy: existing?.createdBy || 'Live Sync',
+      };
+    });
+
+    write([...otherDates, ...mergedForDate]);
   },
 
   /** Get a single slot by ID */

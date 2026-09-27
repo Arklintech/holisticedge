@@ -39,18 +39,21 @@ export function BookingSlotsPage() {
   const { showToast, logAudit } = useAdminStore();
   const { user } = useAdminAuth();
 
-  const todayIso = useMemo(() => new Date().toISOString().split('T')[0], []);
+  const todayIso = useMemo(() => {
+    return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  }, []);
   const [selectedDate, setSelectedDate] = useState<string>(todayIso);
   const [statusFilter, setStatusFilter] = useState<'ALL' | SlotStatus>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [slots, setSlots] = useState<BookingSlot[]>([]);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Modals state
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [editingSlot, setEditingSlot] = useState<BookingSlot | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BookingSlot | null>(null);
   const [batchModalOpen, setBatchModalOpen] = useState(false);
-  const [batchCapacity, setBatchCapacity] = useState(4);
+  const [batchCapacity, setBatchCapacity] = useState(5);
 
   const loadSlots = () => {
     setSlots(bookingSlotStorage.getAll());
@@ -61,6 +64,30 @@ export function BookingSlotsPage() {
     const unsub = bookingSlotStorage.subscribe(loadSlots);
     return unsub;
   }, []);
+
+  // When selectedDate changes, ensure standard slots exist and sync live from backend API
+  useEffect(() => {
+    if (selectedDate) {
+      bookingSlotStorage.ensureScheduleForDate(selectedDate);
+      loadSlots();
+
+      setIsSyncing(true);
+      fetch(`/api/public/slots?date=${encodeURIComponent(selectedDate)}`)
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+          if (data && data.success && Array.isArray(data.slots) && data.slots.length > 0) {
+            bookingSlotStorage.syncFromBackend(selectedDate, data.slots);
+            loadSlots();
+          }
+        })
+        .catch(err => {
+          console.warn('[BookingSlotsPage] Live sync note:', err);
+        })
+        .finally(() => {
+          setIsSyncing(false);
+        });
+    }
+  }, [selectedDate]);
 
   // Filtered list
   const filteredSlots = useMemo(() => {
@@ -105,6 +132,22 @@ export function BookingSlotsPage() {
       `${nextStatus === 'OPEN' ? 'Opened' : 'Closed'} slot ${slot.date} at ${slot.timeLabel}`
     );
     showToast('success', `Slot ${nextStatus === 'OPEN' ? 'Opened' : 'Closed'}`, `${slot.timeLabel} is now ${nextStatus.toLowerCase()}.`);
+
+    // Sync with backend API
+    fetch(`/api/booking-slots/${slot.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('admin_token') || 'admin_session'}`,
+        'x-admin-user-email': 'admin@holisticedge.in',
+      },
+      body: JSON.stringify({
+        date: slot.date,
+        time: slot.time,
+        capacity: slot.capacity,
+        status: nextStatus === 'OPEN' ? 'AVAILABLE' : 'CLOSED',
+      }),
+    }).catch(e => console.warn('Could not sync slot status to server:', e));
   };
 
   const handleToggleBlock = (slot: BookingSlot) => {
@@ -112,12 +155,43 @@ export function BookingSlotsPage() {
       bookingSlotStorage.setStatus(slot.id, 'OPEN');
       logAudit('unblocked', 'booking_slot' as any, slot.id, `Unblocked slot ${slot.date} at ${slot.timeLabel}`);
       showToast('success', 'Slot Unblocked', `${slot.timeLabel} is now open for bookings.`);
+
+      fetch(`/api/booking-slots/${slot.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('admin_token') || 'admin_session'}`,
+          'x-admin-user-email': 'admin@holisticedge.in',
+        },
+        body: JSON.stringify({
+          date: slot.date,
+          time: slot.time,
+          capacity: slot.capacity,
+          status: 'AVAILABLE',
+        }),
+      }).catch(e => console.warn('Could not sync slot unblock to server:', e));
     } else {
       const reason = window.prompt('Enter reason for blocking this slot (e.g. Doctor in surgery):', 'Clinical procedure scheduled');
       if (reason !== null) {
         bookingSlotStorage.setStatus(slot.id, 'BLOCKED', reason || 'Blocked by administrator');
         logAudit('blocked', 'booking_slot' as any, slot.id, `Blocked slot ${slot.date} at ${slot.timeLabel}: ${reason}`);
         showToast('info', 'Slot Blocked', `${slot.timeLabel} blocked.`);
+
+        fetch(`/api/booking-slots/${slot.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('admin_token') || 'admin_session'}`,
+            'x-admin-user-email': 'admin@holisticedge.in',
+          },
+          body: JSON.stringify({
+            date: slot.date,
+            time: slot.time,
+            capacity: slot.capacity,
+            status: 'BLOCKED',
+            blockedReason: reason || 'Blocked by administrator',
+          }),
+        }).catch(e => console.warn('Could not sync slot block to server:', e));
       }
     }
   };
