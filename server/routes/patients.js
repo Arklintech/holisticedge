@@ -4,6 +4,7 @@ import { getActiveDataProvider } from '../providers/dataProvider.js';
 import { matchPatient, findOrCreatePatient } from '../services/patientService.js';
 import { scheduleReminder, generateSignedBookingToken } from '../services/reminderService.js';
 import { sendFollowUpReminderEmail } from '../services/emailService.js';
+import { notificationService } from '../services/notificationService.js';
 import { db } from '../db.js';
 
 const router = express.Router();
@@ -286,6 +287,157 @@ router.post('/:id/send-email', authenticate, async (req, res) => {
     return res.status(500).json({
       success: false,
       error: `Email dispatch failed: ${err.message}`,
+    });
+  }
+});
+
+// POST /api/patients/:id/send-whatsapp (Instant follow-up WhatsApp dispatch via WATI)
+router.post('/:id/send-whatsapp', authenticate, async (req, res) => {
+  try {
+    let patient = null;
+    try {
+      patient = await dataProvider.getPatientById(req.params.id);
+    } catch {
+      patient = db.find('patients', p => p.id === req.params.id || p.registrationTokenNumber === req.params.id);
+    }
+    if (!patient) {
+      patient = db.find('patients', p => p.id === req.params.id || p.registrationTokenNumber === req.params.id);
+    }
+    if (!patient) {
+      patient = {
+        id: req.params.id,
+        registrationTokenNumber: req.body.registrationTokenNumber || 'HE-001281',
+        name: req.body.patientName || 'Valued Patient',
+        email: req.body.patientEmail || '',
+        phone: req.body.patientPhone || '',
+      };
+    }
+
+    const recipientPhone = req.body.patientPhone || patient.phone;
+    if (!recipientPhone) {
+      return res.status(400).json({
+        success: false,
+        error: 'Patient does not have a phone number for WhatsApp delivery.',
+      });
+    }
+
+    patient.phone = recipientPhone;
+    if (req.body.patientName && (!patient.name || patient.name === 'Valued Patient')) {
+      patient.name = req.body.patientName;
+    }
+
+    const { notes, scheduledDate, scheduledTime } = req.body;
+    const targetDate = scheduledDate || new Date().toISOString().split('T')[0];
+    const targetTime = scheduledTime || '10:00 AM';
+
+    let reminder = null;
+    try {
+      reminder = await scheduleReminder({
+        patientId: patient.id,
+        scheduledDate: targetDate,
+        scheduledTime: targetTime,
+        notes: notes || 'Administrative Follow-up Reminder',
+      });
+    } catch {
+      reminder = {
+        id: `rem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        patientId: patient.id,
+        registrationTokenNumber: patient.registrationTokenNumber || 'HE-001281',
+        patientName: patient.name || 'Valued Patient',
+        patientEmail: patient.email || '',
+        patientPhone: recipientPhone,
+        scheduledDate: targetDate,
+        scheduledTime: targetTime,
+        notes: notes || 'Administrative Follow-up Reminder',
+        status: 'SCHEDULED',
+        messageStatus: 'PENDING',
+        messageChannel: 'whatsapp',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      db.push('reminders', reminder);
+    }
+
+    if (!reminder.patientPhone) {
+      reminder.patientPhone = recipientPhone;
+    }
+
+    const notifRes = await notificationService.notify({
+      eventType: 'appointment_reminder',
+      patient: { ...patient, phone: recipientPhone },
+      reminder,
+      data: {
+        reminderId: reminder.id,
+        scheduledDate: targetDate,
+        scheduledTime: targetTime,
+        notes: notes || reminder.notes,
+      },
+    });
+
+    const isSuccess = notifRes.whatsApp?.status === 'SENT' || notifRes.whatsApp?.status === 'READY_PENDING_CREDENTIALS';
+
+    if (isSuccess) {
+      const sentPayload = {
+        status: reminder.status || 'SCHEDULED', // task remains active!
+        messageStatus: 'SENT',
+        messageChannel: 'whatsapp',
+        sentAt: new Date().toISOString(),
+        providerMessageId: notifRes.whatsApp?.providerMessageId || null,
+        failureReason: null,
+        updatedAt: new Date().toISOString(),
+      };
+      try { await dataProvider.updateReminder(reminder.id, sentPayload); } catch (_) {}
+      db.update('reminders', reminder.id, sentPayload);
+
+      db.insert('auditLogs', {
+        id: `audit_${Date.now()}`,
+        actor: req.user?.name || req.user?.email || 'Admin',
+        action: 'sent_patient_whatsapp',
+        entity: 'reminder',
+        entityId: reminder.id,
+        description: `Dispatched follow-up WhatsApp to ${patient.name} (${recipientPhone}) via WATI [ID: ${sentPayload.providerMessageId || 'N/A'}]`,
+        timestamp: new Date().toISOString(),
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: `Follow-up WhatsApp reminder dispatched to ${recipientPhone}`,
+        reminder: { ...reminder, ...sentPayload },
+        providerMessageId: sentPayload.providerMessageId,
+      });
+    } else {
+      const errMsg = notifRes.whatsApp?.error || 'WATI WhatsApp dispatch failed';
+      const failPayload = {
+        status: reminder.status || 'SCHEDULED',
+        messageStatus: 'FAILED',
+        failedAt: new Date().toISOString(),
+        failureReason: errMsg,
+        updatedAt: new Date().toISOString(),
+      };
+      try { await dataProvider.updateReminder(reminder.id, failPayload); } catch (_) {}
+      db.update('reminders', reminder.id, failPayload);
+
+      db.insert('auditLogs', {
+        id: `audit_${Date.now()}`,
+        actor: req.user?.name || req.user?.email || 'Admin',
+        action: 'patient_whatsapp_failed',
+        entity: 'reminder',
+        entityId: reminder.id,
+        description: `Follow-up WhatsApp to ${patient.name} (${recipientPhone}) failed: ${errMsg}`,
+        timestamp: new Date().toISOString(),
+      });
+
+      return res.status(502).json({
+        success: false,
+        error: errMsg,
+        reminder: { ...reminder, ...failPayload },
+      });
+    }
+  } catch (err) {
+    console.error(`[PatientSendWhatsApp] Error:`, err.message);
+    return res.status(500).json({
+      success: false,
+      error: `WhatsApp dispatch failed: ${err.message}`,
     });
   }
 });

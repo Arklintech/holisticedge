@@ -541,4 +541,91 @@ test('WATI WhatsApp Integration: Comprehensive Production Test Suite (15 Test Re
     const status = smtp.getStatus();
     assert.strictEqual(status.type, 'SMTP');
   });
+
+  // 16. Patient profile direct follow-up: POST /api/patients/:id/send-whatsapp successfully dispatches WhatsApp and creates reminder
+  await t.test('16. Patient profile direct follow-up: POST /api/patients/:id/send-whatsapp successfully dispatches WhatsApp', async () => {
+    let capturedReq = null;
+    const mockProvider = {
+      sendTemplateMessage: async ({ to, templateName, parameters }) => {
+        capturedReq = { recipientPhone: to, templateName, parameters };
+        return {
+          status: 'SENT',
+          providerMessageId: `wati_patient_followup_${Date.now()}`,
+          provider: 'WATI',
+        };
+      },
+    };
+    setWhatsAppProviderForTest(mockProvider);
+
+    const patientId = `pt_patient_followup_${Date.now()}`;
+    const uniqueToken = `HE-${Math.floor(800000 + Math.random() * 99999)}`;
+    try {
+      db.insert('patients', {
+        id: patientId,
+        registrationTokenNumber: uniqueToken,
+        name: 'Test User',
+        phone: '917893769903',
+        email: 'testuser.holisticedge@gmail.com',
+      });
+
+      const res = await fetch(`${baseUrl}/api/patients/${patientId}/send-whatsapp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-user-email': 'admin@holisticedge.in',
+        },
+        body: JSON.stringify({
+          notes: 'Routine checkup follow-up',
+          scheduledDate: '2026-10-05',
+          scheduledTime: '11:30 AM',
+          patientName: 'Test User',
+          patientPhone: '917893769903',
+        }),
+      });
+
+      assert.strictEqual(res.status, 200);
+      const data = await res.json();
+      assert.strictEqual(data.success, true);
+      assert.strictEqual(data.reminder.messageStatus, 'SENT');
+      assert.strictEqual(data.reminder.messageChannel, 'whatsapp');
+      assert.ok(data.providerMessageId, 'providerMessageId must be returned');
+      assert.ok(capturedReq, 'WATI provider must be called');
+      assert.strictEqual(capturedReq.recipientPhone, '917893769903');
+    } finally {
+      db.delete('patients', patientId);
+      resetWhatsAppProviderForTest();
+    }
+  });
+
+  // 17. Patient profile direct follow-up rejects if recipient has no phone number
+  await t.test('17. Patient profile direct follow-up rejects if recipient has no phone number', async () => {
+    const patientId = `pt_nophone_${Date.now()}`;
+    const uniqueToken = `HE-${Math.floor(800000 + Math.random() * 99999)}`;
+    try {
+      db.insert('patients', {
+        id: patientId,
+        registrationTokenNumber: uniqueToken,
+        name: 'No Phone Patient',
+        email: 'nophone@test.com',
+      });
+
+      const res = await fetch(`${baseUrl}/api/patients/${patientId}/send-whatsapp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-user-email': 'admin@holisticedge.in',
+        },
+        body: JSON.stringify({
+          notes: 'Checkup',
+        }),
+      });
+
+      assert.strictEqual(res.status, 400);
+      const data = await res.json();
+      assert.strictEqual(data.success, false);
+      assert.ok(data.error.includes('phone number'));
+    } finally {
+      db.delete('patients', patientId);
+    }
+  });
 });

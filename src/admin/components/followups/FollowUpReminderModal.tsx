@@ -143,10 +143,14 @@ export function FollowUpReminderModal({ patient, onClose, onSuccess }: FollowUpR
           data = await res.json();
         } else {
           const text = await res.text();
-          data = { success: true, message: text || 'WhatsApp processed' };
+          data = { success: res.ok, message: text || 'WhatsApp processed' };
         }
       } catch {
-        data = { success: true, message: 'WhatsApp dispatched successfully' };
+        data = { success: res.ok, message: res.ok ? 'WhatsApp dispatched successfully' : 'Failed to dispatch WhatsApp' };
+      }
+
+      if (!res.ok) {
+        throw new Error(data.error || `Server responded with status ${res.status}`);
       }
 
       setWaSuccess(`Follow-up WhatsApp successfully sent to ${patient.phone || patient.name}!`);
@@ -164,21 +168,10 @@ export function FollowUpReminderModal({ patient, onClose, onSuccess }: FollowUpR
         onClose();
       }, 1400);
     } catch (err: any) {
-      console.warn('WhatsApp dispatch completed via notification engine:', err);
-      setWaSuccess(`Follow-up WhatsApp successfully sent to ${patient.phone || patient.name}!`);
-      notificationStorage.create({
-        type: 'whatsapp',
-        title: 'Follow-Up WhatsApp Sent',
-        message: `Sent to ${patient.name} (${patient.phone}) - ${customDate} ${reminderTime}`,
-        entityId: patient.id,
-        entityType: 'patient',
-        link: `/admin/patients?id=${patient.id}`,
-      });
-      showToast('success', 'WhatsApp Sent', `Follow-up WhatsApp dispatched to ${patient.name}`);
-      setTimeout(() => {
-        onSuccess();
-        onClose();
-      }, 1400);
+      console.error('WhatsApp dispatch error:', err);
+      const errMsg = err.message || 'Failed to dispatch WhatsApp';
+      setWaError(errMsg);
+      showToast('error', 'WhatsApp Dispatch Failed', errMsg);
     } finally {
       setLoading(false);
     }
