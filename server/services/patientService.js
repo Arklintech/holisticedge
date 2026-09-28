@@ -19,8 +19,19 @@ export async function allocateRegistrationToken() {
 export function normalizePhoneDigits(phone) {
   if (!phone) return '';
   let digits = String(phone).replace(/\D/g, '');
+  // Strip 91 country code if 12 digits or 13 digits with leading 0
   if (digits.length === 12 && digits.startsWith('91')) {
     digits = digits.substring(2);
+  } else if (digits.length === 13 && digits.startsWith('910')) {
+    digits = digits.substring(3);
+  }
+  // Strip leading 0 trunk prefix if 11 digits
+  if (digits.length === 11 && digits.startsWith('0')) {
+    digits = digits.substring(1);
+  }
+  // For Indian 10-digit mobile numbers (starting with 6, 7, 8, 9)
+  if (digits.length > 10 && /^[6-9]\d{9}$/.test(digits.slice(-10))) {
+    digits = digits.slice(-10);
   }
   return digits;
 }
@@ -85,8 +96,8 @@ export async function matchPatient({ name, phone, email, registrationTokenNumber
     }
   }
 
-  // 4. LOW: Similar Name (No auto-merge, return potential matches)
-  if (cleanName) {
+  // 4. LOW: Similar Name (Only when phone is not provided, return potential matches for staff review)
+  if (!cleanPhone && cleanName) {
     const nameMatches = allPatients.filter(p => p.name && p.name.toLowerCase().trim() === cleanName);
     if (nameMatches.length > 0) {
       return { status: 'AMBIGUOUS', matches: nameMatches, confidence: 'LOW_AMBIGUOUS' };
@@ -115,8 +126,10 @@ export async function findOrCreatePatient(patientInput) {
   }
 
   try {
+    // Step 1: Match existing patient by normalized phone/token/email
     const matchResult = await matchPatient(patientInput);
 
+    // Step 2: If exact existing patient exists: reuse existing token
     if (matchResult.status === 'MATCHED_EXACT') {
       return { patient: matchResult.patient, isNew: false, isAmbiguous: false };
     }
@@ -125,27 +138,23 @@ export async function findOrCreatePatient(patientInput) {
       return { patient: null, isNew: false, isAmbiguous: true, matches: matchResult.matches };
     }
 
-    // Reserve token from central shared authority
-    const registrationTokenNumber = await allocateRegistrationToken();
+    // Step 3: Request one new token from the central allocator
+    let registrationTokenNumber = await allocateRegistrationToken();
 
-    // Pre-write uniqueness check
-    const existingWithToken = await dataProvider.getPatientByRegistrationToken(registrationTokenNumber);
+    // Step 4: Verify the token is not already present in the source of truth
+    let existingWithToken = await dataProvider.getPatientByRegistrationToken(registrationTokenNumber);
+    let attempts = 0;
+    while (existingWithToken && attempts < 10) {
+      attempts++;
+      console.warn(`[patientService] Token collision detected for ${registrationTokenNumber}. Requesting fresh token...`);
+      registrationTokenNumber = await allocateRegistrationToken();
+      existingWithToken = await dataProvider.getPatientByRegistrationToken(registrationTokenNumber);
+    }
     if (existingWithToken) {
-      const fallbackToken = await allocateRegistrationToken();
-      const newPatient = {
-        id: `pt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-        registrationTokenNumber: fallbackToken,
-        name: patientInput.name.trim(),
-        phone: patientInput.phone.trim(),
-        email: patientInput.email ? patientInput.email.trim() : '',
-        patientType: patientInput.patientType || 'Standard',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      const created = await dataProvider.createPatient(newPatient);
-      return { patient: created, isNew: true, isAmbiguous: false };
+      throw new Error(`DATA_INTEGRITY_VIOLATION: Unable to allocate a unique registration token after ${attempts} attempts`);
     }
 
+    // Step 5: Create the patient
     const newPatient = {
       id: `pt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       registrationTokenNumber,
@@ -153,16 +162,24 @@ export async function findOrCreatePatient(patientInput) {
       phone: patientInput.phone.trim(),
       email: patientInput.email ? patientInput.email.trim() : '',
       patientType: patientInput.patientType || 'Standard',
+      status: 'ACTIVE',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     const created = await dataProvider.createPatient(newPatient);
+
+    // Step 6: Verify the final persisted state
+    const verifyPatient = await dataProvider.getPatientByRegistrationToken(registrationTokenNumber);
+    if (!verifyPatient || verifyPatient.id !== newPatient.id) {
+      throw new Error(`DATA_INTEGRITY_VIOLATION: Verification failed: Created patient ${newPatient.id} could not be retrieved by token ${registrationTokenNumber}`);
+    }
+
     return { patient: created, isNew: true, isAmbiguous: false };
   } finally {
     if (cleanPhone) {
       inFlightPhoneLocks.delete(cleanPhone);
-      resolvePhoneLock();
+      if (resolvePhoneLock) resolvePhoneLock();
     }
   }
 }

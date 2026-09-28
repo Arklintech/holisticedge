@@ -2,6 +2,7 @@ import express from 'express';
 import { db } from '../db.js';
 import { authenticate } from '../middleware/auth.js';
 import { getActiveDataProvider } from '../providers/dataProvider.js';
+import { findOrCreatePatient } from '../services/patientService.js';
 import { sendAppointmentConfirmationEmail } from '../services/emailService.js';
 import { notificationService } from '../services/notificationService.js';
 import { scheduleReminder } from '../services/reminderService.js';
@@ -159,26 +160,19 @@ router.post('/', async (req, res) => {
     updatedAt: new Date().toISOString(),
   };
 
-  // Find or create patient for admin appointment
-  let patient = db.find('patients', p => (p.phone && p.phone === phone) || (email && p.email === email));
-  if (!patient) {
-    const token = `HE-${Date.now().toString().slice(-6)}`;
-    patient = {
-      id: `pt_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+  // Find or create patient for admin appointment using central authority
+  let patient = null;
+  try {
+    const resolution = await findOrCreatePatient({
       name: pName,
       phone,
       email: email || '',
-      registrationTokenNumber: token,
       patientType: 'Standard',
-      status: 'ACTIVE',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    try {
-      await dataProvider.createPatient(patient);
-    } catch (e) {
-      db.insert('patients', patient);
-    }
+    });
+    patient = resolution.patient;
+  } catch (err) {
+    console.error('[Appointments] Error creating patient for appointment:', err.message);
+    patient = db.find('patients', p => (p.phone && p.phone === phone) || (email && p.email === email));
   }
 
   newAppt.patientId = patient.id;

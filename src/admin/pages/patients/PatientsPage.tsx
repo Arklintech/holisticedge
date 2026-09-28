@@ -39,7 +39,7 @@ export function PatientsPage() {
       const res = await apiClient.get<any>(`/api/patients/search?q=${encodeURIComponent(searchTerm)}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('admin_token') || 'admin_session'}` },
       });
-      if (res.ok && res.data?.success && Array.isArray(res.data.patients) && res.data.patients.length > 0) {
+      if (res.ok && res.data?.success && Array.isArray(res.data.patients)) {
         setPatients(res.data.patients);
       } else {
         setPatients(patientStorage.search(searchTerm));

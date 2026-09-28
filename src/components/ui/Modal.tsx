@@ -6,11 +6,12 @@ import { cn } from '../../lib/utils';
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   children: React.ReactNode;
-  maxWidth: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  id: string;
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  id?: string;
+  bodyRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -20,8 +21,12 @@ export const Modal: React.FC<ModalProps> = ({
   subtitle,
   children,
   maxWidth = 'lg',
-  id = 'global-modal'
+  id = 'global-modal',
+  bodyRef,
 }) => {
+  const internalBodyRef = React.useRef<HTMLDivElement>(null);
+  const activeBodyRef = bodyRef || internalBodyRef;
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -31,12 +36,38 @@ export const Modal: React.FC<ModalProps> = ({
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
+      if (activeBodyRef.current) {
+        activeBodyRef.current.scrollTop = 0;
+      }
+      const raf = requestAnimationFrame(() => {
+        if (activeBodyRef.current) {
+          activeBodyRef.current.scrollTop = 0;
+        }
+      });
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+        cancelAnimationFrame(raf);
+      };
     }
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, activeBodyRef]);
+
+  // When modal content/children change (e.g. step transitions in multi-step flows), reset scroll to top
+  useEffect(() => {
+    if (isOpen && activeBodyRef.current) {
+      activeBodyRef.current.scrollTop = 0;
+      const raf = requestAnimationFrame(() => {
+        if (activeBodyRef.current) {
+          activeBodyRef.current.scrollTop = 0;
+        }
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isOpen, children, activeBodyRef]);
 
   const widths = {
     sm: 'max-w-md',
@@ -54,7 +85,7 @@ export const Modal: React.FC<ModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby={title ? `${id}-title` : undefined}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-3 sm:p-6 overflow-y-auto"
         >
           {/* Backdrop */}
           <motion.div
@@ -72,21 +103,21 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ scale: 0.95, opacity: 0, y: 16 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className={cn(
-              'relative w-full bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200/80 z-10 my-8 overflow-hidden flex flex-col max-h-[90vh]',
+              'relative w-full bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200/80 z-10 my-auto sm:my-8 overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[90vh]',
               widths[maxWidth]
             )}
           >
             {/* Header */}
             {(title || subtitle) && (
-              <div className="flex items-start justify-between p-6 pb-4 border-b border-slate-100 bg-slate-50/50">
+              <div className="flex items-start justify-between p-4 sm:p-6 pb-3 sm:pb-4 border-b border-slate-100 bg-slate-50/50 flex-shrink-0">
                 <div>
                   {title && (
-                    <h3 id={`${id}-title`} className="text-xl font-bold text-slate-900 font-heading">
+                    <h3 id={`${id}-title`} className="text-lg sm:text-xl font-bold text-slate-900 font-heading">
                       {title}
                     </h3>
                   )}
                   {subtitle && (
-                    <p className="text-sm text-slate-600 mt-1">{subtitle}</p>
+                    <p className="text-xs sm:text-sm text-slate-600 mt-1">{subtitle}</p>
                   )}
                 </div>
                 <button
@@ -114,7 +145,9 @@ export const Modal: React.FC<ModalProps> = ({
             )}
 
             {/* Body */}
-            <div className="p-6 overflow-y-auto">{children}</div>
+            <div ref={activeBodyRef} className="p-4 sm:p-6 overflow-y-auto flex-1 overscroll-contain">
+              {children}
+            </div>
           </motion.div>
         </div>
       )}

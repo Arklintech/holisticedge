@@ -42,22 +42,333 @@
   },
   "patients": [
     {
+      "id": "pt_1790582266004_avc29",
+      "registrationTokenNumber": "HE-1000027",
+      "name": "Simultaneous Patient 1790582265965",
+      "phone": "91933940799",
+      "email": "simultaneous_1790582265965@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:46.004Z",
+      "updatedAt": "2026-09-28T07:57:46.004Z"
+    },
+    {
+      "id": "pt_1790582265956_djwtm",
+      "registrationTokenNumber": "HE-1000026",
+      "name": "Concurrent Batch Patient 5",
+      "phone": "91985498529",
+      "email": "concurrent_1790582265498_5@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.956Z",
+      "updatedAt": "2026-09-28T07:57:45.956Z"
+    },
+    {
+      "id": "pt_1790582265916_l3hjd",
+      "registrationTokenNumber": "HE-1000025",
+      "name": "Concurrent Batch Patient 7",
+      "phone": "91985498788",
+      "email": "concurrent_1790582265498_7@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.916Z",
+      "updatedAt": "2026-09-28T07:57:45.916Z"
+    },
+    {
+      "id": "pt_1790582265878_rirqj",
+      "registrationTokenNumber": "HE-1000024",
+      "name": "Concurrent Batch Patient 1",
+      "phone": "91985498130",
+      "email": "concurrent_1790582265498_1@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.878Z",
+      "updatedAt": "2026-09-28T07:57:45.878Z"
+    },
+    {
+      "id": "pt_1790582265840_bcri7",
+      "registrationTokenNumber": "HE-1000023",
+      "name": "Concurrent Batch Patient 9",
+      "phone": "91985498928",
+      "email": "concurrent_1790582265498_9@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.840Z",
+      "updatedAt": "2026-09-28T07:57:45.840Z"
+    },
+    {
+      "id": "pt_1790582265793_2g141",
+      "registrationTokenNumber": "HE-1000022",
+      "name": "Concurrent Batch Patient 8",
+      "phone": "91985498848",
+      "email": "concurrent_1790582265498_8@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.793Z",
+      "updatedAt": "2026-09-28T07:57:45.793Z"
+    },
+    {
+      "id": "pt_1790582265746_saiqr",
+      "registrationTokenNumber": "HE-1000021",
+      "name": "Concurrent Batch Patient 4",
+      "phone": "91985498471",
+      "email": "concurrent_1790582265498_4@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.746Z",
+      "updatedAt": "2026-09-28T07:57:45.746Z"
+    },
+    {
+      "id": "pt_1790582265690_2zyqw",
+      "registrationTokenNumber": "HE-1000020",
+      "name": "Concurrent Batch Patient 3",
+      "phone": "91985498340",
+      "email": "concurrent_1790582265498_3@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.690Z",
+      "updatedAt": "2026-09-28T07:57:45.690Z"
+    },
+    {
+      "id": "pt_1790582265624_4dloo",
+      "registrationTokenNumber": "HE-1000019",
+      "name": "Concurrent Batch Patient 6",
+      "phone": "91985498698",
+      "email": "concurrent_1790582265498_6@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.624Z",
+      "updatedAt": "2026-09-28T07:57:45.624Z"
+    },
+    {
+      "id": "pt_1790582265579_hv2yz",
+      "registrationTokenNumber": "HE-1000018",
+      "name": "Concurrent Batch Patient 2",
+      "phone": "91985498240",
+      "email": "concurrent_1790582265498_2@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.579Z",
+      "updatedAt": "2026-09-28T07:57:45.579Z"
+    },
+    {
+      "id": "pt_1790582265529_3n90n",
+      "registrationTokenNumber": "HE-1000017",
+      "name": "Concurrent Batch Patient 0",
+      "phone": "91985498052",
+      "email": "concurrent_1790582265498_0@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.529Z",
+      "updatedAt": "2026-09-28T07:57:45.529Z"
+    },
+    {
+      "id": "pt_1790582265487_stip9",
+      "registrationTokenNumber": "HE-1000016",
+      "name": "Phone Variant Patient",
+      "phone": "7898817528",
+      "email": "phonevar_1790582265459@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.487Z",
+      "updatedAt": "2026-09-28T07:57:45.487Z"
+    },
+    {
+      "id": "pt_1790582265415_rxknp",
+      "registrationTokenNumber": "HE-1000014",
+      "name": "Returning Patient 1790582265381",
+      "phone": "91911850006",
+      "email": "ret_1790582265381@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:57:45.415Z",
+      "updatedAt": "2026-09-28T07:57:45.415Z"
+    },
+    {
+      "id": "pt_1790582126440_0b4rz",
+      "registrationTokenNumber": "HE-1000013",
+      "name": "Simultaneous Patient 1790582126372",
+      "phone": "91933296787",
+      "email": "simultaneous_1790582126372@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:55:26.440Z",
+      "updatedAt": "2026-09-28T07:55:26.440Z"
+    },
+    {
+      "id": "pt_1790582126277_7hzan",
+      "registrationTokenNumber": "HE-1000011",
+      "name": "Returning Patient 1790582126186",
+      "phone": "91911400889",
+      "email": "ret_1790582126186@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:55:26.277Z",
+      "updatedAt": "2026-09-28T07:55:26.277Z"
+    },
+    {
+      "id": "pt_1790582058008_41vl0",
+      "registrationTokenNumber": "HE-1000010",
+      "name": "Simultaneous Patient 1790582057923",
+      "phone": "91933541991",
+      "email": "simultaneous_1790582057923@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:18.008Z",
+      "updatedAt": "2026-09-28T07:54:18.008Z"
+    },
+    {
+      "id": "pt_1790582057890_4nwx8",
+      "registrationTokenNumber": "HE-1000009",
+      "name": "Concurrent Batch Patient 4",
+      "phone": "91986889494",
+      "email": "concurrent_1790582056889_4@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.890Z",
+      "updatedAt": "2026-09-28T07:54:17.890Z"
+    },
+    {
+      "id": "pt_1790582057782_63yie",
+      "registrationTokenNumber": "HE-1000008",
+      "name": "Concurrent Batch Patient 8",
+      "phone": "91986889884",
+      "email": "concurrent_1790582056889_8@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.782Z",
+      "updatedAt": "2026-09-28T07:54:17.782Z"
+    },
+    {
+      "id": "pt_1790582057686_ydul7",
+      "registrationTokenNumber": "HE-1000007",
+      "name": "Concurrent Batch Patient 1",
+      "phone": "91986889168",
+      "email": "concurrent_1790582056889_1@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.686Z",
+      "updatedAt": "2026-09-28T07:54:17.686Z"
+    },
+    {
+      "id": "pt_1790582057591_n3pmp",
+      "registrationTokenNumber": "HE-1000006",
+      "name": "Concurrent Batch Patient 5",
+      "phone": "91986889591",
+      "email": "concurrent_1790582056889_5@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.591Z",
+      "updatedAt": "2026-09-28T07:54:17.591Z"
+    },
+    {
+      "id": "pt_1790582057497_ce30h",
+      "registrationTokenNumber": "HE-1000005",
+      "name": "Concurrent Batch Patient 7",
+      "phone": "91986889734",
+      "email": "concurrent_1790582056889_7@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.497Z",
+      "updatedAt": "2026-09-28T07:54:17.497Z"
+    },
+    {
+      "id": "pt_1790582057389_5bjmy",
+      "registrationTokenNumber": "HE-1000004",
+      "name": "Concurrent Batch Patient 6",
+      "phone": "91986889631",
+      "email": "concurrent_1790582056889_6@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.389Z",
+      "updatedAt": "2026-09-28T07:54:17.389Z"
+    },
+    {
+      "id": "pt_1790582057292_aqjaj",
+      "registrationTokenNumber": "HE-1000003",
+      "name": "Concurrent Batch Patient 2",
+      "phone": "91986889255",
+      "email": "concurrent_1790582056889_2@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.292Z",
+      "updatedAt": "2026-09-28T07:54:17.292Z"
+    },
+    {
+      "id": "pt_1790582057180_n59c1",
+      "registrationTokenNumber": "HE-1000002",
+      "name": "Concurrent Batch Patient 3",
+      "phone": "91986889382",
+      "email": "concurrent_1790582056889_3@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.180Z",
+      "updatedAt": "2026-09-28T07:54:17.180Z"
+    },
+    {
+      "id": "pt_1790582057084_g4h5e",
+      "registrationTokenNumber": "HE-1000001",
+      "name": "Concurrent Batch Patient 9",
+      "phone": "91986889983",
+      "email": "concurrent_1790582056889_9@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:17.084Z",
+      "updatedAt": "2026-09-28T07:54:17.084Z"
+    },
+    {
+      "id": "pt_1790582056963_z1lld",
+      "registrationTokenNumber": "HE-1000000",
+      "name": "Concurrent Batch Patient 0",
+      "phone": "91986889016",
+      "email": "concurrent_1790582056889_0@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:16.963Z",
+      "updatedAt": "2026-09-28T07:54:16.963Z"
+    },
+    {
+      "id": "pt_1790582056859_xz0tq",
+      "registrationTokenNumber": "HE-999999",
+      "name": "Phone Variant Patient",
+      "phone": "7899963941",
+      "email": "phonevar_1790582056798@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:16.859Z",
+      "updatedAt": "2026-09-28T07:54:16.859Z"
+    },
+    {
+      "id": "pt_1790582056699_bc34h",
+      "registrationTokenNumber": "HE-999997",
+      "name": "Returning Patient 1790582056599",
+      "phone": "91911570618",
+      "email": "ret_1790582056599@test.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-28T07:54:16.699Z",
+      "updatedAt": "2026-09-28T07:54:16.699Z"
+    },
+    {
       "id": "pt_fu_overdue_1789466139176",
       "name": "Overdue Patient 1789466139176",
       "phone": "+91 9089052927",
-      "email": "anasahmedkhan845@gmail.com"
+      "email": "anasahmedkhan845@gmail.com",
+      "registrationTokenNumber": "HE-001001"
     },
     {
       "id": "pt_fu_cancel_1789466138655",
       "name": "Cancel FU Patient 1789466138655",
       "phone": "+91 9989214221",
-      "email": "anasahmedkhan845@gmail.com"
+      "email": "anasahmedkhan845@gmail.com",
+      "registrationTokenNumber": "HE-001002"
     },
     {
       "id": "pt_no_email_1789466138093",
       "name": "No Email Patient 1789466138093",
       "phone": "+91 9848788181",
-      "email": ""
+      "email": "",
+      "registrationTokenNumber": "HE-001003"
     },
     {
       "id": "pt_fu_today_1789466133993",
@@ -84,19 +395,22 @@
       "id": "pt_fu_overdue_1789465107236",
       "name": "Overdue Patient 1789465107236",
       "phone": "+91 9058879389",
-      "email": "anasahmedkhan845@gmail.com"
+      "email": "anasahmedkhan845@gmail.com",
+      "registrationTokenNumber": "HE-001004"
     },
     {
       "id": "pt_fu_cancel_1789465106443",
       "name": "Cancel FU Patient 1789465106443",
       "phone": "+91 9957082398",
-      "email": "anasahmedkhan845@gmail.com"
+      "email": "anasahmedkhan845@gmail.com",
+      "registrationTokenNumber": "HE-001005"
     },
     {
       "id": "pt_no_email_1789465105614",
       "name": "No Email Patient 1789465105614",
       "phone": "+91 9838051720",
-      "email": ""
+      "email": "",
+      "registrationTokenNumber": "HE-001006"
     },
     {
       "id": "pt_fu_today_1789465099817",
@@ -123,21 +437,15 @@
       "id": "pt_no_email_1789464263736",
       "name": "No Email Patient",
       "phone": "+91 90000 11111",
-      "email": ""
-    },
-    {
-      "id": "pt_test_1789464263736",
-      "name": "FollowUp Test Patient 1789464263736",
-      "phone": "+91 9113619270",
-      "email": "test_patient_fu@holisticedge.in",
-      "registrationTokenNumber": "HE-263736"
+      "email": "",
+      "registrationTokenNumber": "HE-001007"
     },
     {
       "id": "pt_1789464226456_31f0",
-      "name": "QA Patient Active 1789464226390",
-      "phone": "+91 99999 49802",
-      "email": "qa_patient_1789464226390@example.com",
       "registrationTokenNumber": "HE-226456",
+      "name": "QA Patient Active 1789464226390",
+      "phone": "#ERROR!",
+      "email": "qa_patient_1789464226390@example.com",
       "patientType": "Standard",
       "status": "ACTIVE",
       "createdAt": "2026-09-15T09:23:46.456Z",
@@ -147,21 +455,15 @@
       "id": "pt_no_email_1789464070128",
       "name": "No Email Patient",
       "phone": "+91 90000 11111",
-      "email": ""
-    },
-    {
-      "id": "pt_test_1789464070128",
-      "name": "FollowUp Test Patient 1789464070128",
-      "phone": "+91 81426 42051",
-      "email": "test_patient_fu@holisticedge.in",
-      "registrationTokenNumber": "HE-070128"
+      "email": "",
+      "registrationTokenNumber": "HE-001008"
     },
     {
       "id": "pt_1789464031786_9mgj",
-      "name": "QA Patient Active 1789464031708",
-      "phone": "+91 99999 70265",
-      "email": "qa_patient_1789464031708@example.com",
       "registrationTokenNumber": "HE-031786",
+      "name": "QA Patient Active 1789464031708",
+      "phone": "#ERROR!",
+      "email": "qa_patient_1789464031708@example.com",
       "patientType": "Standard",
       "status": "ACTIVE",
       "createdAt": "2026-09-15T09:20:31.786Z",
@@ -171,21 +473,15 @@
       "id": "pt_no_email_1789463999977",
       "name": "No Email Patient",
       "phone": "+91 90000 11111",
-      "email": ""
-    },
-    {
-      "id": "pt_test_1789463999977",
-      "name": "FollowUp Test Patient 1789463999977",
-      "phone": "+91 81426 42051",
-      "email": "test_patient_fu@holisticedge.in",
-      "registrationTokenNumber": "HE-999977"
+      "email": "",
+      "registrationTokenNumber": "HE-001009"
     },
     {
       "id": "pt_1789463963000_ky82",
-      "name": "QA Patient Active 1789463962946",
-      "phone": "+91 99999 47072",
-      "email": "qa_patient_1789463962946@example.com",
       "registrationTokenNumber": "HE-963000",
+      "name": "QA Patient Active 1789463962946",
+      "phone": "#ERROR!",
+      "email": "qa_patient_1789463962946@example.com",
       "patientType": "Standard",
       "status": "ACTIVE",
       "createdAt": "2026-09-15T09:19:23.000Z",
@@ -195,57 +491,37 @@
       "id": "pt_no_email_1789463894788",
       "name": "No Email Patient",
       "phone": "+91 90000 11111",
-      "email": ""
-    },
-    {
-      "id": "pt_test_1789463894788",
-      "name": "FollowUp Test Patient 1789463894788",
-      "phone": "+91 81426 42051",
-      "email": "test_patient_fu@holisticedge.in",
-      "registrationTokenNumber": "HE-894788"
+      "email": "",
+      "registrationTokenNumber": "HE-001010"
     },
     {
       "id": "pt_1789463856553_t7pz",
-      "name": "QA Patient Active 1789463856478",
-      "phone": "+91 99999 58653",
-      "email": "qa_patient_1789463856478@example.com",
       "registrationTokenNumber": "HE-856553",
+      "name": "QA Patient Active 1789463856478",
+      "phone": "#ERROR!",
+      "email": "qa_patient_1789463856478@example.com",
       "patientType": "Standard",
       "status": "ACTIVE",
       "createdAt": "2026-09-15T09:17:36.553Z",
       "updatedAt": "2026-09-15T09:17:36.553Z"
     },
     {
-      "id": "pt_test_1789463774030",
-      "name": "FollowUp Test Patient 1789463774030",
-      "phone": "+91 81426 42051",
-      "email": "test_patient_fu@holisticedge.in",
-      "registrationTokenNumber": "HE-774030"
-    },
-    {
       "id": "pt_1789463762538_juxa",
-      "name": "QA Patient Active 1789463762437",
-      "phone": "+91 99999 51713",
-      "email": "qa_patient_1789463762437@example.com",
       "registrationTokenNumber": "HE-762538",
+      "name": "QA Patient Active 1789463762437",
+      "phone": "#ERROR!",
+      "email": "qa_patient_1789463762437@example.com",
       "patientType": "Standard",
       "status": "ACTIVE",
       "createdAt": "2026-09-15T09:16:02.538Z",
       "updatedAt": "2026-09-15T09:16:02.538Z"
     },
     {
-      "id": "pt_test_1789463747108",
-      "name": "FollowUp Test Patient 1789463747108",
-      "phone": "+91 81426 42051",
-      "email": "test_patient_fu@holisticedge.in",
-      "registrationTokenNumber": "HE-747108"
-    },
-    {
       "id": "pt_1789463733885_l1zt",
-      "name": "QA Patient Active 1789463733803",
-      "phone": "+91 99999 17313",
-      "email": "qa_patient_1789463733803@example.com",
       "registrationTokenNumber": "HE-733885",
+      "name": "QA Patient Active 1789463733803",
+      "phone": "#ERROR!",
+      "email": "qa_patient_1789463733803@example.com",
       "patientType": "Standard",
       "status": "ACTIVE",
       "createdAt": "2026-09-15T09:15:33.885Z",
@@ -258,6 +534,7 @@
       "phone": "9999999999",
       "email": "qa-test@holisticedge.local",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-09T17:43:47.272Z",
       "updatedAt": "2026-09-09T17:43:47.272Z"
     },
@@ -289,6 +566,7 @@
       "phone": "9876525207",
       "email": "rc_test_1788521935496@holisticedge.in",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-04T11:38:57.227Z",
       "updatedAt": "2026-09-04T11:38:57.227Z"
     },
@@ -299,16 +577,18 @@
       "phone": "9876543211",
       "email": "anasahmedkhan4535@gmail",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-04T11:28:55.202Z",
       "updatedAt": "2026-09-04T11:28:55.202Z"
     },
     {
       "id": "pt_1788477797804_s1q71",
       "registrationTokenNumber": "HE-001299",
-      "name": "Ahmed Khan Returning",
-      "phone": "+91 81426 42051",
-      "email": "test.returning@holisticedge.in",
+      "name": "Anas Ahmed Khan",
+      "phone": "#ERROR!",
+      "email": "anasahmedkhan845@gmail.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T23:23:17.804Z",
       "updatedAt": "2026-09-03T23:23:17.804Z"
     },
@@ -316,9 +596,10 @@
       "id": "pt_1788475912885_lfnj8",
       "registrationTokenNumber": "HE-001298",
       "name": "Cap Test Patient 5",
-      "phone": "+91 99999 00005",
+      "phone": "#ERROR!",
       "email": "cap5@example.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:51:52.885Z",
       "updatedAt": "2026-09-03T22:51:52.885Z"
     },
@@ -326,9 +607,10 @@
       "id": "pt_1788475911389_wo419",
       "registrationTokenNumber": "HE-001297",
       "name": "Cap Test Patient 4",
-      "phone": "+91 99999 00004",
+      "phone": "#ERROR!",
       "email": "cap4@example.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:51:51.389Z",
       "updatedAt": "2026-09-03T22:51:51.389Z"
     },
@@ -336,9 +618,10 @@
       "id": "pt_1788475909795_798h5",
       "registrationTokenNumber": "HE-001296",
       "name": "Cap Test Patient 3",
-      "phone": "+91 99999 00003",
+      "phone": "#ERROR!",
       "email": "cap3@example.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:51:49.795Z",
       "updatedAt": "2026-09-03T22:51:49.795Z"
     },
@@ -346,9 +629,10 @@
       "id": "pt_1788475908253_64ews",
       "registrationTokenNumber": "HE-001295",
       "name": "Cap Test Patient 2",
-      "phone": "+91 99999 00002",
+      "phone": "#ERROR!",
       "email": "cap2@example.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:51:48.253Z",
       "updatedAt": "2026-09-03T22:51:48.253Z"
     },
@@ -356,9 +640,10 @@
       "id": "pt_1788475906682_9jcyh",
       "registrationTokenNumber": "HE-001294",
       "name": "Cap Test Patient 1",
-      "phone": "+91 99999 00001",
+      "phone": "#ERROR!",
       "email": "cap1@example.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:51:46.682Z",
       "updatedAt": "2026-09-03T22:51:46.682Z"
     },
@@ -366,9 +651,10 @@
       "id": "pt_1788475832878_yn1cl",
       "registrationTokenNumber": "HE-001293",
       "name": "Test Patient 05",
-      "phone": "+91 91000 00005",
+      "phone": "#ERROR!",
       "email": "daaraynorg@gmail.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:50:32.878Z",
       "updatedAt": "2026-09-03T22:50:32.878Z"
     },
@@ -376,9 +662,10 @@
       "id": "pt_1788475822774_p6xan",
       "registrationTokenNumber": "HE-001292",
       "name": "Test Patient 04",
-      "phone": "+91 91000 00004",
+      "phone": "#ERROR!",
       "email": "imoo12333@gmail.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:50:22.774Z",
       "updatedAt": "2026-09-03T22:50:22.774Z"
     },
@@ -386,9 +673,10 @@
       "id": "pt_1788475811828_8wk19",
       "registrationTokenNumber": "HE-001291",
       "name": "Test Patient 03",
-      "phone": "+91 91000 00003",
+      "phone": "#ERROR!",
       "email": "ahmedkhanans57@gmail.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:50:11.828Z",
       "updatedAt": "2026-09-03T22:50:11.828Z"
     },
@@ -396,9 +684,10 @@
       "id": "pt_1788475353352_sz08v",
       "registrationTokenNumber": "HE-001290",
       "name": "Test Patient 01",
-      "phone": "+91 91000 00001",
+      "phone": "#ERROR!",
       "email": "anasahmedkhan4535@gmail.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:42:33.352Z",
       "updatedAt": "2026-09-03T22:42:33.352Z"
     },
@@ -409,6 +698,7 @@
       "phone": "9876543210",
       "email": "test@example.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:14:03.916Z",
       "updatedAt": "2026-09-03T22:14:03.916Z"
     },
@@ -419,6 +709,7 @@
       "phone": "12345567890",
       "email": "ahmedkhananas57@gmail.com",
       "patientType": "Standard",
+      "status": "ACTIVE",
       "createdAt": "2026-09-03T22:01:23.665Z",
       "updatedAt": "2026-09-03T22:01:23.665Z"
     },
@@ -552,9 +843,341 @@
       "patientType": "Standard",
       "createdAt": "2026-08-31T18:08:37.951Z",
       "updatedAt": "2026-08-31T18:08:37.951Z"
+    },
+    {
+      "id": "pt_1788549658763_7boi",
+      "registrationTokenNumber": "HE-658763",
+      "name": "Admin Test Patient",
+      "phone": "9849099999",
+      "email": "admin_test_patient@holisticedge.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-04T19:20:58.763Z",
+      "updatedAt": "2026-09-04T19:20:58.763Z"
+    },
+    {
+      "id": "pt_1788549702283_27ls",
+      "registrationTokenNumber": "HE-702283",
+      "name": "Admin Test Patient",
+      "phone": "9849099999",
+      "email": "admin_test_patient@holisticedge.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-04T19:21:42.283Z",
+      "updatedAt": "2026-09-04T19:21:42.283Z"
+    },
+    {
+      "id": "pt_1788549738295_890y",
+      "registrationTokenNumber": "HE-738295",
+      "name": "Admin Test Patient",
+      "phone": "9849099999",
+      "email": "admin_test_patient@holisticedge.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-04T19:22:18.295Z",
+      "updatedAt": "2026-09-04T19:22:18.295Z"
+    },
+    {
+      "id": "pt_1788550085627_5gvb",
+      "registrationTokenNumber": "HE-085627",
+      "name": "Admin Test Patient",
+      "phone": "9849099999",
+      "email": "admin_test_patient@holisticedge.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-04T19:28:05.627Z",
+      "updatedAt": "2026-09-04T19:28:05.627Z"
+    },
+    {
+      "id": "pt_1788593786268_1bsy",
+      "registrationTokenNumber": "HE-786268",
+      "name": "Admin Handover Test Patient",
+      "phone": "9849088888",
+      "email": "admin_handover@holisticedge.in",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-05T07:36:26.268Z",
+      "updatedAt": "2026-09-05T07:36:26.268Z"
+    },
+    {
+      "id": "pt_1788743982099_taii9",
+      "registrationTokenNumber": "HE-786269",
+      "name": "Lubna affan",
+      "phone": "7799362786",
+      "email": "affanalialiaffan4@email.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-07T01:19:42.099Z",
+      "updatedAt": "2026-09-07T01:19:42.099Z"
+    },
+    {
+      "id": "pt_1788861456710_wlj6",
+      "registrationTokenNumber": "HE-456710",
+      "name": "Admin Handover Test Patient",
+      "phone": "9849088888",
+      "email": "admin_handover@holisticedge.in",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-08T09:57:36.710Z",
+      "updatedAt": "2026-09-08T09:57:36.710Z"
+    },
+    {
+      "id": "pt_1788861578810_uk4bf",
+      "registrationTokenNumber": "HE-786270",
+      "name": "Handover Test User 4",
+      "phone": "9849000004",
+      "email": "abubakarahmedkhan26@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-08T09:59:38.810Z",
+      "updatedAt": "2026-09-08T09:59:38.811Z"
+    },
+    {
+      "id": "pt_1788866542146_dsc8o",
+      "registrationTokenNumber": "HE-786271",
+      "name": "siddiq",
+      "phone": "8732657890",
+      "email": "syedsiddiqm@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-08T11:22:22.146Z",
+      "updatedAt": "2026-09-08T11:22:22.146Z"
+    },
+    {
+      "id": "pt_1788871881329_be021",
+      "registrationTokenNumber": "HE-786272",
+      "name": "ayman khan",
+      "phone": "9705962801",
+      "email": "mraymankhan12345@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-08T12:51:21.329Z",
+      "updatedAt": "2026-09-08T12:51:21.329Z"
+    },
+    {
+      "id": "pt_1788973451458_u3ubz",
+      "registrationTokenNumber": "HE-786273",
+      "name": "Hajera",
+      "phone": "8499968615",
+      "email": "aliyamalik7310@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-09T17:04:11.458Z",
+      "updatedAt": "2026-09-09T17:04:11.458Z"
+    },
+    {
+      "id": "pt_1789287005417_97jzv",
+      "registrationTokenNumber": "HE-786275",
+      "name": "Md Sufiyan Ahmad",
+      "phone": "9392292053",
+      "email": "opsufiyan5@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-13T08:10:05.417Z",
+      "updatedAt": "2026-09-13T08:10:05.417Z"
+    },
+    {
+      "id": "pt_1789559886033_vslr2",
+      "registrationTokenNumber": "HE-963001",
+      "name": "khan",
+      "phone": "9873782361",
+      "email": "anasahmedkhan845@gmail.om",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-16T11:58:06.033Z",
+      "updatedAt": "2026-09-16T11:58:06.033Z"
+    },
+    {
+      "id": "pt_1789567055317_yruaf",
+      "registrationTokenNumber": "HE-963002",
+      "name": "Rahman",
+      "phone": "7416737619",
+      "email": "hameedar283@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-16T13:57:35.317Z",
+      "updatedAt": "2026-09-16T13:57:35.317Z"
+    },
+    {
+      "id": "pt_1789574273342_u7x6x",
+      "registrationTokenNumber": "HE-963003",
+      "name": "Sarfaraz",
+      "phone": "971559600232",
+      "email": "sarfarazmohd78@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-16T15:57:53.342Z",
+      "updatedAt": "2026-09-16T15:57:53.342Z"
+    },
+    {
+      "id": "pt_1789637683371_0d7b3",
+      "registrationTokenNumber": "HE-963004",
+      "name": "Mohammed Razzaq",
+      "phone": "7330555617",
+      "email": "mohammedrazzaq609@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-17T09:34:43.371Z",
+      "updatedAt": "2026-09-17T09:34:43.371Z"
+    },
+    {
+      "id": "pt_1789725685570_9s76a",
+      "registrationTokenNumber": "HE-963005",
+      "name": "Samad",
+      "phone": "9100913634",
+      "email": "samad00232@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-18T10:01:25.570Z",
+      "updatedAt": "2026-09-18T10:01:25.570Z"
+    },
+    {
+      "id": "pt_1790237375679_3fcmh",
+      "registrationTokenNumber": "HE-999978",
+      "name": "Ahmed ali",
+      "phone": "9160077851",
+      "email": "rahamath129@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-24T08:09:35.679Z",
+      "updatedAt": "2026-09-24T08:09:35.679Z"
+    },
+    {
+      "id": "pt_1790503626053_hzuxz",
+      "registrationTokenNumber": "HE-999979",
+      "name": "Resilient Patient",
+      "phone": "7893769903",
+      "email": "",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T10:07:06.053Z",
+      "updatedAt": "2026-09-27T10:07:06.053Z"
+    },
+    {
+      "id": "pt_1790508087966_2ff06",
+      "registrationTokenNumber": "HE-999980",
+      "name": "Test User",
+      "phone": "917893769903",
+      "email": "testuser.holisticedge@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T11:21:27.966Z",
+      "updatedAt": "2026-09-27T11:21:27.966Z"
+    },
+    {
+      "id": "pt_1790513021942_9ixbb",
+      "registrationTokenNumber": "HE-999992",
+      "name": "Unique New Patient",
+      "phone": "9888877777",
+      "email": "unique.new.patient@holisticedge.in",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T12:43:41.942Z",
+      "updatedAt": "2026-09-27T12:43:41.943Z"
+    },
+    {
+      "id": "pt_1790513215441_vga9t",
+      "registrationTokenNumber": "HE-999993",
+      "name": "Exceeding Patient",
+      "phone": "9777766666",
+      "email": "exceeding@holisticedge.in",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T12:46:55.441Z",
+      "updatedAt": "2026-09-27T12:46:55.441Z"
+    },
+    {
+      "id": "pt_1790513297093_1izy8",
+      "registrationTokenNumber": "HE-999994",
+      "name": "Fifth Patient",
+      "phone": "9666655555",
+      "email": "fifth@holisticedge.in",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T12:48:17.093Z",
+      "updatedAt": "2026-09-27T12:48:17.093Z"
+    },
+    {
+      "id": "pt_1790514245454_7afgy",
+      "registrationTokenNumber": "HE-999995",
+      "name": "Resilient Patient",
+      "phone": "7893700012",
+      "email": "",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T13:04:05.454Z",
+      "updatedAt": "2026-09-27T13:04:05.454Z"
+    },
+    {
+      "id": "pt_1790540150084_n2kw1",
+      "registrationTokenNumber": "HE-999996",
+      "name": "ahmed",
+      "phone": "7995471457",
+      "email": "ah@gmail.com",
+      "patientType": "Standard",
+      "status": "ACTIVE",
+      "createdAt": "2026-09-27T20:15:50.084Z",
+      "updatedAt": "2026-09-27T20:15:50.084Z"
     }
   ],
   "appointments": [
+    {
+      "id": "apt_1790582420954_uqqmm",
+      "patientId": "pt_1790514245454_7afgy",
+      "registrationTokenNumber": "HE-999995",
+      "patientName": "Resilient Patient",
+      "patientPhone": "7893700012",
+      "patientEmail": "",
+      "date": "2027-01-16",
+      "time": "4:30 PM",
+      "slotId": "slot_1790582416168_cq7t",
+      "service": "Chiropractic Consultation",
+      "status": "CONFIRMED",
+      "source": "WEBSITE_PUBLIC",
+      "notes": "",
+      "idempotencyKey": null,
+      "emailStatus": "PENDING",
+      "createdAt": "2026-09-28T08:00:20.954Z",
+      "updatedAt": "2026-09-28T08:00:20.954Z"
+    },
+    {
+      "id": "apt_1790582319288_y6swn",
+      "patientId": "pt_1790514245454_7afgy",
+      "registrationTokenNumber": "HE-999995",
+      "patientName": "Resilient Patient",
+      "patientPhone": "7893700012",
+      "patientEmail": "",
+      "date": "2027-01-25",
+      "time": "3:30 PM",
+      "slotId": "slot_1790582316840_vden",
+      "service": "Chiropractic Consultation",
+      "status": "CONFIRMED",
+      "source": "WEBSITE_PUBLIC",
+      "notes": "",
+      "idempotencyKey": null,
+      "emailStatus": "PENDING",
+      "createdAt": "2026-09-28T07:58:39.288Z",
+      "updatedAt": "2026-09-28T07:58:39.288Z"
+    },
+    {
+      "id": "apt_1790581492213_g1hos",
+      "patientId": "pt_1790514245454_7afgy",
+      "registrationTokenNumber": "HE-999995",
+      "patientName": "Resilient Patient",
+      "patientPhone": "7893700012",
+      "patientEmail": "",
+      "date": "2027-01-05",
+      "time": "3:30 PM",
+      "slotId": "slot_1790581489686_ps0v",
+      "service": "Chiropractic Consultation",
+      "status": "CONFIRMED",
+      "source": "WEBSITE_PUBLIC",
+      "notes": "",
+      "idempotencyKey": null,
+      "emailStatus": "PENDING",
+      "createdAt": "2026-09-28T07:44:52.214Z",
+      "updatedAt": "2026-09-28T07:44:52.214Z"
+    },
     {
       "id": "apt_1790538153506_3icau",
       "patientId": "pt_1790514245454_7afgy",
@@ -3757,6 +4380,159 @@
     }
   ],
   "reminders": [
+    {
+      "id": "rem_1790582423490_tgpus",
+      "patientId": "pt_patient_followup_1790582423425",
+      "registrationTokenNumber": "HE-889576",
+      "patientName": "Test User",
+      "patientEmail": "testuser.holisticedge@gmail.com",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-10-05",
+      "scheduledTime": "11:30 AM",
+      "notes": "Routine checkup follow-up",
+      "status": "SCHEDULED",
+      "createdAt": "2026-09-28T08:00:23.491Z",
+      "updatedAt": "2026-09-28T08:00:24.506Z",
+      "messageStatus": "SENT",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T08:00:24.483Z",
+      "providerMessageId": "wati_patient_followup_1790582424432",
+      "failureReason": null
+    },
+    {
+      "id": "rem_test_fail_1790582422760",
+      "patientId": "pt_test_002",
+      "patientName": "Fail Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "11:00 AM",
+      "status": "DUE",
+      "messageStatus": "FAILED",
+      "notes": "Check lumbar alignment",
+      "createdAt": "2026-09-28T08:00:22.760Z",
+      "failedAt": "2026-09-28T08:00:23.322Z",
+      "failureReason": "Simulated WATI dispatch failure",
+      "updatedAt": "2026-09-28T08:00:23.341Z"
+    },
+    {
+      "id": "rem_test_due_1790582421790",
+      "patientId": "pt_test_001",
+      "patientName": "Due Followup Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "10:30 AM",
+      "status": "DUE",
+      "messageStatus": "SENT",
+      "notes": "Check cervical mobility",
+      "createdAt": "2026-09-28T08:00:21.790Z",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T08:00:22.688Z",
+      "providerMessageId": "wati_fu_succ_1790582422667",
+      "failureReason": null,
+      "updatedAt": "2026-09-28T08:00:22.709Z"
+    },
+    {
+      "id": "rem_1790582321420_tju0v",
+      "patientId": "pt_patient_followup_1790582321404",
+      "registrationTokenNumber": "HE-800655",
+      "patientName": "Test User",
+      "patientEmail": "testuser.holisticedge@gmail.com",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-10-05",
+      "scheduledTime": "11:30 AM",
+      "notes": "Routine checkup follow-up",
+      "status": "SCHEDULED",
+      "createdAt": "2026-09-28T07:58:41.420Z",
+      "updatedAt": "2026-09-28T07:58:42.826Z",
+      "messageStatus": "SENT",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T07:58:42.804Z",
+      "providerMessageId": "wati_patient_followup_1790582322796",
+      "failureReason": null
+    },
+    {
+      "id": "rem_test_fail_1790582320786",
+      "patientId": "pt_test_002",
+      "patientName": "Fail Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "11:00 AM",
+      "status": "DUE",
+      "messageStatus": "FAILED",
+      "notes": "Check lumbar alignment",
+      "createdAt": "2026-09-28T07:58:40.786Z",
+      "failedAt": "2026-09-28T07:58:41.375Z",
+      "failureReason": "Simulated WATI dispatch failure",
+      "updatedAt": "2026-09-28T07:58:41.383Z"
+    },
+    {
+      "id": "rem_test_due_1790582319928",
+      "patientId": "pt_test_001",
+      "patientName": "Due Followup Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "10:30 AM",
+      "status": "DUE",
+      "messageStatus": "SENT",
+      "notes": "Check cervical mobility",
+      "createdAt": "2026-09-28T07:58:39.928Z",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T07:58:40.761Z",
+      "providerMessageId": "wati_fu_succ_1790582320753",
+      "failureReason": null,
+      "updatedAt": "2026-09-28T07:58:40.768Z"
+    },
+    {
+      "id": "rem_1790581495888_wnnw1",
+      "patientId": "pt_patient_followup_1790581495873",
+      "registrationTokenNumber": "HE-825605",
+      "patientName": "Test User",
+      "patientEmail": "testuser.holisticedge@gmail.com",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-10-05",
+      "scheduledTime": "11:30 AM",
+      "notes": "Routine checkup follow-up",
+      "status": "SCHEDULED",
+      "createdAt": "2026-09-28T07:44:55.889Z",
+      "updatedAt": "2026-09-28T07:44:56.814Z",
+      "messageStatus": "SENT",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T07:44:56.802Z",
+      "providerMessageId": "wati_patient_followup_1790581496789",
+      "failureReason": null
+    },
+    {
+      "id": "rem_test_fail_1790581493754",
+      "patientId": "pt_test_002",
+      "patientName": "Fail Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "11:00 AM",
+      "status": "DUE",
+      "messageStatus": "FAILED",
+      "notes": "Check lumbar alignment",
+      "createdAt": "2026-09-28T07:44:53.754Z",
+      "failedAt": "2026-09-28T07:44:55.844Z",
+      "failureReason": "Simulated WATI dispatch failure",
+      "updatedAt": "2026-09-28T07:44:55.854Z"
+    },
+    {
+      "id": "rem_test_due_1790581492842",
+      "patientId": "pt_test_001",
+      "patientName": "Due Followup Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "10:30 AM",
+      "status": "DUE",
+      "messageStatus": "SENT",
+      "notes": "Check cervical mobility",
+      "createdAt": "2026-09-28T07:44:52.843Z",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T07:44:53.716Z",
+      "providerMessageId": "wati_fu_succ_1790581493704",
+      "failureReason": null,
+      "updatedAt": "2026-09-28T07:44:53.727Z"
+    },
     {
       "id": "rem_1790538154873_epeo5",
       "patientId": "pt_patient_followup_1790538154859",
@@ -8840,6 +9616,36 @@
   ],
   "bookingSlots": [
     {
+      "id": "slot_1790582416168_cq7t",
+      "date": "2027-01-16",
+      "time": "4:30 PM",
+      "capacity": 5,
+      "booked": 2,
+      "status": "AVAILABLE",
+      "createdAt": "2026-09-28T08:00:16.169Z",
+      "updatedAt": "2026-09-28T08:00:21.689Z"
+    },
+    {
+      "id": "slot_1790582316840_vden",
+      "date": "2027-01-25",
+      "time": "3:30 PM",
+      "capacity": 5,
+      "booked": 3,
+      "status": "AVAILABLE",
+      "createdAt": "2026-09-28T07:58:36.840Z",
+      "updatedAt": "2026-09-28T07:58:39.886Z"
+    },
+    {
+      "id": "slot_1790581489686_ps0v",
+      "date": "2027-01-05",
+      "time": "3:30 PM",
+      "capacity": 5,
+      "booked": 2,
+      "status": "AVAILABLE",
+      "createdAt": "2026-09-28T07:44:49.686Z",
+      "updatedAt": "2026-09-28T07:44:52.782Z"
+    },
+    {
       "id": "slot_1790538152325_o6m1",
       "date": "2027-01-13",
       "time": "1:30 PM",
@@ -9422,6 +10228,30 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif_1790582421711",
+      "title": "New Online Appointment Automatically Confirmed",
+      "message": "Resilient Patient (HE-999995) booked for 2027-01-16 at 4:30 PM",
+      "type": "appointment",
+      "status": "unread",
+      "createdAt": "2026-09-28T08:00:21.711Z"
+    },
+    {
+      "id": "notif_1790582319894",
+      "title": "New Online Appointment Automatically Confirmed",
+      "message": "Resilient Patient (HE-999995) booked for 2027-01-25 at 3:30 PM",
+      "type": "appointment",
+      "status": "unread",
+      "createdAt": "2026-09-28T07:58:39.894Z"
+    },
+    {
+      "id": "notif_1790581492792",
+      "title": "New Online Appointment Automatically Confirmed",
+      "message": "Resilient Patient (HE-999995) booked for 2027-01-05 at 3:30 PM",
+      "type": "appointment",
+      "status": "unread",
+      "createdAt": "2026-09-28T07:44:52.792Z"
+    },
     {
       "id": "notif_1790538153911",
       "title": "New Online Appointment Automatically Confirmed",
@@ -11640,6 +12470,282 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit_1790582424540",
+      "actor": "Admin",
+      "action": "sent_patient_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_1790582423490_tgpus",
+      "description": "Dispatched follow-up WhatsApp to Test User (917893769903) via WATI [ID: wati_patient_followup_1790582424432]",
+      "timestamp": "2026-09-28T08:00:24.541Z"
+    },
+    {
+      "id": "audit_1790582424404",
+      "actor": "Staff",
+      "actorId": "system",
+      "action": "schedule_reminder",
+      "entity": "reminder",
+      "entityId": "rem_1790582423490_tgpus",
+      "description": "Scheduled follow-up reminder for Test User (HE-889576) on 2026-10-05",
+      "timestamp": "2026-09-28T08:00:24.404Z"
+    },
+    {
+      "id": "audit_1790582423360",
+      "actor": "Admin",
+      "action": "followup_whatsapp_failed",
+      "entity": "reminder",
+      "entityId": "rem_test_fail_1790582422760",
+      "description": "Follow-up WhatsApp to Fail Patient (917893769903) failed: Simulated WATI dispatch failure",
+      "timestamp": "2026-09-28T08:00:23.360Z"
+    },
+    {
+      "id": "audit_1790582422730",
+      "actor": "Admin",
+      "action": "sent_followup_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_test_due_1790582421790",
+      "description": "Dispatched follow-up WhatsApp to Due Followup Patient (917893769903) via WATI [ID: wati_fu_succ_1790582422667]",
+      "timestamp": "2026-09-28T08:00:22.730Z"
+    },
+    {
+      "id": "audit_1790582421733",
+      "actor": "SYSTEM / PUBLIC_BOOKING",
+      "actorId": "pt_1790514245454_7afgy",
+      "action": "APPOINTMENT_AUTO_CONFIRMED",
+      "entity": "appointment",
+      "entityId": "apt_1790582420954_uqqmm",
+      "description": "Automatic confirmation after successful public booking for Resilient Patient (HE-999995) on 2027-01-16 4:30 PM",
+      "timestamp": "2026-09-28T08:00:21.733Z"
+    },
+    {
+      "id": "audit_wa_1790582416116_wukh",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_idem_1790582416081",
+      "description": "WATI WhatsApp message wati_wh_idem_1790582416081 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T08:00:16.116Z"
+    },
+    {
+      "id": "audit_wa_1790582416021_gbg6",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_failed",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_fail_1790582415987",
+      "description": "WATI WhatsApp message wati_wh_fail_1790582415987 (N/A): FAILED [Error: User phone number is inactive or not on WhatsApp]",
+      "timestamp": "2026-09-28T08:00:16.020Z"
+    },
+    {
+      "id": "audit_wa_1790582415929_g18f",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_read",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_read_1790582415883",
+      "description": "WATI WhatsApp message wati_wh_read_1790582415883 (N/A): READ",
+      "timestamp": "2026-09-28T08:00:15.000Z"
+    },
+    {
+      "id": "audit_wa_1790582415841_3b1l",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_del_1790582415786",
+      "description": "WATI WhatsApp message wati_wh_del_1790582415786 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T08:00:15.000Z"
+    },
+    {
+      "id": "audit_wa_1790582415700_3otf",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_sent",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_sent_1790582415056",
+      "description": "WATI WhatsApp message wati_wh_sent_1790582415056 (N/A): SENT",
+      "timestamp": "2026-09-28T08:00:15.000Z"
+    },
+    {
+      "id": "audit_1790582322835",
+      "actor": "Admin",
+      "action": "sent_patient_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_1790582321420_tju0v",
+      "description": "Dispatched follow-up WhatsApp to Test User (917893769903) via WATI [ID: wati_patient_followup_1790582322796]",
+      "timestamp": "2026-09-28T07:58:42.835Z"
+    },
+    {
+      "id": "audit_1790582322786",
+      "actor": "Staff",
+      "actorId": "system",
+      "action": "schedule_reminder",
+      "entity": "reminder",
+      "entityId": "rem_1790582321420_tju0v",
+      "description": "Scheduled follow-up reminder for Test User (HE-800655) on 2026-10-05",
+      "timestamp": "2026-09-28T07:58:42.786Z"
+    },
+    {
+      "id": "audit_1790582321390",
+      "actor": "Admin",
+      "action": "followup_whatsapp_failed",
+      "entity": "reminder",
+      "entityId": "rem_test_fail_1790582320786",
+      "description": "Follow-up WhatsApp to Fail Patient (917893769903) failed: Simulated WATI dispatch failure",
+      "timestamp": "2026-09-28T07:58:41.390Z"
+    },
+    {
+      "id": "audit_1790582320776",
+      "actor": "Admin",
+      "action": "sent_followup_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_test_due_1790582319928",
+      "description": "Dispatched follow-up WhatsApp to Due Followup Patient (917893769903) via WATI [ID: wati_fu_succ_1790582320753]",
+      "timestamp": "2026-09-28T07:58:40.776Z"
+    },
+    {
+      "id": "audit_1790582319903",
+      "actor": "SYSTEM / PUBLIC_BOOKING",
+      "actorId": "pt_1790514245454_7afgy",
+      "action": "APPOINTMENT_AUTO_CONFIRMED",
+      "entity": "appointment",
+      "entityId": "apt_1790582319288_y6swn",
+      "description": "Automatic confirmation after successful public booking for Resilient Patient (HE-999995) on 2027-01-25 3:30 PM",
+      "timestamp": "2026-09-28T07:58:39.903Z"
+    },
+    {
+      "id": "audit_wa_1790582316817_d63m",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_idem_1790582316797",
+      "description": "WATI WhatsApp message wati_wh_idem_1790582316797 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T07:58:36.817Z"
+    },
+    {
+      "id": "audit_wa_1790582316769_ocdm",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_failed",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_fail_1790582316747",
+      "description": "WATI WhatsApp message wati_wh_fail_1790582316747 (N/A): FAILED [Error: User phone number is inactive or not on WhatsApp]",
+      "timestamp": "2026-09-28T07:58:36.769Z"
+    },
+    {
+      "id": "audit_wa_1790582316719_bdev",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_read",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_read_1790582316692",
+      "description": "WATI WhatsApp message wati_wh_read_1790582316692 (N/A): READ",
+      "timestamp": "2026-09-28T07:58:36.000Z"
+    },
+    {
+      "id": "audit_wa_1790582316667_mh66",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_del_1790582316636",
+      "description": "WATI WhatsApp message wati_wh_del_1790582316636 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T07:58:36.000Z"
+    },
+    {
+      "id": "audit_wa_1790582316596_6yqq",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_sent",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_sent_1790582316430",
+      "description": "WATI WhatsApp message wati_wh_sent_1790582316430 (N/A): SENT",
+      "timestamp": "2026-09-28T07:58:36.000Z"
+    },
+    {
+      "id": "audit_1790581496820",
+      "actor": "Admin",
+      "action": "sent_patient_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_1790581495888_wnnw1",
+      "description": "Dispatched follow-up WhatsApp to Test User (917893769903) via WATI [ID: wati_patient_followup_1790581496789]",
+      "timestamp": "2026-09-28T07:44:56.820Z"
+    },
+    {
+      "id": "audit_1790581496778",
+      "actor": "Staff",
+      "actorId": "system",
+      "action": "schedule_reminder",
+      "entity": "reminder",
+      "entityId": "rem_1790581495888_wnnw1",
+      "description": "Scheduled follow-up reminder for Test User (HE-825605) on 2026-10-05",
+      "timestamp": "2026-09-28T07:44:56.778Z"
+    },
+    {
+      "id": "audit_1790581495862",
+      "actor": "Admin",
+      "action": "followup_whatsapp_failed",
+      "entity": "reminder",
+      "entityId": "rem_test_fail_1790581493754",
+      "description": "Follow-up WhatsApp to Fail Patient (917893769903) failed: Simulated WATI dispatch failure",
+      "timestamp": "2026-09-28T07:44:55.862Z"
+    },
+    {
+      "id": "audit_1790581493739",
+      "actor": "Admin",
+      "action": "sent_followup_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_test_due_1790581492842",
+      "description": "Dispatched follow-up WhatsApp to Due Followup Patient (917893769903) via WATI [ID: wati_fu_succ_1790581493704]",
+      "timestamp": "2026-09-28T07:44:53.739Z"
+    },
+    {
+      "id": "audit_1790581492807",
+      "actor": "SYSTEM / PUBLIC_BOOKING",
+      "actorId": "pt_1790514245454_7afgy",
+      "action": "APPOINTMENT_AUTO_CONFIRMED",
+      "entity": "appointment",
+      "entityId": "apt_1790581492213_g1hos",
+      "description": "Automatic confirmation after successful public booking for Resilient Patient (HE-999995) on 2027-01-05 3:30 PM",
+      "timestamp": "2026-09-28T07:44:52.807Z"
+    },
+    {
+      "id": "audit_wa_1790581489664_xye6",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_idem_1790581489650",
+      "description": "WATI WhatsApp message wati_wh_idem_1790581489650 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T07:44:49.664Z"
+    },
+    {
+      "id": "audit_wa_1790581489627_be4p",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_failed",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_fail_1790581489612",
+      "description": "WATI WhatsApp message wati_wh_fail_1790581489612 (N/A): FAILED [Error: User phone number is inactive or not on WhatsApp]",
+      "timestamp": "2026-09-28T07:44:49.627Z"
+    },
+    {
+      "id": "audit_wa_1790581489591_2kip",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_read",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_read_1790581489575",
+      "description": "WATI WhatsApp message wati_wh_read_1790581489575 (N/A): READ",
+      "timestamp": "2026-09-28T07:44:49.000Z"
+    },
+    {
+      "id": "audit_wa_1790581489557_zmp7",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_del_1790581489542",
+      "description": "WATI WhatsApp message wati_wh_del_1790581489542 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T07:44:49.000Z"
+    },
+    {
+      "id": "audit_wa_1790581489514_td7w",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_sent",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_sent_1790581489333",
+      "description": "WATI WhatsApp message wati_wh_sent_1790581489333 (N/A): SENT",
+      "timestamp": "2026-09-28T07:44:49.000Z"
+    },
     {
       "id": "audit_1790538155365",
       "actor": "Admin",
@@ -15602,9 +16708,532 @@
       "timestamp": "2026-08-31T18:08:11.263Z"
     }
   ],
-  "counters": [],
+  "counters": [
+    {
+      "id": "cnt_PATIENT_REGISTRATION_TOKEN",
+      "key": "PATIENT_REGISTRATION_TOKEN",
+      "seq": 1000027,
+      "lockOwnerId": "",
+      "lockTimestamp": 0,
+      "version": 94,
+      "updatedAt": "2026-09-28T07:57:45.989Z"
+    }
+  ],
   "emailTemplates": [],
   "notificationLogs": [
+    {
+      "id": "notif_log_1790582424433_qg79y",
+      "patientId": "pt_patient_followup_1790582423425",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_patient_followup_1790582424432",
+      "createdAt": "2026-09-28T08:00:24.432Z",
+      "sentAt": "2026-09-28T08:00:24.433Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_1790582423490_tgpus",
+        "scheduledDate": "2026-10-05",
+        "scheduledTime": "11:30 AM",
+        "notes": "Routine checkup follow-up",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582423304_akdkd",
+      "patientId": "pt_test_002",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T08:00:23.304Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI dispatch failure",
+      "metadata": {
+        "reminderId": "rem_test_fail_1790582422760",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "11:00 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582422667_f0zg4",
+      "patientId": "pt_test_001",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_fu_succ_1790582422667",
+      "createdAt": "2026-09-28T08:00:22.667Z",
+      "sentAt": "2026-09-28T08:00:22.667Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_test_due_1790582421790",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "10:30 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582421754_p46h9",
+      "patientId": "pt_1790514245454_7afgy",
+      "phone": "7893700012",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T08:00:21.754Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI Gateway 503 Service Unavailable",
+      "metadata": {
+        "appointmentId": "apt_1790582420954_uqqmm",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "log_wati_wh_idem_1790582416081",
+      "providerMessageId": "wati_wh_idem_1790582416081",
+      "status": "READ",
+      "readAt": "2026-09-28T08:00:16.081Z",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T08:00:16.081Z"
+    },
+    {
+      "id": "log_wati_wh_fail_1790582415987",
+      "providerMessageId": "wati_wh_fail_1790582415987",
+      "status": "FAILED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T08:00:15.987Z",
+      "updatedAt": "2026-09-28T08:00:16.049Z",
+      "error": "User phone number is inactive or not on WhatsApp"
+    },
+    {
+      "id": "log_wati_wh_read_1790582415883",
+      "providerMessageId": "wati_wh_read_1790582415883",
+      "status": "READ",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T08:00:15.883Z",
+      "updatedAt": "2026-09-28T08:00:15.953Z",
+      "readAt": "2026-09-28T08:00:15.000Z",
+      "deliveredAt": "2026-09-28T08:00:15.000Z"
+    },
+    {
+      "id": "log_wati_wh_del_1790582415786",
+      "providerMessageId": "wati_wh_del_1790582415786",
+      "status": "DELIVERED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T08:00:15.786Z",
+      "updatedAt": "2026-09-28T08:00:15.857Z",
+      "deliveredAt": "2026-09-28T08:00:15.000Z"
+    },
+    {
+      "id": "log_wati_wh_sent_1790582415056",
+      "providerMessageId": "wati_wh_sent_1790582415056",
+      "status": "SENT",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T08:00:15.056Z",
+      "updatedAt": "2026-09-28T08:00:15.729Z",
+      "sentAt": "2026-09-28T08:00:15.000Z"
+    },
+    {
+      "id": "notif_log_1790582415005_rbr3v",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_dup_1790582415005",
+      "createdAt": "2026-09-28T08:00:15.005Z",
+      "sentAt": "2026-09-28T08:00:15.005Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_dup_1790582415004",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582414934_p065j",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_msg_save_test_999",
+      "createdAt": "2026-09-28T08:00:14.933Z",
+      "sentAt": "2026-09-28T08:00:14.933Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_1790582414930",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582322796_kvfj1",
+      "patientId": "pt_patient_followup_1790582321404",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_patient_followup_1790582322796",
+      "createdAt": "2026-09-28T07:58:42.796Z",
+      "sentAt": "2026-09-28T07:58:42.796Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_1790582321420_tju0v",
+        "scheduledDate": "2026-10-05",
+        "scheduledTime": "11:30 AM",
+        "notes": "Routine checkup follow-up",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582321367_y1l0j",
+      "patientId": "pt_test_002",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T07:58:41.367Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI dispatch failure",
+      "metadata": {
+        "reminderId": "rem_test_fail_1790582320786",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "11:00 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582320753_7lmpg",
+      "patientId": "pt_test_001",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_fu_succ_1790582320753",
+      "createdAt": "2026-09-28T07:58:40.753Z",
+      "sentAt": "2026-09-28T07:58:40.753Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_test_due_1790582319928",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "10:30 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582319912_s2xjk",
+      "patientId": "pt_1790514245454_7afgy",
+      "phone": "7893700012",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T07:58:39.912Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI Gateway 503 Service Unavailable",
+      "metadata": {
+        "appointmentId": "apt_1790582319288_y6swn",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "log_wati_wh_idem_1790582316797",
+      "providerMessageId": "wati_wh_idem_1790582316797",
+      "status": "READ",
+      "readAt": "2026-09-28T07:58:36.797Z",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:58:36.797Z"
+    },
+    {
+      "id": "log_wati_wh_fail_1790582316747",
+      "providerMessageId": "wati_wh_fail_1790582316747",
+      "status": "FAILED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:58:36.747Z",
+      "updatedAt": "2026-09-28T07:58:36.781Z",
+      "error": "User phone number is inactive or not on WhatsApp"
+    },
+    {
+      "id": "log_wati_wh_read_1790582316692",
+      "providerMessageId": "wati_wh_read_1790582316692",
+      "status": "READ",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:58:36.692Z",
+      "updatedAt": "2026-09-28T07:58:36.730Z",
+      "readAt": "2026-09-28T07:58:36.000Z",
+      "deliveredAt": "2026-09-28T07:58:36.000Z"
+    },
+    {
+      "id": "log_wati_wh_del_1790582316636",
+      "providerMessageId": "wati_wh_del_1790582316636",
+      "status": "DELIVERED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:58:36.636Z",
+      "updatedAt": "2026-09-28T07:58:36.677Z",
+      "deliveredAt": "2026-09-28T07:58:36.000Z"
+    },
+    {
+      "id": "log_wati_wh_sent_1790582316430",
+      "providerMessageId": "wati_wh_sent_1790582316430",
+      "status": "SENT",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:58:36.430Z",
+      "updatedAt": "2026-09-28T07:58:36.611Z",
+      "sentAt": "2026-09-28T07:58:36.000Z"
+    },
+    {
+      "id": "notif_log_1790582316411_52uik",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_dup_1790582316411",
+      "createdAt": "2026-09-28T07:58:36.411Z",
+      "sentAt": "2026-09-28T07:58:36.411Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_dup_1790582316411",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "notif_log_1790582316389_8k0dc",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_msg_save_test_999",
+      "createdAt": "2026-09-28T07:58:36.389Z",
+      "sentAt": "2026-09-28T07:58:36.389Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_1790582316387",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "notif_log_1790581496789_3fscw",
+      "patientId": "pt_patient_followup_1790581495873",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_patient_followup_1790581496789",
+      "createdAt": "2026-09-28T07:44:56.789Z",
+      "sentAt": "2026-09-28T07:44:56.789Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_1790581495888_wnnw1",
+        "scheduledDate": "2026-10-05",
+        "scheduledTime": "11:30 AM",
+        "notes": "Routine checkup follow-up",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790581495833_ep4an",
+      "patientId": "pt_test_002",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T07:44:55.833Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI dispatch failure",
+      "metadata": {
+        "reminderId": "rem_test_fail_1790581493754",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "11:00 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790581493704_sov62",
+      "patientId": "pt_test_001",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_fu_succ_1790581493704",
+      "createdAt": "2026-09-28T07:44:53.704Z",
+      "sentAt": "2026-09-28T07:44:53.704Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_test_due_1790581492842",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "10:30 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790581492823_tnli7",
+      "patientId": "pt_1790514245454_7afgy",
+      "phone": "7893700012",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T07:44:52.823Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI Gateway 503 Service Unavailable",
+      "metadata": {
+        "appointmentId": "apt_1790581492213_g1hos",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "log_wati_wh_idem_1790581489650",
+      "providerMessageId": "wati_wh_idem_1790581489650",
+      "status": "READ",
+      "readAt": "2026-09-28T07:44:49.650Z",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:44:49.650Z"
+    },
+    {
+      "id": "log_wati_wh_fail_1790581489612",
+      "providerMessageId": "wati_wh_fail_1790581489612",
+      "status": "FAILED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:44:49.612Z",
+      "updatedAt": "2026-09-28T07:44:49.637Z",
+      "error": "User phone number is inactive or not on WhatsApp"
+    },
+    {
+      "id": "log_wati_wh_read_1790581489575",
+      "providerMessageId": "wati_wh_read_1790581489575",
+      "status": "READ",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:44:49.575Z",
+      "updatedAt": "2026-09-28T07:44:49.600Z",
+      "readAt": "2026-09-28T07:44:49.000Z",
+      "deliveredAt": "2026-09-28T07:44:49.000Z"
+    },
+    {
+      "id": "log_wati_wh_del_1790581489542",
+      "providerMessageId": "wati_wh_del_1790581489542",
+      "status": "DELIVERED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:44:49.542Z",
+      "updatedAt": "2026-09-28T07:44:49.566Z",
+      "deliveredAt": "2026-09-28T07:44:49.000Z"
+    },
+    {
+      "id": "log_wati_wh_sent_1790581489333",
+      "providerMessageId": "wati_wh_sent_1790581489333",
+      "status": "SENT",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T07:44:49.333Z",
+      "updatedAt": "2026-09-28T07:44:49.521Z",
+      "sentAt": "2026-09-28T07:44:49.000Z"
+    },
+    {
+      "id": "notif_log_1790581489319_y0sjr",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_dup_1790581489319",
+      "createdAt": "2026-09-28T07:44:49.319Z",
+      "sentAt": "2026-09-28T07:44:49.319Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_dup_1790581489319",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "notif_log_1790581489293_h5l7u",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_msg_save_test_999",
+      "createdAt": "2026-09-28T07:44:49.292Z",
+      "sentAt": "2026-09-28T07:44:49.292Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_1790581489290",
+        "reminderId": null
+      }
+    },
     {
       "id": "notif_log_1790538155345_91jee",
       "patientId": "pt_patient_followup_1790538154859",

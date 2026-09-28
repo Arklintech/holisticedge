@@ -46,14 +46,7 @@ router.get('/:id', authenticate, async (req, res) => {
     }
 
     if (!patient) {
-      patient = {
-        id: req.params.id,
-        registrationTokenNumber: 'HE-001281',
-        name: 'Patient Record',
-        phone: '+91 81426 42051',
-        email: 'holisticedges@gmail.com',
-        patientType: 'Existing Patient',
-      };
+      return res.status(404).json({ success: false, error: 'Patient not found' });
     }
 
     let appointments = [];
@@ -83,21 +76,7 @@ router.get('/:id', authenticate, async (req, res) => {
     });
   } catch (err) {
     console.error(`[PatientDetails] Error for ${req.params.id}:`, err.message);
-    const fallbackPatient = db.find('patients', p => p.id === req.params.id) || {
-      id: req.params.id,
-      registrationTokenNumber: 'HE-001281',
-      name: 'Patient Record',
-      phone: '+91 81426 42051',
-      email: 'holisticedges@gmail.com',
-    };
-    return res.json({
-      success: true,
-      patient: fallbackPatient,
-      appointments: [],
-      reminders: [],
-      emailLogs: [],
-      auditLogs: [],
-    });
+    return res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -124,17 +103,7 @@ router.post('/', authenticate, async (req, res) => {
     res.status(201).json({ success: true, ...result });
   } catch (err) {
     console.error('[PatientCreate] Error:', err.message);
-    const newPatient = {
-      id: `patient_${Date.now()}`,
-      registrationTokenNumber: `HE-${Math.floor(100000 + Math.random() * 900000)}`,
-      name: req.body.name || 'New Patient',
-      phone: req.body.phone || '+91 00000 00000',
-      email: req.body.email || '',
-      patientType: req.body.patientType || 'New Patient',
-      createdAt: new Date().toISOString(),
-    };
-    db.push('patients', newPatient);
-    res.status(201).json({ success: true, isNew: true, patient: newPatient });
+    res.status(400).json({ success: false, error: err.message });
   }
 });
 

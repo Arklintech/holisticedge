@@ -29,7 +29,9 @@ export class MockDataProvider extends DataProvider {
   }
 
   async allocateNextRegistrationToken() {
-    return atomicLockAuthority.reserveNextRegistrationToken();
+    const patients = db.get('patients') || [];
+    const knownTokens = patients.map(p => p.registrationTokenNumber).filter(Boolean);
+    return atomicLockAuthority.reserveNextRegistrationToken(undefined, { knownTokens });
   }
 
   getStatus() {
@@ -43,12 +45,16 @@ export class MockDataProvider extends DataProvider {
   }
 
   async searchPatients(query) {
-    if (!query) return db.get('patients');
+    const patients = db.get('patients') || [];
+    if (!query) return patients;
     const q = query.toLowerCase().trim();
-    return db.filter('patients', p =>
+    const cleanDigits = q.replace(/\D/g, '');
+    const isPhoneQuery = /^[+\d\s()-]+$/.test(q) && cleanDigits.length >= 5;
+    return patients.filter(p =>
       (p.registrationTokenNumber && p.registrationTokenNumber.toLowerCase().includes(q)) ||
       (p.name && p.name.toLowerCase().includes(q)) ||
-      (p.phone && p.phone.includes(q)) ||
+      (p.phone && p.phone.toLowerCase().includes(q)) ||
+      (isPhoneQuery && p.phone && p.phone.replace(/\D/g, '').includes(cleanDigits)) ||
       (p.email && p.email.toLowerCase().includes(q))
     );
   }
@@ -60,11 +66,30 @@ export class MockDataProvider extends DataProvider {
   async getPatientByRegistrationToken(token) {
     if (!token) return null;
     const cleanToken = token.trim().toUpperCase();
-    return db.find('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.toUpperCase() === cleanToken);
+    return db.find('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken);
   }
 
   async createPatient(patientData) {
-    return db.insert('patients', patientData);
+    if (!patientData.registrationTokenNumber) {
+      throw new Error('DATA_INTEGRITY_VIOLATION: registrationTokenNumber is strictly required.');
+    }
+    const cleanToken = patientData.registrationTokenNumber.trim().toUpperCase();
+
+    // Pre-insert verification: Ensure no other patient has this token
+    const existing = db.find('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken);
+    if (existing && existing.id !== patientData.id) {
+      throw new Error(`DATA_INTEGRITY_VIOLATION: Token ${cleanToken} already exists for patient ${existing.id} (${existing.name}). Duplicate rejected.`);
+    }
+
+    const inserted = db.insert('patients', patientData);
+
+    // Post-insert verification: Ensure token exists exactly once
+    const count = db.filter('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken).length;
+    if (count !== 1) {
+      throw new Error(`DATA_INTEGRITY_VIOLATION: Token ${cleanToken} exists ${count} times after insertion. Uniqueness invariant violated!`);
+    }
+
+    return inserted;
   }
 
   async updatePatient(id, updateData) {
@@ -313,7 +338,15 @@ export class GoogleSheetsDataProvider extends DataProvider {
       return mock.allocateNextRegistrationToken();
     }
 
-    return atomicLockAuthority.reserveNextRegistrationToken();
+    let knownTokens = [];
+    try {
+      const patients = await this.searchPatients('');
+      knownTokens = patients.map(p => p.registrationTokenNumber).filter(Boolean);
+    } catch (err) {
+      console.warn('[GoogleSheets] Token pre-scan warning:', err.message);
+    }
+
+    return atomicLockAuthority.reserveNextRegistrationToken(undefined, { knownTokens });
   }
 
   async searchPatients(query) {
@@ -341,27 +374,34 @@ export class GoogleSheetsDataProvider extends DataProvider {
         updatedAt: r[8],
       }));
 
+      // Google Sheets is the authoritative source of truth: merge local then overwrite with Google Sheets
       const mergedMap = new Map();
-      patients.forEach(p => mergedMap.set(p.id, p));
       localPatients.forEach(p => mergedMap.set(p.id, p));
+      patients.forEach(p => mergedMap.set(p.id, p));
 
       const merged = Array.from(mergedMap.values());
       if (!query) return merged;
 
       const q = query.toLowerCase().trim();
+      const cleanDigits = q.replace(/\D/g, '');
+      const isPhoneQuery = /^[+\d\s()-]+$/.test(q) && cleanDigits.length >= 5;
       return merged.filter(p =>
         (p.registrationTokenNumber && p.registrationTokenNumber.toLowerCase().includes(q)) ||
         (p.name && p.name.toLowerCase().includes(q)) ||
         (p.phone && p.phone.includes(q)) ||
+        (isPhoneQuery && p.phone && p.phone.replace(/\D/g, '').includes(cleanDigits)) ||
         (p.email && p.email.toLowerCase().includes(q))
       );
     } catch (err) {
       if (!query) return localPatients;
       const q = query.toLowerCase().trim();
+      const cleanDigits = q.replace(/\D/g, '');
+      const isPhoneQuery = /^[+\d\s()-]+$/.test(q) && cleanDigits.length >= 5;
       return localPatients.filter(p =>
         (p.registrationTokenNumber && p.registrationTokenNumber.toLowerCase().includes(q)) ||
         (p.name && p.name.toLowerCase().includes(q)) ||
         (p.phone && p.phone.includes(q)) ||
+        (isPhoneQuery && p.phone && p.phone.replace(/\D/g, '').includes(cleanDigits)) ||
         (p.email && p.email.toLowerCase().includes(q))
       );
     }
@@ -377,13 +417,33 @@ export class GoogleSheetsDataProvider extends DataProvider {
   async getPatientByRegistrationToken(token) {
     if (!token) return null;
     const cleanToken = token.trim().toUpperCase();
-    const local = db.find('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.toUpperCase() === cleanToken);
+    const local = db.find('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken);
     if (local) return local;
     const patients = await this.searchPatients('');
-    return patients.find(p => p.registrationTokenNumber && p.registrationTokenNumber.toUpperCase() === cleanToken) || null;
+    return patients.find(p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken) || null;
   }
 
   async createPatient(patientData) {
+    if (!patientData.registrationTokenNumber) {
+      throw new Error('DATA_INTEGRITY_VIOLATION: registrationTokenNumber is strictly required.');
+    }
+    const cleanToken = patientData.registrationTokenNumber.trim().toUpperCase();
+
+    // 1. Pre-insert verification against local DB
+    const localExisting = db.find('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken);
+    if (localExisting && localExisting.id !== patientData.id) {
+      throw new Error(`DATA_INTEGRITY_VIOLATION: Token ${cleanToken} already exists in local DB for patient ${localExisting.id} (${localExisting.name}). Duplicate rejected.`);
+    }
+
+    // Pre-insert verification against Google Sheets
+    if (this.isConfigured) {
+      const allPatients = await this.searchPatients('');
+      const sheetExisting = allPatients.find(p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken);
+      if (sheetExisting && sheetExisting.id !== patientData.id) {
+        throw new Error(`DATA_INTEGRITY_VIOLATION: Token ${cleanToken} already exists in Google Sheets for patient ${sheetExisting.id} (${sheetExisting.name}). Duplicate rejected.`);
+      }
+    }
+
     db.insert('patients', patientData);
     if (!this.isConfigured) return patientData;
 
@@ -413,6 +473,12 @@ export class GoogleSheetsDataProvider extends DataProvider {
       }
     } catch (err) {
       console.error('[GoogleSheets] createPatient append error:', err.message);
+    }
+
+    // Post-insert verification
+    const localMatches = db.filter('patients', p => p.registrationTokenNumber && p.registrationTokenNumber.trim().toUpperCase() === cleanToken);
+    if (localMatches.length > 1) {
+      throw new Error(`DATA_INTEGRITY_VIOLATION: Token ${cleanToken} exists ${localMatches.length} times in local DB after insertion. Uniqueness invariant violated!`);
     }
 
     return patientData;

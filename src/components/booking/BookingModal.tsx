@@ -52,6 +52,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   onAppointmentBooked
 }) => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const modalBodyRef = React.useRef<HTMLDivElement>(null);
 
   // Form State
   const [service, setService] = useState<string>(
@@ -70,6 +71,37 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingConfirmation, setBookingConfirmation] = useState<(AppointmentRequest & { registrationTokenNumber: string; emailStatus: string }) | null>(null);
+
+  // Reset to Step 1 and scroll to top whenever the modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setErrors({});
+      setBookingConfirmation(null);
+      if (modalBodyRef.current) {
+        modalBodyRef.current.scrollTop = 0;
+      }
+      const raf = requestAnimationFrame(() => {
+        if (modalBodyRef.current) {
+          modalBodyRef.current.scrollTop = 0;
+        }
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isOpen]);
+
+  // When advancing/navigating between steps (e.g. Step 1 -> Step 2 -> Step 3), ensure the modal starts at the top
+  useEffect(() => {
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTop = 0;
+    }
+    const raf = requestAnimationFrame(() => {
+      if (modalBodyRef.current) {
+        modalBodyRef.current.scrollTop = 0;
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [step]);
 
   // Live admin-controlled booking slots for chosen date
   const { slots: daySlots } = useBookingSlots(selectedDate);
@@ -355,6 +387,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           : 'Schedule your clinical consultation with Healer Abdul Mallik'
       }
       maxWidth="xl"
+      bodyRef={modalBodyRef}
     >
       {/* Progress Indicators */}
       {step < 4 && (
