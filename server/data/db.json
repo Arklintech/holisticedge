@@ -1122,6 +1122,25 @@
   ],
   "appointments": [
     {
+      "id": "apt_1790587911250_5b2lc",
+      "patientId": "pt_1790514245454_7afgy",
+      "registrationTokenNumber": "HE-999995",
+      "patientName": "Resilient Patient",
+      "patientPhone": "7893700012",
+      "patientEmail": "",
+      "date": "2027-01-17",
+      "time": "5:30 PM",
+      "slotId": "slot_1790587908695_e7wk",
+      "service": "Chiropractic Consultation",
+      "status": "CONFIRMED",
+      "source": "WEBSITE_PUBLIC",
+      "notes": "",
+      "idempotencyKey": null,
+      "emailStatus": "PENDING",
+      "createdAt": "2026-09-28T09:31:51.250Z",
+      "updatedAt": "2026-09-28T09:31:51.250Z"
+    },
+    {
       "id": "apt_1790582420954_uqqmm",
       "patientId": "pt_1790514245454_7afgy",
       "registrationTokenNumber": "HE-999995",
@@ -4380,6 +4399,57 @@
     }
   ],
   "reminders": [
+    {
+      "id": "rem_1790587913496_27lyx",
+      "patientId": "pt_patient_followup_1790587913482",
+      "registrationTokenNumber": "HE-852844",
+      "patientName": "Test User",
+      "patientEmail": "testuser.holisticedge@gmail.com",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-10-05",
+      "scheduledTime": "11:30 AM",
+      "notes": "Routine checkup follow-up",
+      "status": "SCHEDULED",
+      "createdAt": "2026-09-28T09:31:53.496Z",
+      "updatedAt": "2026-09-28T09:31:54.354Z",
+      "messageStatus": "SENT",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T09:31:54.347Z",
+      "providerMessageId": "wati_patient_followup_1790587914336",
+      "failureReason": null
+    },
+    {
+      "id": "rem_test_fail_1790587912864",
+      "patientId": "pt_test_002",
+      "patientName": "Fail Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "11:00 AM",
+      "status": "DUE",
+      "messageStatus": "FAILED",
+      "notes": "Check lumbar alignment",
+      "createdAt": "2026-09-28T09:31:52.864Z",
+      "failedAt": "2026-09-28T09:31:53.445Z",
+      "failureReason": "Simulated WATI dispatch failure",
+      "updatedAt": "2026-09-28T09:31:53.455Z"
+    },
+    {
+      "id": "rem_test_due_1790587911874",
+      "patientId": "pt_test_001",
+      "patientName": "Due Followup Patient",
+      "patientPhone": "917893769903",
+      "scheduledDate": "2026-09-28",
+      "scheduledTime": "10:30 AM",
+      "status": "DUE",
+      "messageStatus": "SENT",
+      "notes": "Check cervical mobility",
+      "createdAt": "2026-09-28T09:31:51.874Z",
+      "messageChannel": "whatsapp",
+      "sentAt": "2026-09-28T09:31:52.811Z",
+      "providerMessageId": "wati_fu_succ_1790587912794",
+      "failureReason": null,
+      "updatedAt": "2026-09-28T09:31:52.830Z"
+    },
     {
       "id": "rem_1790582423490_tgpus",
       "patientId": "pt_patient_followup_1790582423425",
@@ -9616,6 +9686,16 @@
   ],
   "bookingSlots": [
     {
+      "id": "slot_1790587908695_e7wk",
+      "date": "2027-01-17",
+      "time": "5:30 PM",
+      "capacity": 5,
+      "booked": 1,
+      "status": "AVAILABLE",
+      "createdAt": "2026-09-28T09:31:48.695Z",
+      "updatedAt": "2026-09-28T09:31:51.834Z"
+    },
+    {
       "id": "slot_1790582416168_cq7t",
       "date": "2027-01-16",
       "time": "4:30 PM",
@@ -10228,6 +10308,14 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif_1790587911843",
+      "title": "New Online Appointment Automatically Confirmed",
+      "message": "Resilient Patient (HE-999995) booked for 2027-01-17 at 5:30 PM",
+      "type": "appointment",
+      "status": "unread",
+      "createdAt": "2026-09-28T09:31:51.843Z"
+    },
     {
       "id": "notif_1790582421711",
       "title": "New Online Appointment Automatically Confirmed",
@@ -12470,6 +12558,98 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit_1790587914363",
+      "actor": "Admin",
+      "action": "sent_patient_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_1790587913496_27lyx",
+      "description": "Dispatched follow-up WhatsApp to Test User (917893769903) via WATI [ID: wati_patient_followup_1790587914336]",
+      "timestamp": "2026-09-28T09:31:54.363Z"
+    },
+    {
+      "id": "audit_1790587914326",
+      "actor": "Staff",
+      "actorId": "system",
+      "action": "schedule_reminder",
+      "entity": "reminder",
+      "entityId": "rem_1790587913496_27lyx",
+      "description": "Scheduled follow-up reminder for Test User (HE-852844) on 2026-10-05",
+      "timestamp": "2026-09-28T09:31:54.326Z"
+    },
+    {
+      "id": "audit_1790587913465",
+      "actor": "Admin",
+      "action": "followup_whatsapp_failed",
+      "entity": "reminder",
+      "entityId": "rem_test_fail_1790587912864",
+      "description": "Follow-up WhatsApp to Fail Patient (917893769903) failed: Simulated WATI dispatch failure",
+      "timestamp": "2026-09-28T09:31:53.465Z"
+    },
+    {
+      "id": "audit_1790587912844",
+      "actor": "Admin",
+      "action": "sent_followup_whatsapp",
+      "entity": "reminder",
+      "entityId": "rem_test_due_1790587911874",
+      "description": "Dispatched follow-up WhatsApp to Due Followup Patient (917893769903) via WATI [ID: wati_fu_succ_1790587912794]",
+      "timestamp": "2026-09-28T09:31:52.844Z"
+    },
+    {
+      "id": "audit_1790587911851",
+      "actor": "SYSTEM / PUBLIC_BOOKING",
+      "actorId": "pt_1790514245454_7afgy",
+      "action": "APPOINTMENT_AUTO_CONFIRMED",
+      "entity": "appointment",
+      "entityId": "apt_1790587911250_5b2lc",
+      "description": "Automatic confirmation after successful public booking for Resilient Patient (HE-999995) on 2027-01-17 5:30 PM",
+      "timestamp": "2026-09-28T09:31:51.851Z"
+    },
+    {
+      "id": "audit_wa_1790587908674_ll2u",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_idem_1790587908661",
+      "description": "WATI WhatsApp message wati_wh_idem_1790587908661 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T09:31:48.674Z"
+    },
+    {
+      "id": "audit_wa_1790587908635_jmre",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_failed",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_fail_1790587908619",
+      "description": "WATI WhatsApp message wati_wh_fail_1790587908619 (N/A): FAILED [Error: User phone number is inactive or not on WhatsApp]",
+      "timestamp": "2026-09-28T09:31:48.635Z"
+    },
+    {
+      "id": "audit_wa_1790587908587_axzn",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_read",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_read_1790587908568",
+      "description": "WATI WhatsApp message wati_wh_read_1790587908568 (N/A): READ",
+      "timestamp": "2026-09-28T09:31:48.000Z"
+    },
+    {
+      "id": "audit_wa_1790587908545_6ccd",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_delivered",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_del_1790587908518",
+      "description": "WATI WhatsApp message wati_wh_del_1790587908518 (N/A): DELIVERED",
+      "timestamp": "2026-09-28T09:31:48.000Z"
+    },
+    {
+      "id": "audit_wa_1790587908476_gs6z",
+      "actor": "WatiWhatsAppWebhook",
+      "action": "whatsapp_sent",
+      "entity": "whatsapp_message",
+      "entityId": "wati_wh_sent_1790587908206",
+      "description": "WATI WhatsApp message wati_wh_sent_1790587908206 (N/A): SENT",
+      "timestamp": "2026-09-28T09:31:48.000Z"
+    },
     {
       "id": "audit_1790582424540",
       "actor": "Admin",
@@ -16721,6 +16901,177 @@
   ],
   "emailTemplates": [],
   "notificationLogs": [
+    {
+      "id": "notif_log_1790587914337_u3mxw",
+      "patientId": "pt_patient_followup_1790587913482",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_patient_followup_1790587914336",
+      "createdAt": "2026-09-28T09:31:54.337Z",
+      "sentAt": "2026-09-28T09:31:54.337Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_1790587913496_27lyx",
+        "scheduledDate": "2026-10-05",
+        "scheduledTime": "11:30 AM",
+        "notes": "Routine checkup follow-up",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790587913426_dgaxf",
+      "patientId": "pt_test_002",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T09:31:53.426Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI dispatch failure",
+      "metadata": {
+        "reminderId": "rem_test_fail_1790587912864",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "11:00 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790587912794_5nolc",
+      "patientId": "pt_test_001",
+      "phone": "917893769903",
+      "eventType": "appointment_reminder",
+      "templateName": "holistic_edge_appointment_reminder",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_fu_succ_1790587912794",
+      "createdAt": "2026-09-28T09:31:52.794Z",
+      "sentAt": "2026-09-28T09:31:52.794Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "reminderId": "rem_test_due_1790587911874",
+        "scheduledDate": "2026-09-28",
+        "scheduledTime": "10:30 AM",
+        "appointmentId": null
+      }
+    },
+    {
+      "id": "notif_log_1790587911861_ghrxl",
+      "patientId": "pt_1790514245454_7afgy",
+      "phone": "7893700012",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "FAILED",
+      "providerMessageId": null,
+      "createdAt": "2026-09-28T09:31:51.861Z",
+      "sentAt": null,
+      "deliveredAt": null,
+      "readAt": null,
+      "error": "Simulated WATI Gateway 503 Service Unavailable",
+      "metadata": {
+        "appointmentId": "apt_1790587911250_5b2lc",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "log_wati_wh_idem_1790587908661",
+      "providerMessageId": "wati_wh_idem_1790587908661",
+      "status": "READ",
+      "readAt": "2026-09-28T09:31:48.661Z",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T09:31:48.661Z"
+    },
+    {
+      "id": "log_wati_wh_fail_1790587908619",
+      "providerMessageId": "wati_wh_fail_1790587908619",
+      "status": "FAILED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T09:31:48.619Z",
+      "updatedAt": "2026-09-28T09:31:48.646Z",
+      "error": "User phone number is inactive or not on WhatsApp"
+    },
+    {
+      "id": "log_wati_wh_read_1790587908568",
+      "providerMessageId": "wati_wh_read_1790587908568",
+      "status": "READ",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T09:31:48.568Z",
+      "updatedAt": "2026-09-28T09:31:48.603Z",
+      "readAt": "2026-09-28T09:31:48.000Z",
+      "deliveredAt": "2026-09-28T09:31:48.000Z"
+    },
+    {
+      "id": "log_wati_wh_del_1790587908518",
+      "providerMessageId": "wati_wh_del_1790587908518",
+      "status": "DELIVERED",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T09:31:48.518Z",
+      "updatedAt": "2026-09-28T09:31:48.554Z",
+      "deliveredAt": "2026-09-28T09:31:48.000Z"
+    },
+    {
+      "id": "log_wati_wh_sent_1790587908206",
+      "providerMessageId": "wati_wh_sent_1790587908206",
+      "status": "SENT",
+      "eventType": "appointment_confirmed",
+      "provider": "WATI",
+      "createdAt": "2026-09-28T09:31:48.206Z",
+      "updatedAt": "2026-09-28T09:31:48.491Z",
+      "sentAt": "2026-09-28T09:31:48.000Z"
+    },
+    {
+      "id": "notif_log_1790587908189_cpus4",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_dup_1790587908189",
+      "createdAt": "2026-09-28T09:31:48.189Z",
+      "sentAt": "2026-09-28T09:31:48.189Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_dup_1790587908189",
+        "reminderId": null
+      }
+    },
+    {
+      "id": "notif_log_1790587908127_hpabw",
+      "patientId": null,
+      "phone": "918142642051",
+      "eventType": "appointment_confirmed",
+      "templateName": "holistic_edge_appointment_confirmed",
+      "provider": "WATI",
+      "status": "SENT",
+      "providerMessageId": "wati_msg_save_test_999",
+      "createdAt": "2026-09-28T09:31:48.126Z",
+      "sentAt": "2026-09-28T09:31:48.126Z",
+      "deliveredAt": null,
+      "readAt": null,
+      "error": null,
+      "metadata": {
+        "appointmentId": "test_apt_1790587908124",
+        "reminderId": null
+      }
+    },
     {
       "id": "notif_log_1790582424433_qg79y",
       "patientId": "pt_patient_followup_1790582423425",

@@ -13,15 +13,15 @@ async function auditProduction() {
   const sheetsApi = google.sheets({ version: 'v4', auth });
 
   console.log('--- FETCHING PRODUCTION DATA ---');
-  const [patientsRes, apptsRes, followUpsRes] = await Promise.all([
-    sheetsApi.spreadsheets.values.get({ spreadsheetId, range: 'PATIENTS!A1:I500' }),
-    sheetsApi.spreadsheets.values.get({ spreadsheetId, range: 'APPOINTMENTS!A1:K500' }),
-    sheetsApi.spreadsheets.values.get({ spreadsheetId, range: 'FOLLOW_UPS!A1:K500' }),
-  ]);
+  const batchRes = await sheetsApi.spreadsheets.values.batchGet({
+    spreadsheetId,
+    ranges: ['PATIENTS!A1:I500', 'APPOINTMENTS!A1:K500', 'FOLLOW_UPS!A1:K500'],
+  });
 
-  const patientRows = patientsRes.data.values || [];
-  const apptRows = apptsRes.data.values || [];
-  const followUpRows = followUpsRes.data.values || [];
+  const valueRanges = batchRes.data.valueRanges || [];
+  const patientRows = valueRanges[0]?.values || [];
+  const apptRows = valueRanges[1]?.values || [];
+  const followUpRows = valueRanges[2]?.values || [];
 
   console.log(`PATIENTS total rows (including header): ${patientRows.length}`);
   console.log(`APPOINTMENTS total rows: ${apptRows.length}`);
