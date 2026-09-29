@@ -21,6 +21,7 @@ import {
   computeDashboardMetrics,
   OFFERS_UPDATED_EVENT,
 } from '../services/adminStorage';
+import { getAdminAuthHeaders } from '../services/adminSession';
 import { useAdminAuth } from './AdminAuthContext';
 
 interface AdminStoreContextValue {
@@ -68,7 +69,7 @@ interface AdminStoreContextValue {
 const AdminStoreContext = createContext<AdminStoreContextValue | null>(null);
 
 export function AdminStoreProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAdminAuth();
+  const { user, logout } = useAdminAuth();
 
   const [patients, setPatients] = useState<AdminPatient[]>([]);
   const [appointments, setAppointments] = useState<AdminAppointment[]>([]);
@@ -86,12 +87,18 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
   });
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
+  const getAuthHeaders = useCallback(() => getAdminAuthHeaders(localStorage), []);
+
   const refreshPatients = useCallback(async () => {
     try {
-      const token = localStorage.getItem('admin_token');
       const res = await fetch('/api/patients', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
+      if (res.status === 401) {
+        // Session token rejected: send the user back to login instead of retrying unauthenticated.
+        logout();
+        return;
+      }
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.patients)) {
@@ -101,13 +108,12 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       }
     } catch {}
     setPatients(patientStorage.getAll());
-  }, []);
+  }, [getAuthHeaders, logout]);
 
   const refreshAppointments = useCallback(async () => {
     try {
-      const token = localStorage.getItem('admin_token');
       const res = await fetch('/api/appointments', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
@@ -131,13 +137,12 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       }
     } catch {}
     setAppointments(appointmentStorage.getAll());
-  }, []);
+  }, [getAuthHeaders]);
 
   const refreshLeads = useCallback(async () => {
     try {
-      const token = localStorage.getItem('admin_token');
       const res = await fetch('/api/leads', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
@@ -148,7 +153,7 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       }
     } catch {}
     setLeads(leadStorage.getAll());
-  }, []);
+  }, [getAuthHeaders]);
 
   const refreshOffers = useCallback(() => {
     setOffers(offerStorage.getAll());
@@ -156,9 +161,8 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
 
   const refreshNotifications = useCallback(async () => {
     try {
-      const token = localStorage.getItem('admin_token');
       const res = await fetch('/api/notifications', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
@@ -169,13 +173,12 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       }
     } catch {}
     setNotifications(notificationStorage.getAll());
-  }, []);
+  }, [getAuthHeaders]);
 
   const refreshMetrics = useCallback(async () => {
     try {
-      const token = localStorage.getItem('admin_token');
       const res = await fetch('/api/dashboard', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
@@ -186,7 +189,7 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
       }
     } catch {}
     setMetrics(computeDashboardMetrics());
-  }, []);
+  }, [getAuthHeaders]);
 
   // Load all data on mount / auth change
   useEffect(() => {
@@ -203,24 +206,31 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
 
   // Listen for offer updates and real-time website submissions across windows/components
   useEffect(() => {
+    let timeoutId: any = null;
     const handleDataChange = () => {
-      refreshPatients();
-      refreshAppointments();
-      refreshLeads();
-      refreshOffers();
-      refreshNotifications();
-      setAuditEntries(auditStorage.getAll());
-      refreshMetrics();
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (user) {
+          refreshPatients();
+          refreshAppointments();
+          refreshLeads();
+          refreshOffers();
+          refreshNotifications();
+          setAuditEntries(auditStorage.getAll());
+          refreshMetrics();
+        }
+      }, 250);
     };
     window.addEventListener(OFFERS_UPDATED_EVENT, handleDataChange);
     window.addEventListener('storage', handleDataChange);
     window.addEventListener('admin_data_updated', handleDataChange);
     return () => {
+      if (timeoutId) clearTimeout(timeoutId);
       window.removeEventListener(OFFERS_UPDATED_EVENT, handleDataChange);
       window.removeEventListener('storage', handleDataChange);
       window.removeEventListener('admin_data_updated', handleDataChange);
     };
-  }, [refreshPatients, refreshAppointments, refreshLeads, refreshOffers, refreshNotifications, refreshMetrics]);
+  }, [user, refreshPatients, refreshAppointments, refreshLeads, refreshOffers, refreshNotifications, refreshMetrics]);
 
   const publishOffer = useCallback((id: string) => {
     const res = offerStorage.publish(id, user || undefined);
@@ -311,76 +321,71 @@ export function AdminStoreProvider({ children }: { children: React.ReactNode }) 
     notificationStorage.markRead(id);
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, status: 'read' as const } : n));
     try {
-      const token = localStorage.getItem('admin_token');
       await fetch(`/api/notifications/${id}/read`, {
         method: 'PUT',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
     } catch (e) {
       console.warn('Backend mark read error:', e);
     }
     refreshMetrics();
-  }, [refreshMetrics]);
+  }, [getAuthHeaders, refreshMetrics]);
 
   const markAllNotificationsRead = useCallback(async () => {
     notificationStorage.markAllRead();
     setNotifications(prev => prev.map(n => n.status === 'unread' ? { ...n, status: 'read' as const } : n));
     try {
-      const token = localStorage.getItem('admin_token');
       await fetch('/api/notifications/read-all', {
         method: 'PUT',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
     } catch (e) {
       console.warn('Backend mark all read error:', e);
     }
     refreshMetrics();
-  }, [refreshMetrics]);
+  }, [getAuthHeaders, refreshMetrics]);
 
   const clearAllNotifications = useCallback(async () => {
     notificationStorage.clearAll();
     setNotifications([]);
     try {
-      const token = localStorage.getItem('admin_token');
       await fetch('/api/notifications', {
         method: 'DELETE',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
     } catch (e) {
       console.warn('Backend clear all notifications error:', e);
     }
     refreshMetrics();
-  }, [refreshMetrics]);
+  }, [getAuthHeaders, refreshMetrics]);
 
   const archiveNotification = useCallback(async (id: string) => {
     notificationStorage.archive(id);
     setNotifications(prev => prev.filter(n => n.id !== id));
     try {
-      const token = localStorage.getItem('admin_token');
       await fetch(`/api/notifications/${id}/archive`, {
         method: 'PUT',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
     } catch (e) {
       console.warn('Backend archive notification error:', e);
     }
     refreshMetrics();
-  }, [refreshMetrics]);
+  }, [getAuthHeaders, refreshMetrics]);
 
   const deleteNotification = useCallback(async (id: string) => {
     notificationStorage.delete(id);
     setNotifications(prev => prev.filter(n => n.id !== id));
     try {
-      const token = localStorage.getItem('admin_token');
       await fetch(`/api/notifications/${id}`, {
         method: 'DELETE',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
     } catch (e) {
       console.warn('Backend delete notification error:', e);
     }
     refreshMetrics();
-  }, [refreshMetrics]);
+  }, [getAuthHeaders, refreshMetrics]);
 
   const logAudit = useCallback((
     action: string,

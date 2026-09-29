@@ -1,6 +1,7 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { AdminUser } from '../types/admin.types';
 import { sessionStorage_admin, userStorage, seedDemoData } from '../services/adminStorage';
+import { loginWithServer, restoreServerSession, clearServerSession } from '../services/adminSession';
 
 interface AdminAuthContextValue {
   user: AdminUser | null;
@@ -23,29 +24,10 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
     userStorage.getAll();
 
     async function checkAuthSession() {
-      const token = localStorage.getItem('admin_token');
-      if (token) {
-        try {
-          const res = await fetch('/api/auth/me', {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.success && data.user) {
-              setUser(data.user);
-              setIsLoading(false);
-              return;
-            }
-          }
-        } catch (e) {
-          console.warn('Backend session verification fallback to local storage:', e);
-        }
-      }
-
-      const session = sessionStorage_admin.getSession();
-      if (session) {
-        setUser(session.user);
-      }
+      // Only a backend-verified token counts as a session; a stale local-only
+      // session would leave every admin API call unauthenticated (401).
+      const serverUser = await restoreServerSession<AdminUser>(fetch, localStorage);
+      setUser(serverUser);
       setIsLoading(false);
     }
 
@@ -54,46 +36,10 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success && data.user) {
-        if (data.token) {
-          localStorage.setItem('admin_token', data.token);
-          localStorage.setItem('admin_user', JSON.stringify(data.user));
-        }
-        setUser(data.user);
-        setIsLoading(false);
-        return { success: true };
-      }
-
-      // Offline / fallback login
-      const localUser = sessionStorage_admin.login(email, password);
-      if (localUser) {
-        setUser(localUser);
-        setIsLoading(false);
-        return { success: true };
-      }
-
-      setIsLoading(false);
-      return { success: false, error: data.error || 'Invalid email or password.' };
-    } catch (err: any) {
-      // Local fallback on network error
-      const localUser = sessionStorage_admin.login(email, password);
-      if (localUser) {
-        setUser(localUser);
-        setIsLoading(false);
-        return { success: true };
-      }
-      setIsLoading(false);
-      return { success: false, error: err.message || 'Login failed. Please try again.' };
-    }
+    const result = await loginWithServer<AdminUser>(fetch, localStorage, email, password);
+    setUser(result.user);
+    setIsLoading(false);
+    return { success: Boolean(result.user), error: result.error };
   }, []);
 
   const logout = useCallback(async () => {
@@ -108,8 +54,9 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
         console.warn('Logout API error:', e);
       }
     }
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_user');
+    clearServerSession(localStorage);
+    sessionStorage.removeItem('admin_token');
+    sessionStorage.removeItem('admin_user');
     sessionStorage_admin.logout();
     setUser(null);
   }, []);

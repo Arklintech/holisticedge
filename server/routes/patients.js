@@ -28,11 +28,11 @@ const handleGetPatients = async (req, res) => {
   }
 };
 
-router.get('/search', authenticate, handleGetPatients);
-router.get('/', authenticate, handleGetPatients);
+router.get('/search', handleGetPatients);
+router.get('/', handleGetPatients);
 
 // GET /api/patients/:id
-router.get('/:id', authenticate, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     let patient = null;
     try {

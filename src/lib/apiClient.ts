@@ -21,7 +21,7 @@ export async function safeFetch<T = any>(
   url: string,
   options: RequestOptions = {}
 ): Promise<ApiResponse<T>> {
-  const { timeoutMs = 15000, ...fetchOptions } = options;
+  const { timeoutMs = 15000, headers: customHeaders, ...fetchOptions } = options;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -30,9 +30,33 @@ export async function safeFetch<T = any>(
     options.signal.addEventListener('abort', () => controller.abort());
   }
 
+  // Attach the server-issued admin token for same-origin API calls; explicit headers override it
+  const mergedHeaders: Record<string, string> = {};
+  if (typeof window !== 'undefined' && url.startsWith('/')) {
+    const adminToken = localStorage.getItem('admin_token');
+    if (adminToken) {
+      mergedHeaders['Authorization'] = `Bearer ${adminToken}`;
+    }
+  }
+
+  if (customHeaders) {
+    if (customHeaders instanceof Headers) {
+      customHeaders.forEach((value, key) => {
+        mergedHeaders[key] = value;
+      });
+    } else if (Array.isArray(customHeaders)) {
+      customHeaders.forEach(([key, value]) => {
+        mergedHeaders[key] = value;
+      });
+    } else {
+      Object.assign(mergedHeaders, customHeaders);
+    }
+  }
+
   try {
     const response = await fetch(url, {
       ...fetchOptions,
+      headers: mergedHeaders,
       signal: controller.signal,
     });
     clearTimeout(timeoutId);

@@ -22,6 +22,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useAdminStore } from '../../context/AdminStoreContext';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { appointmentStorage, leadStorage, auditStorage } from '../../services/adminStorage';
+import { apiClient } from '../../../lib/apiClient';
 import { clinicInfo } from '../../../data/clinicInfo';
 
 function greeting(name: string): string {
@@ -86,15 +87,9 @@ export function DashboardPage() {
   const fetchDashboard = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      const token = localStorage.getItem('admin_token');
-      const res = await fetch('/api/dashboard', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success) {
-          setDashboardData(data);
-        }
+      const res = await apiClient.get<any>('/api/dashboard');
+      if (res.ok && res.data?.success) {
+        setDashboardData(res.data);
       }
     } catch (e) {
       console.warn('[DashboardPage] /api/dashboard fallback:', e);
